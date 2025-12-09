@@ -1,0 +1,49 @@
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 200px; /* Adjust the size as necessary */
+    height: auto;
+}
+
+.action-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.action-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.action-btn:hover {
+    background-color: #45a049;
+}
+
+.action-btn:active {
+    background-color: #3e8e41;
+}
