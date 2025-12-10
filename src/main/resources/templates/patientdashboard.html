@@ -6,6 +6,63 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/css/patient.css}" />
+
+    <style>
+      /* Custom modal styles */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+      .modal-box {
+        background: #fff;
+        width: 80%;
+        max-width: 700px;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      }
+      .terms-content {
+        max-height: 300px;
+        overflow-y: auto;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        align-items: center;
+      }
+      .btn-accept, .btn-decline {
+        padding: 0.6rem 1.2rem;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+      }
+      .btn-accept {
+        background: #28a745;
+        color: #fff;
+      }
+      .btn-accept:disabled {
+        background: #6c757d;
+        cursor: not-allowed;
+      }
+      .btn-decline {
+        background: #dc3545;
+        color: #fff;
+      }
+    </style>
+
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -44,8 +101,10 @@
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="container my-5">
+   
+
+
+            <main class="container my-5">
         <h3 class="mb-4">Available Plans</h3>
         <div class="row">
             <!-- Dynamic plan cards -->
@@ -56,12 +115,16 @@
                         <p class="card-text mb-1">Deductible: $<span th:text="${plan.deductible}"></span></p>
                         <p class="card-text mb-1">Annual Max: $<span th:text="${plan.annualMax}"></span></p>
                         <p class="card-text mb-3">Premium: $<span th:text="${plan.premium}"></span>/month</p>
-                        <a th:href="@{/patient/enrollForm/{id}(id=${plan.id})}" 
-                           class="btn btn-primary w-100">Enroll</a>
+                        <!-- Enroll button triggers modal -->
+                        <a href="#" class="btn btn-primary w-100" 
+                           th:attr="data-plan-id=${plan.id}" 
+                           onclick="openTerms(this)">Enroll</a>
                     </div>
                 </div>
             </div>
         </div>
+
+            
 
         <!-- Current Enrollment Section -->
         <div class="mt-5">
@@ -79,12 +142,66 @@
         </div>
     </main>
 
+    <!-- Terms & Conditions Modal -->
+    <div id="termsModal" class="modal-overlay">
+      <div class="modal-box">
+        <h2>Terms & Conditions</h2>
+        <p>Please review the following before enrolling:</p>
+        <div class="terms-content">
+          <ul>
+            <li>I certify that I am eligible to enroll in this dental plan and my dependents meet eligibility requirements.</li>
+            <li>I understand coverage is subject to deductibles, annual maximums, exclusions, and waiting periods.</li>
+            <li>I agree to provide accurate information; misrepresentation may result in termination of coverage.</li>
+            <li>I acknowledge that claims are processed according to plan rules and provider networks.</li>
+            <li>I consent to the use of my information for plan administration in compliance with privacy laws.</li>
+            <li>I understand that enrollment is binding for the benefit year unless a qualifying life event occurs.</li>
+            <li>I agree to pay premiums on time; non-payment may result in cancellation of coverage.</li>
+          </ul>
+        </div>
+        <div class="modal-actions">
+          <label>
+            <input type="checkbox" id="termsCheckbox" onchange="toggleAccept()"> 
+            I have read and agree to the Terms & Conditions
+          </label>
+          <button id="acceptBtn" class="btn-accept" onclick="acceptTerms()" disabled>Accept</button>
+          <button class="btn-decline" onclick="declineTerms()">Decline</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-primary text-white text-center py-3 mt-5">
         <small>&copy; 2025 CareDent Insurance Portal. All rights reserved.</small>
     </footer>
 
-    <!-- Bootstrap JS -->
-    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js}"></script>
+    <!-- JavaScript -->
+    <script>
+      let selectedPlanId = null;
+
+      function openTerms(button) {
+        selectedPlanId = button.getAttribute("data-plan-id");
+        document.getElementById("termsModal").style.display = "flex";
+      }
+
+      function toggleAccept() {
+        const checkbox = document.getElementById("termsCheckbox");
+        const acceptBtn = document.getElementById("acceptBtn");
+        acceptBtn.disabled = !checkbox.checked;
+      }
+
+      function acceptTerms() {
+        window.location.href = "/patient/enrollForm/" + selectedPlanId;
+      }
+
+      function declineTerms() {
+        document.getElementById("termsModal").style.display = "none";
+        window.location.href = "/patient/dashboard?error=termsDeclined";
+      }
+    </script>
 </body>
 </html>
+
+
+   
+
+

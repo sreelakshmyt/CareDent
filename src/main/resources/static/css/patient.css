@@ -1,0 +1,204 @@
+/* patient.css */
+
+/* General page styling */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #0069d9; /* Primary blue */
+}
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+.navbar .nav-link {
+    color: #fff !important;
+    margin-right: 1rem;
+}
+.navbar .nav-link.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+.navbar-text {
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Hero section */
+header {
+    background-color: #ffffff;
+    border-bottom: 2px solid #e0e0e0;
+}
+header h2 {
+    color: #0069d9;
+}
+header p {
+    color: #6c757d;
+}
+
+/* Cards for plans */
+.card {
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.card-title {
+    color: #0069d9;
+}
+.card-text {
+    font-size: 0.95rem;
+    color: #333;
+}
+.btn-primary {
+    background-color: #0069d9;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Enrollment section */
+h3 {
+    color: #0069d9;
+    margin-top: 2rem;
+}
+.text-muted {
+    font-style: italic;
+}
+
+/* Footer */
+footer {
+    background-color: #0069d9;
+    color: #fff;
+    font-size: 0.85rem;
+}
+/* patient.css */
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #007bff;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+.navbar-nav {
+    display: flex;
+    gap: 1rem;
+}
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+.nav-link:hover {
+    text-decoration: underline;
+}
+.navbar-text {
+    color: white;
+    font-weight: 500;
+}
+
+/* Hero section */
+header {
+    background-color: white;
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+header h2 {
+    color: #007bff;
+    margin-bottom: 0.5rem;
+}
+header p {
+    color: #666;
+}
+
+/* Main content */
+main {
+    padding: 2rem;
+}
+h3 {
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+/* Plan cards */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+.card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex: 1 1 calc(33% - 1rem);
+}
+.card-title {
+    font-size: 1.2rem;
+    color: #007bff;
+    margin-bottom: 0.5rem;
+}
+.card-text {
+    margin-bottom: 0.5rem;
+}
+.btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+}
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Enrollment section */
+.enrollment {
+    margin-top: 2rem;
+}
+.enrollment p {
+    margin-bottom: 0.5rem;
+}
+
+/* Footer */
+footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    font-size: 0.85rem;
+}
