@@ -17,8 +17,8 @@ public class Patient {
     private User user;
 
     // Demographic details
-    private String firstName;
-    private String lastName;
+    public String firstName;
+    public String lastName;
     private LocalDate dob;
     private String ssn;
     private String address;

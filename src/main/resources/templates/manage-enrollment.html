@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Enrollments</title>
+    <link rel="stylesheet" th:href="@{/css/styles1.css}" />
+</head>
+<body>
+    <h1>Enrollment Management</h1>
+
+    <!-- Pending Enrollments -->
+    <h2>Pending Enrollments</h2>
+    <table>
+        <tr>
+            <th>ID</th><th>Patient</th><th>Plan</th><th>Actions</th>
+        </tr>
+        <tr th:each="enrollment : ${pendingEnrollments}">
+            <td th:text="${enrollment.id}"></td>
+            
+            <td th:text="${enrollment.patient.firstName + ' ' + enrollment.patient.lastName}"></td>
+
+  
+            <td th:text="${enrollment.dentalPlan.name}"></td>
+            <td>
+                <form th:action="@{/api/auth/admin/manageenrollment/accept/{id}(id=${enrollment.id})}" method="post">
+                    <button type="submit">Accept</button>
+                </form>
+                <form th:action="@{/api/auth/admin/manageenrollment/reject/{id}(id=${enrollment.id})}" method="post">
+                    <button type="submit">Reject</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Accepted Enrollments -->
+    <h2>Accepted Enrollments</h2>
+    <table>
+        <tr><th>ID</th><th>Patient</th><th>Plan</th></tr>
+        <tr th:each="enrollment : ${acceptedEnrollments}">
+            <td th:text="${enrollment.id}"></td>
+            <td th:text="${enrollment.patient.name}"></td>
+            <td th:text="${enrollment.dentalPlan.name}"></td>
+        </tr>
+    </table>
+
+    <!-- Rejected Enrollments -->
+    <h2>Rejected Enrollments</h2>
+    <table>
+        <tr><th>ID</th><th>Patient</th><th>Plan</th></tr>
+        <tr th:each="enrollment : ${rejectedEnrollments}">
+            <td th:text="${enrollment.id}"></td>
+            <td th:text="${enrollment.patient.name}"></td>
+            <td th:text="${enrollment.dentalPlan.name}"></td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -29,6 +29,10 @@ public class Enrollment {
     private Double deductibleUsed = 0.0;
     private Double annualMaxUsed = 0.0;
 
+    private String status="PENDING"; // PENDING, ACCEPTED, REJECTED
+    
+
+
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -50,4 +54,10 @@ public class Enrollment {
 
     public Double getAnnualMaxUsed() { return annualMaxUsed; }
     public void setAnnualMaxUsed(Double annualMaxUsed) { this.annualMaxUsed = annualMaxUsed; }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
