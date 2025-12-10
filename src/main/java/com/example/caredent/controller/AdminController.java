@@ -71,15 +71,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.caredent.bean.DentalPlan;
 import com.example.caredent.bean.DentistNetwork;
-import com.example.caredent.bean.Network;
 import com.example.caredent.bean.PlanCoverageRule;
-import com.example.caredent.bean.Role;
 import com.example.caredent.bean.User;
 import com.example.caredent.repository.DentalPlanRepository;
 import com.example.caredent.repository.DentistNetworkRepository;
-import com.example.caredent.repository.NetworkRepository;
 import com.example.caredent.repository.PlanCoverageRuleRepository;
-import com.example.caredent.repository.RoleRepository;
 import com.example.caredent.repository.UserRepository;
 
 @Controller
@@ -94,7 +90,9 @@ public class AdminController {
 
     @Autowired
     private UserRepository userRepository;
-  
+
+    @Autowired
+    DentistNetworkRepository dentistNetworkRepository;
 
     // Dashboard view
     @GetMapping("/dashboard")
@@ -163,6 +161,41 @@ public class AdminController {
         planCoverageRuleRepository.save(rule);
         return "redirect:/api/auth/admin/plans/manage-coverage/" + planId; // Redirect to the manage coverage page
     }
+
+
+
+@PostMapping("/networks/add-dentist-to-plan")
+public String addDentistToPlan(@RequestParam Long planId, @RequestParam Long dentistId) {
+    DentalPlan dentalPlan = dentalPlanRepository.findById(planId)
+            .orElseThrow(() -> new RuntimeException("Plan not found"));
+    User dentist = userRepository.findById(dentistId)
+            .orElseThrow(() -> new RuntimeException("Dentist not found"));
+
+    DentistNetwork dentistNetwork = new DentistNetwork();
+    dentistNetwork.setDentalPlan(dentalPlan);
+    dentistNetwork.setDentist(dentist);
+
+    dentistNetworkRepository.save(dentistNetwork);
+
+    return "redirect:/api/auth/admin/networks";
+}
+@GetMapping("/networks")
+public String manageNetworks(Model model) {
+    List<DentalPlan> dentalPlans = dentalPlanRepository.findAll();
+    List<User> dentists = userRepository.findByRoleName("Dentist");
+
+    // Attach dentist networks to each plan
+    for (DentalPlan plan : dentalPlans) {
+        List<DentistNetwork> networks = dentistNetworkRepository.findByDentalPlan(plan);
+        plan.setDentistNetworks(networks); // Add a transient field in DentalPlan
+    }
+
+    model.addAttribute("dentalPlans", dentalPlans);
+    model.addAttribute("dentists", dentists);
+
+    return "admin_manage_networks";
+}
+
 
 
     

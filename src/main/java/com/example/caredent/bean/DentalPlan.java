@@ -1,10 +1,13 @@
 package com.example.caredent.bean;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
 @Entity
 public class DentalPlan {
@@ -20,6 +23,17 @@ public class DentalPlan {
     private Double annualMax;
 
     private Double premium;
+
+    @Transient
+private List<DentistNetwork> dentistNetworks;
+
+public List<DentistNetwork> getDentistNetworks() {
+    return dentistNetworks;
+}
+public void setDentistNetworks(List<DentistNetwork> dentistNetworks) {
+    this.dentistNetworks = dentistNetworks;
+}
+
 
     // Getters and Setters
     public Long getId() {

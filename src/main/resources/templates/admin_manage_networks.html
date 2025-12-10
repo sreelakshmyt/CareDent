@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Network Management</title>
+</head>
+<body>
+<h1>Network Management</h1>
+
+<div th:each="plan : ${dentalPlans}" class="plan-box">
+    <h2 th:text="${plan.name}"></h2>
+
+    <!-- Show assigned dentists -->
+    <h3>Assigned Dentists:</h3>
+    <ul>
+        <li th:each="network : ${plan.dentistNetworks}"
+            th:text="${network.dentist.username}"></li>
+    </ul>
+
+    <!-- Form to add dentist -->
+    <form th:action="@{/api/auth/admin/networks/add-dentist-to-plan}" method="post">
+        <input type="hidden" name="planId" th:value="${plan.id}" />
+        <select name="dentistId">
+            <option th:each="dentist : ${dentists}"
+                    th:value="${dentist.id}"
+                    th:text="${dentist.username}"></option>
+        </select>
+        <button type="submit">Add Dentist</button>
+    </form>
+</div>
+</body>
+</html>
