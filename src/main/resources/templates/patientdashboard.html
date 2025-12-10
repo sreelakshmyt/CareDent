@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <style>
+        .dashboard { display: flex; }
+        .sidebar { width: 200px; background: #f4f4f4; padding: 15px; }
+        .content { flex: 1; padding: 20px; }
+        .plan-card { border: 1px solid #ccc; padding: 15px; margin: 10px; border-radius: 8px; }
+        .plan-card h3 { margin-top: 0; }
+        .plan-grid { display: flex; flex-wrap: wrap; }
+        .plan-card button { background: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3>Menu</h3>
+        <ul>
+            <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+            <li><a th:href="@{/patient/enrollment}">Enrollment</a></li>
+            <li><a th:href="@{/patient/claims}">Claims (coming soon)</a></li>
+            <li><a th:href="@{/patient/benefits}">Benefits (coming soon)</a></li>
+            <li><a th:href="@{/patient/tools}">Tools (coming soon)</a></li>
+        </ul>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <h2>Welcome, <span th:text="${patient.firstName}"></span>!</h2>
+
+        <h3>Enrollment</h3>
+        <div class="plan-grid">
+            <!-- Demo Plans -->
+            <div class="plan-card">
+                <h3>PPO Basic</h3>
+                <p>Deductible: $50</p>
+                <p>Annual Max: $1000</p>
+                <p>Premium: $25/month</p>
+                <a th:href="@{/patient/enrollForm(planId=1)}"><button>Enroll</button></a>
+            </div>
+
+            <div class="plan-card">
+                <h3>PPO Plus</h3>
+                <p>Deductible: $100</p>
+                <p>Annual Max: $2000</p>
+                <p>Premium: $40/month</p>
+                <a th:href="@{/patient/enrollForm(planId=2)}"><button>Enroll</button></a>
+            </div>
+
+            <div class="plan-card">
+                <h3>HMO Standard</h3>
+                <p>Deductible: $0</p>
+                <p>Annual Max: $1500</p>
+                <p>Premium: $30/month</p>
+                <a th:href="@{/patient/enrollForm(planId=3)}"><button>Enroll</button></a>
+            </div>
+
+            <div class="plan-card">
+                <h3>Premier Gold</h3>
+                <p>Deductible: $200</p>
+                <p>Annual Max: $3000</p>
+                <p>Premium: $60/month</p>
+                <a th:href="@{/patient/enrollForm(planId=4)}"><button>Enroll</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+package com.example.caredent.repository;
+
+import com.example.caredent.bean.Enrollment;
+import com.example.caredent.bean.Patient;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Repository
+public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
+    Optional<Enrollment> findByPatient(Patient patient); // check if patient already enrolled
+}

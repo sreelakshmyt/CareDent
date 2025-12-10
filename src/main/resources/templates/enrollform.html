@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Enrollment Form</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<div class="container">
+    <h2>Enrollment Form</h2>
+
+    <form th:action="@{/patient/enroll}" th:object="${patientForm}" method="post">
+        <input type="hidden" th:field="*{planId}" th:value="${planId}" />
+
+        <label>First Name</label>
+        <input type="text" th:field="*{firstName}" required />
+
+        <label>Last Name</label>
+        <input type="text" th:field="*{lastName}" required />
+
+        <label>Date of Birth</label>
+        <input type="date" th:field="*{dob}" required />
+
+        <label>SSN</label>
+        <input type="text" th:field="*{ssn}" required />
+
+        <label>Address</label>
+        <input type="text" th:field="*{address}" required />
+
+        <label>Phone</label>
+        <input type="tel" th:field="*{phone}" required />
+
+        <label>
+            <input type="checkbox" required /> I agree to the plan terms
+        </label>
+
+        <button type="submit">Confirm Enrollment</button>
+    </form>
+</div>
+</body>
+</html>
