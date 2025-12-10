@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "enrollments")
+
 public class Enrollment {
 
     @Id
@@ -20,6 +20,7 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "plan_id", referencedColumnName = "id")
     private DentalPlan dentalPlan;
+    private String status; // e.g., ACTIVE, CANCELLED
 
     // Benefit period
     private LocalDate benefitYearStart;
