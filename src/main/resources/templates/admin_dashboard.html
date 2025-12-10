@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles1.css}" />
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="#" th:href="@{/api/auth/admin/dashboard}">Home</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/plans}">Plan Management</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/fee-schedules}">Fee Schedule Management</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/networks}">Network Management</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/claims}">Claims Queue</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/analytics}">Analytics</a></li>
+            <li><a href="#" th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <h1>Admin Dashboard</h1>
+
+        <!-- Summary widgets -->
+        <div class="summary-widgets">
+            <div class="widget">
+                <h3>Total Claims</h3>
+                <p th:text="${totalClaims}"></p>
+            </div>
+            <div class="widget">
+                <h3>Total Payouts</h3>
+                <p th:text="${totalPayouts}"></p>
+            </div>
+            <div class="widget">
+                <h3>Active Plans</h3>
+                <p th:text="${totalPlans}"></p>
+            </div>
+            <div class="widget">
+                <h3>Total Enrollments</h3>
+                <p th:text="${totalEnrollments}"></p>
+            </div>
+        </div>
+
+        <!-- Dashboard details -->
+        <div class="dashboard-details">
+            <h2>Manage Admin Settings</h2>
+            <p><a href="#" th:href="@{/api/auth/admin/plans}">Manage Plans</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/claims}">Manage Claims</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/networks}">Manage Networks</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/fee-schedules}">Manage Fee Schedules</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/analytics}">View Analytics</a></p>
+        </div>
+    </div>
+
+</body>
+</html>

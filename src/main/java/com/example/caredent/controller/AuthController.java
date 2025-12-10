@@ -91,13 +91,12 @@
 
 package com.example.caredent.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.caredent.bean.Role;
@@ -182,22 +181,31 @@ public String registerPage(Model model) {
     public String loginPage() {
         return "login";  // This will look for login.html in the templates folder
     }
-
-    // Handle the login form submission
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto) {
-        // Find the user by email
-        User user = userRepository.findByEmail(loginDto.getEmail()).orElse(null);
+public String login(@ModelAttribute LoginDto loginDto) {
+    // Find the user by email
+    User user = userRepository.findByEmail(loginDto.getEmail()).orElse(null);
 
-        if (user == null) {
-            return "User not found";
-        }
-
-        // Check if the password matches
-        if (!user.getPassword().equals(loginDto.getPassword())) {
-            return "Incorrect password";
-        }
-
-        return "Login success!";
+    if (user == null) {
+        return "User not found";
     }
+
+    // Check if the password matches
+    if (!user.getPassword().equals(loginDto.getPassword())) {
+        return "Incorrect password";
+    }
+    Role userRole = user.getRole();
+      switch (userRole.getName()) {
+        case "Admin":
+            return "redirect:/api/auth/admin/dashboard";  // Redirect to Admin Dashboard
+        case "Doctor":
+            return "redirect:/api/auth/doctor/dashboard";  // Redirect to Doctor Dashboard
+        case "Patient":
+            return "patient_dashboard";  // Redirect to Patient Dashboard
+        default:
+            return "redirect:/api/auth/login";  // Redirect to login if the role is not found
+    }
+
+}
+
 }

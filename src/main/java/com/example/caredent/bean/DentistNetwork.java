@@ -17,9 +17,14 @@ public class DentistNetwork {
     @JoinColumn(name = "dentist_id", referencedColumnName = "id")
     private User dentist;
 
+    // @ManyToOne
+    // @JoinColumn(name = "network_id", referencedColumnName = "id")
+    // private Network network;
+
     @ManyToOne
-    @JoinColumn(name = "network_id", referencedColumnName = "id")
-    private Network network;
+    @JoinColumn(name = "dentalplan_id", referencedColumnName = "id")
+    private DentalPlan dentalPlan;
+
 
     // Getters and Setters
     public Long getId() {
@@ -37,12 +42,19 @@ public class DentistNetwork {
     public void setDentist(User dentist) {
         this.dentist = dentist;
     }
-
-    public Network getNetwork() {
-        return network;
+    public DentalPlan getDentalPlan() {
+        return dentalPlan;
     }
-
-    public void setNetwork(Network network) {
-        this.network = network;
+    public void setDentalPlan(DentalPlan dentalPlan) {
+        this.dentalPlan = dentalPlan;
     }
+    
+
+    // public Network getNetwork() {
+    //     return network;
+    // }
+
+    // public void setNetwork(Network network) {
+    //     this.network = network;
+    // }
 }

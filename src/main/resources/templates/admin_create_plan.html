@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Plan</title>
+</head>
+<body>
+    <h1>Create New Plan</h1>
+    <form th:action="@{/api/auth/admin/plans/create}" th:object="${dentalPlan}" method="post">
+        <label for="name">Name:</label>
+        <input type="text" th:field="*{name}" id="name" required><br>
+
+        <label for="deductible">Deductible:</label>
+        <input type="number" th:field="*{deductible}" id="deductible" required><br>
+
+        <label for="annualMax">Annual Max:</label>
+        <input type="number" th:field="*{annualMax}" id="annualMax" required><br>
+
+        <label for="premium">Premium:</label>
+        <input type="number" th:field="*{premium}" id="premium" required><br>
+
+        <button type="submit">Create Plan</button>
+    </form>
+</body>
+</html>
