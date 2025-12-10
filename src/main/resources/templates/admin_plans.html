@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Plans</title>
+    <style>
+        /* Styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .btn:hover {
+            background-color: #3498db;
+        }
+        .create-btn {
+            background-color: #27ae60;
+            margin-bottom: 20px;
+        }
+        .create-btn:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Dental Plans</h1>
+    
+    <!-- Button to Create New Plan -->
+    <a href="/api/auth/admin/plans/create" class="btn create-btn">Create New Plan</a>
+    
+    <!-- Table to list all plans -->
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Deductible</th>
+                <th>Annual Max</th>
+                <th>Premium</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through plans and display them -->
+            <tr th:each="plan : ${plans}">
+                <td th:text="${plan.name}"></td>
+                <td th:text="${plan.deductible}"></td>
+                <td th:text="${plan.annualMax}"></td>
+                <td th:text="${plan.premium}"></td>
+                <td class="actions">
+                    <!-- Edit Plan Link -->
+                    <a th:href="@{/api/auth/admin/plans/edit/{id}(id=${plan.id})}" class="btn">Edit</a>
+                    <!-- Manage Coverage Link -->
+                    <a th:href="@{/api/auth/admin/plans/manage-coverage/{planId}(planId=${plan.id})}" class="btn">Manage Coverage</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

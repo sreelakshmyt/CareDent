@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Coverage</title>
+</head>
+<body>
+    <h1>Manage Coverage for Plan: <span th:text="${dentalPlan.name}"></span></h1>
+    <form th:action="@{/api/auth/admin/plans/manage-coverage/{planId}(planId=${dentalPlan.id})}" method="post">
+        <label for="procedureCategory">Procedure Category:</label>
+        <input type="text" id="procedureCategory" name="procedureCategory" required><br>
+
+        <label for="coveragePercentage">Coverage Percentage:</label>
+        <input type="number" id="coveragePercentage" name="coveragePercentage" step="0.01" min="0" max="100" required><br>
+
+        <button type="submit">Save Coverage</button>
+    </form>
+
+    <h2>Existing Coverage Rules</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Procedure Category</th>
+                <th>Coverage Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="rule : ${coverageRules}">
+                <td th:text="${rule.procedureCategory}"></td>
+                <td th:text="${rule.coveragePercentage}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

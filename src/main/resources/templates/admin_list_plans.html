@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dental Plans</title>
+</head>
+<body>
+    <h1>Dental Plans</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Plan Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="plan : ${plans}">
+                <td th:text="${plan.name}">Plan Name</td>
+                <td>
+                    <!-- Assign Dentist to this plan -->
+                    <a th:href="@{/api/auth/admin/plans/assign-dentist/{planId}(planId=${plan.id})}">Assign Dentist</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/api/auth/admin/plans/create">Create New Plan</a>
+</body>
+</html>
