@@ -3,7 +3,6 @@ package com.example.caredent.repository;
 import java.util.List;
 import java.util.Optional;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
    
     // Query to find users by their role
     List<User> findByRole(Role role);
+    List<User> findByRoleName(String roleName);
 
 
 }
