@@ -1,40 +1,138 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Enrollment Form</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <meta charset="UTF-8">
+  <title>Dental Enrollment Form</title>
+  <link rel="stylesheet" th:href="@{/css/enroll.css}" />
 </head>
 <body>
-<div class="container">
-    <h2>Enrollment Form</h2>
+<div class="container my-5">
+  <h2 class="text-primary">Dental Insurance Enrollment Form</h2>
 
-    <form th:action="@{/patient/enroll}" th:object="${patientForm}" method="post">
-        <input type="hidden" th:field="*{planId}" th:value="${planId}" />
+  <!-- Selected Plan Details -->
+  <h4 class="mt-4">Selected Plan</h4>
+  <div class="card p-3 mb-4 shadow-sm">
+    <p><strong th:text="${plan.name}"></strong></p>
+    <p>Deductible: $<span th:text="${plan.deductible}"></span></p>
+    <p>Annual Max: $<span th:text="${plan.annualMax}"></span></p>
+    <p>Premium: $<span th:text="${plan.premium}"></span>/month</p>
+  </div>
 
+  <form th:action="@{/patient/enroll}" method="post" th:object="${patientForm}">
+    <!-- Hidden Plan ID -->
+    <input type="hidden" th:field="*{planId}" />
+
+    <!-- Member Information -->
+    <h4 class="mt-4">Member Information</h4>
+    <div class="row">
+      <div class="col-md-6 mb-3">
         <label>First Name</label>
-        <input type="text" th:field="*{firstName}" required />
-
+        <input type="text" th:field="*{firstName}" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
         <label>Last Name</label>
-        <input type="text" th:field="*{lastName}" required />
-
+        <input type="text" th:field="*{lastName}" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
         <label>Date of Birth</label>
-        <input type="date" th:field="*{dob}" required />
-
-        <label>SSN</label>
-        <input type="text" th:field="*{ssn}" required />
-
+        <input type="date" th:field="*{dob}" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>National ID / SSN</label>
+        <input type="text" th:field="*{ssn}" class="form-control">
+      </div>
+      <div class="col-md-12 mb-3">
         <label>Address</label>
-        <input type="text" th:field="*{address}" required />
-
+        <input type="text" th:field="*{address}" class="form-control">
+      </div>
+      <div class="col-md-6 mb-3">
         <label>Phone</label>
-        <input type="tel" th:field="*{phone}" required />
+        <input type="text" th:field="*{phone}" class="form-control">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Email</label>
+        <input type="email" th:field="*{email}" class="form-control">
+      </div>
+    </div>
 
-        <label>
-            <input type="checkbox" required /> I agree to the plan terms
-        </label>
+    <!-- Coverage Selection -->
+    <h4 class="mt-4">Coverage Selection</h4>
+    <div class="form-group mb-3">
+      <label>Coverage Type</label>
+      <select th:field="*{coverageType}" class="form-control" required>
+        <option value="Individual">Individual</option>
+        <option value="Individual + Spouse">Individual + Spouse</option>
+        <option value="Individual + Child(ren)">Individual + Child(ren)</option>
+        <option value="Family">Family</option>
+        <option value="Waive">Waive Coverage</option>
+      </select>
+    </div>
 
-        <button type="submit">Confirm Enrollment</button>
-    </form>
+    <!-- Dependent Information -->
+    <h4 class="mt-4">Dependent Information (Optional)</h4>
+<p>Please list spouse and children you want covered under this plan.</p>
+
+<div class="row mb-3">
+  <div class="col-md-4">
+    <label>Dependent Name</label>
+    <input type="text" th:field="*{dependentName}" class="form-control" placeholder="Full Name">
+  </div>
+  <div class="col-md-3">
+    <label>Date of Birth</label>
+    <input type="date" th:field="*{dependentDob}" class="form-control">
+  </div>
+  <div class="col-md-3">
+    <label>Relationship</label>
+    <select th:field="*{dependentRelationship}" class="form-control">
+      <option value="Spouse">Spouse</option>
+      <option value="Child">Child</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <label>Gender</label>
+    <select th:field="*{dependentGender}" class="form-control">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+</div>
+
+<!-- Optional flags -->
+<div class="form-check mb-2">
+  <input type="checkbox" th:field="*{dependentStudent}" class="form-check-input">
+  <label class="form-check-label">Is full-time student (if over 19)?</label>
+</div>
+<div class="form-check mb-2">
+  <input type="checkbox" th:field="*{dependentDisabled}" class="form-check-input">
+  <label class="form-check-label">Is disabled/handicapped?</label>
+</div>
+
+    <!-- Other Insurance -->
+    <h4 class="mt-4">Other Dental Insurance</h4>
+    <div class="form-group mb-3">
+      <label>Do you have other dental insurance?</label>
+      <select th:field="*{otherInsurance}" class="form-control">
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+      </select>
+    </div>
+    <div class="form-group mb-3">
+      <label>If Yes, Carrier Name</label>
+      <input type="text" th:field="*{carrierName}" class="form-control">
+    </div>
+
+    <!-- Consent -->
+    <h4 class="mt-4">Consent & Authorization</h4>
+    <div class="form-check mb-3">
+      <input type="checkbox" class="form-check-input" required>
+      <label class="form-check-label">
+        I certify that the above information is true and complete. I understand coverage is subject to plan rules, deductibles, annual maximums, and exclusions.
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Submit Enrollment</button>
+  </form>
 </div>
 </body>
 </html>

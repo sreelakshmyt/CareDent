@@ -1,0 +1,109 @@
+/* enroll form design */
+/* General page styling */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container */
+.container {
+  max-width: 900px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Headings */
+h2 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+h4 {
+  font-weight: 500;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: #0056b3;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 5px;
+}
+
+/* Card for plan details */
+.card {
+  background-color: #f1f9ff;
+  border: 1px solid #d0e7ff;
+  border-radius: 6px;
+}
+
+.card p {
+  margin: 5px 0;
+  font-size: 15px;
+}
+
+/* Labels */
+label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Inputs & Selects */
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 0 0.2rem rgba(0,86,179,0.25);
+  outline: none;
+}
+
+/* Checkboxes */
+.form-check-label {
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.form-check-input {
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  padding: 10px 20px;
+  font-size: 15px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+/* Spacing between rows */
+.row {
+  margin-bottom: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  h4 {
+    font-size: 18px;
+  }
+}
