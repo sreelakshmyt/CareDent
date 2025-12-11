@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div th:fragment="sidebar">
+    <h2 style="text-align:center;">CareDent</h2>
+    <a th:href="@{/doctor/dashboard}">Overview</a>
+    <a th:href="@{/doctor/profile}">View Profile</a>
+    <a th:href="@{/doctor/plan}">My Plan</a>
+    <a th:href="@{/doctor/manageProcedures}">Manage Procedures</a>
+    <a th:href="@{/doctor/claimForm}">Submit Claim</a>
+    <a th:href="@{/doctor/trackClaims}">Track Claims</a>
+    <a th:href="@{/logout}">Logout</a>
+</div>
+
+</body>
+</html>

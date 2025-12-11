@@ -114,7 +114,7 @@ public String login(@ModelAttribute LoginDto loginDto, HttpSession session) {
     switch (user.getRole().getName()) {
         case "Admin":
             return "redirect:/api/auth/admin/dashboard";
-        case "Doctor":
+        case "Dentist":
             return "redirect:/api/auth/doctor/dashboard";
         case "Patient":
             return "redirect:/patient/dashboard";

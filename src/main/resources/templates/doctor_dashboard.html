@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Doctor Dashboard - CareDent</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 style="text-align:center;">CareDent</h2>
+        <a th:href="@{api/auth/doctor/dashboard}">Overview</a>
+        <a th:href="@{/doctor/profile}">View Profile</a>
+        <a th:href="@{/doctor/plan}">My Plan</a>
+        <a th:href="@{/doctor/manageProcedures}">Manage Procedures</a>
+        <a th:href="@{/doctor/claimForm}">Submit Claim</a>
+        <a th:href="@{/doctor/trackClaims}">Track Claims</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <span>Welcome, Dr. <span th:text="${user.username}">Doctor</span></span>
+        <span>Notifications 🔔 | Profile ⚙️</span>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content" layout:fragment="content">
+        <!-- This will be replaced by child pages -->
+    </div>
+</body>
+</html>

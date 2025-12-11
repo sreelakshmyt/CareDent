@@ -1,0 +1,129 @@
+/* General Reset */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f6e5e5; /* Soft blush background */
+    color: #352961; /* Deep plum text */
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100%;
+    background-color: #352961; /* Deep plum */
+    color: #fff;
+    padding-top: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+    font-size: 22px;
+    color: #fff;
+}
+
+.sidebar a {
+    display: block;
+    padding: 12px 20px;
+    color: #fff;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #774181; /* Rich purple accent */
+    border-radius: 4px;
+}
+
+/* Topbar */
+.topbar {
+    margin-left: 220px;
+    height: 60px;
+    background-color: #352961; /* Deep plum */
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Content Area */
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+/* Cards */
+.card {
+    background-color: #e6b2c6; /* Light pink accent */
+    color: #352961; /* Deep plum text */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: #774181; /* Rich purple heading */
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: 12px 15px;
+    text-align: left;
+    color: #352961;
+}
+
+table thead {
+    background-color: #774181; /* Rich purple header */
+    color: #fff;
+}
+
+table tr:nth-child(even) {
+    background-color: #f6e5e5; /* Soft blush tint */
+}
+
+/* Buttons */
+.btn {
+    background-color: #774181; /* Rich purple */
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #e6b2c6; /* Light pink hover */
+    color: #352961;
+}
+
+/* Status Indicators */
+.status-approved {
+    color: #2ecc71; /* Green */
+    font-weight: bold;
+}
+
+.status-pending {
+    color: #f39c12; /* Orange */
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #e74c3c; /* Red */
+    font-weight: bold;
+}

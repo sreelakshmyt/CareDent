@@ -1,0 +1,72 @@
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Doctor Dashboard - CareDent</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 style="text-align:center;">CareDent</h2>
+        <a th:href="@{/doctor/dashboard}">Overview</a>
+        <a th:href="@{/doctor/profile}">View Profile</a>
+        <a th:href="@{/doctor/plan}">My Plan</a>
+        <a th:href="@{/api/auth/doctor/manageProcedures}">Manage Procedures</a>
+        <a th:href="@{/doctor/claimForm}">Submit Claim</a>
+        <a th:href="@{/doctor/trackClaims}">Track Claims</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <span>Welcome, Dr. <span th:text="${user.username}">Doctor</span></span>
+        <span>Notifications 🔔 | Profile ⚙️</span>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+
+        <div class="card">
+            <h2>Manage Procedures</h2>
+
+            <!-- Add Procedure Form -->
+            <form th:action="@{/api/auth/doctor/addProcedure}" method="post">
+            
+
+                <input type="text" name="procedureCode" placeholder="Procedure Code" required>
+                <input type="text" name="description" placeholder="Description" required>
+                <input type="text" name="category" placeholder="Category" required>
+                <button type="submit" class="btn">+ Add Procedure</button>
+            </form>
+
+            <!-- Procedure Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="procedure : ${procedures}">
+                        <td th:text="${procedure.procedureCode}"></td>
+                        <td th:text="${procedure.description}"></td>
+                        <td th:text="${procedure.category}"></td>
+                        <td>
+                            <form th:action="@{/api/auth/doctor/deleteProcedure/{id}(id=${procedure.id})}" method="post">
+                                <button type="submit" class="btn">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+       
+    </div>
+</body>
+</html>
