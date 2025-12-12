@@ -5,64 +5,965 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Doctor Dashboard - CareDent</title>
-    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+    <title>CareDent | Submit Claim</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Professional Color Palette */
+        :root {
+            --primary-color: #005461;
+            --primary-dark: #003d47;
+            --primary-light: #e6f2f3;
+            --secondary-color: #018790;
+            --accent-color: #00B7B5;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-light: #888888;
+            --text-on-dark: #ffffff;
+            --background-light: #f8f9fa;
+            --background-white: #ffffff;
+            --border-color: #e0e0e0;
+            --border-light: #f0f0f0;
+            --success-color: #00B7B5;
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.08);
+            --shadow-md: 0 4px 6px rgba(0, 84, 97, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 84, 97, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 84, 97, 0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --transition: all 0.25s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--background-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header - Matching Doctor Dashboard */
+        .main-header {
+            background: var(--background-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .brand-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 0.125rem;
+        }
+
+        /* Navigation - Matching Doctor Dashboard */
+        .main-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--background-white);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* User Menu - Matching Doctor Dashboard */
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-details p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+        }
+
+        .action-btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-color));
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Content Card */
+        .content-card {
+            background: var(--background-white);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .card-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title i {
+            color: var(--accent-color);
+        }
+
+        /* Form Styles */
+        .claim-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--background-white);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 183, 181, 0.1);
+        }
+
+        .form-select:hover {
+            border-color: var(--secondary-color);
+        }
+
+        /* Procedures Grid */
+        .procedures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .procedure-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--background-light);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+
+        .procedure-item:hover {
+            background: var(--primary-light);
+            border-color: var(--accent-color);
+        }
+
+        .checkbox-input {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--accent-color);
+            cursor: pointer;
+        }
+
+        .procedure-info {
+            flex: 1;
+        }
+
+        .procedure-code {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        .procedure-desc {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .procedure-fee {
+            font-weight: 600;
+            color: var(--accent-color);
+            font-size: 0.95rem;
+        }
+
+        /* Textarea Styles */
+        .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--background-white);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 183, 181, 0.1);
+        }
+
+        .form-textarea:hover {
+            border-color: var(--secondary-color);
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            margin-top: 0.5rem;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            background: var(--background-white);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .file-input:hover {
+            border-color: var(--secondary-color);
+        }
+
+        .file-hint {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background: var(--primary-light);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid var(--border-light);
+        }
+
+        .summary-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Footer - Matching Doctor Dashboard */
+        .main-footer {
+            background: var(--primary-color);
+            color: var(--text-on-dark);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background: white;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .footer-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .header-content,
+            .main-content,
+            .footer-container {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .main-nav {
+                width: 100%;
+                overflow-x: auto;
+            }
+            
+            .user-menu {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .procedures-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .brand {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .page-title {
+                font-size: 1.75rem;
+            }
+            
+            .content-card {
+                padding: 2rem;
+            }
+            
+            .procedures-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-content,
+            .main-content {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .user-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .action-btn {
+                padding: 0.625rem 1rem;
+            }
+            
+            .submit-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2 style="text-align:center;">CareDent</h2>
-        <a th:href="@{/doctor/dashboard}">Overview</a>
-        <a th:href="@{/doctor/profile}">View Profile</a>
-        <a th:href="@{/doctor/plan}">My Plan</a>
-        <a th:href="@{/api/auth/doctor/manageProcedures}">Manage Procedures</a>
-        <a th:href="@{/api/auth/doctor/claimForm}">Submit Claim</a>
-        <a th:href="@{/doctor/trackClaims}">Track Claims</a>
-        <a th:href="@{/logout}">Logout</a>
-    </div>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="/" class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div>
+                    <div class="brand-text">CareDent</div>
+                    <div class="brand-tagline">Submit Claim</div>
+                </div>
+            </a>
 
+            <nav class="main-nav">
+                <a th:href="@{/api/auth/doctor/overview}" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+                <a th:href="@{/doctor/profile}" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <a th:href="@{/api/auth/doctor/plan}" class="nav-link">
+                    <i class="fas fa-network-wired"></i>
+                    Network
+                </a>
+                <a th:href="@{/api/auth/doctor/manageProcedures}" class="nav-link">
+                    <i class="fas fa-procedures"></i>
+                    Procedures
+                </a>
+                <a th:href="@{/api/auth/doctor/claimForm}" class="nav-link active">
+                    <i class="fas fa-file-medical"></i>
+                    Submit Claim
+                </a>
+                <a th:href="@{/api/auth/doctor/trackClaims}" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    Track Claims
+                </a>
+            </nav>
 
-    <!-- Topbar -->
-    <div class="topbar">
-        <span>Welcome, Dr. <span th:text="${user.username}">Doctor</span></span>
-        <span>Notifications 🔔 | Profile ⚙️</span>
-    </div>
-
-    <!-- Content Area -->
-    <div class="content">
-        <div class="card">
-           
-
-            <form th:action="@{/api/auth/doctor/submitClaim}" method="post" enctype="multipart/form-data">
-    <!-- Select Patient -->
-    <label>Select Patient:</label>
-    <select name="patientId" required>
-        <option th:each="p : ${patients}" th:value="${p.id}" 
-                th:text="${p.firstName} + ' ' + ${p.lastName}"></option>
-    </select>
-
-    <!-- Select Procedures -->
-    <label>Select Procedures:</label>
-    <div th:each="proc : ${procedures}">
-        <input type="checkbox" name="procedureIds" th:value="${proc.id}" />
-        <span th:text="${proc.procedureCode} + ' - ' + ${proc.description} + ' (₹' + ${proc.standardFee} + ')'"></span>
-    </div>
-
-    <!-- Optional Notes -->
-    <label>Notes:</label>
-    <textarea name="notes"></textarea>
-
-    <!-- Optional Supporting Document -->
-    <label>Attach Supporting Document:</label>
-    <input type="file" name="supportingDoc" />
-
-    <button type="submit">Submit Claim</button>
-</form>
-
-
-
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3>Dr. <span th:text="${user.username}">Doctor</span></h3>
+                        <p>Dental Practitioner</p>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <a th:href="@{/api/auth/doctor/claimForm}" class="action-btn action-btn-primary">
+                        <i class="fas fa-plus"></i>
+                        New Claim
+                    </a>
+                    <a th:href="@{/logout}" class="action-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Submit Insurance Claim</h1>
+            <p class="page-subtitle">Submit a new insurance claim for procedures performed</p>
+        </div>
+
+        <!-- Claim Form Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-file-medical"></i>
+                    Claim Submission Form
+                </h2>
+            </div>
+            
+            <!-- Claim Form -->
+            <form class="claim-form" th:action="@{/api/auth/doctor/submitClaim}" method="post" enctype="multipart/form-data">
+                <!-- Select Patient -->
+                <div class="form-group">
+                    <label class="form-label">Select Patient</label>
+                    <select name="patientId" class="form-select" required>
+                        <option value="" disabled selected>Select a patient</option>
+                        <option th:each="p : ${patients}" 
+                                th:value="${p.id}" 
+                                th:text="${p.firstName} + ' ' + ${p.lastName}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Select Procedures -->
+                <div class="form-group">
+                    <label class="form-label">Select Procedures</label>
+                    <p class="file-hint">Select one or more procedures performed for this patient</p>
+                    <div class="procedures-grid">
+                        <div class="procedure-item" th:each="proc : ${procedures}">
+                            <input type="checkbox" 
+                                   name="procedureIds" 
+                                   th:value="${proc.id}"
+                                   class="checkbox-input" />
+                            <div class="procedure-info">
+                                <div class="procedure-code" th:text="${proc.procedureCode}"></div>
+                                <div class="procedure-desc" th:text="${proc.description}"></div>
+                            </div>
+                            <div class="procedure-fee" th:text="'₹' + ${proc.standardFee}"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Optional Notes -->
+                <div class="form-group">
+                    <label class="form-label">Additional Notes</label>
+                    <textarea name="notes" 
+                              class="form-textarea" 
+                              placeholder="Add any additional information about this claim..."></textarea>
+                    <p class="file-hint">Optional: Include any relevant notes about the treatment or claim</p>
+                </div>
+
+                <!-- Optional Supporting Document -->
+                <div class="form-group">
+                    <label class="form-label">Attach Supporting Document</label>
+                    <div class="file-upload">
+                        <input type="file" 
+                               name="supportingDoc" 
+                               class="file-input" 
+                               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" />
+                    </div>
+                    <p class="file-hint">Optional: Upload supporting documents (PDF, DOC, JPG, PNG)</p>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Claim
+                </button>
+            </form>
+        </div>
+
+        <!-- Instructions Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <i class="fas fa-info-circle"></i>
+                    Claim Submission Guidelines
+                </h2>
+            </div>
+            <div class="summary-section">
+                <ul style="color: var(--text-secondary); padding-left: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;">Select the correct patient from the dropdown list</li>
+                    <li style="margin-bottom: 0.5rem;">Check all procedures performed during the treatment</li>
+                    <li style="margin-bottom: 0.5rem;">Add relevant notes for clarity (treatment details, special circumstances)</li>
+                    <li style="margin-bottom: 0.5rem;">Attach supporting documents if available (X-rays, reports, prescriptions)</li>
+                    <li>Review all information before submitting the claim</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-tooth"></i>
+                        </div>
+                        <div class="footer-logo-text">CareDent</div>
+                    </div>
+                    <p class="footer-description">
+                        Professional dental insurance claims management. 
+                        Submit and track insurance claims efficiently with our comprehensive platform.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a th:href="@{/api/auth/doctor/overview}">Dashboard</a></li>
+                        <li><a th:href="@{/doctor/profile}">My Profile</a></li>
+                        <li><a th:href="@{/api/auth/doctor/plan}">Network</a></li>
+                        <li><a th:href="@{/api/auth/doctor/claimForm}">Submit Claim</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Resources</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Claim Guidelines</a></li>
+                        <li><a href="#">Procedure Codes</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Support Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 CareDent Insurance Services. All rights reserved. For professional use only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set active navigation
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('th:href') && 
+                    currentPath.includes(link.getAttribute('th:href').split('/').pop())) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // Update current year in footer
+            const yearElement = document.querySelector('.footer-bottom p');
+            if (yearElement) {
+                yearElement.innerHTML = yearElement.innerHTML.replace('2024', new Date().getFullYear());
+            }
+            
+            // Add hover effect to procedure items
+            const procedureItems = document.querySelectorAll('.procedure-item');
+            procedureItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = 'var(--shadow-sm)';
+                });
+                
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+            
+            // Form validation
+            const claimForm = document.querySelector('.claim-form');
+            if (claimForm) {
+                claimForm.addEventListener('submit', function(e) {
+                    const patientSelect = this.querySelector('select[name="patientId"]');
+                    const procedureCheckboxes = this.querySelectorAll('input[name="procedureIds"]:checked');
+                    
+                    if (!patientSelect.value) {
+                        e.preventDefault();
+                        alert('Please select a patient.');
+                        patientSelect.focus();
+                        return false;
+                    }
+                    
+                    if (procedureCheckboxes.length === 0) {
+                        e.preventDefault();
+                        alert('Please select at least one procedure.');
+                        return false;
+                    }
+                    
+                    // Show submission confirmation
+                    const confirmed = confirm('Submit this claim for processing?');
+                    if (!confirmed) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    
+                    // Show loading state
+                    const submitBtn = this.querySelector('.submit-btn');
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                    submitBtn.disabled = true;
+                });
+            }
+            
+            // Calculate total selected procedures
+            function updateSelectedCount() {
+                const checkboxes = document.querySelectorAll('input[name="procedureIds"]:checked');
+                const countElement = document.getElementById('selectedCount') || (function() {
+                    const el = document.createElement('div');
+                    el.id = 'selectedCount';
+                    el.style.cssText = 'margin-top: 0.5rem; font-size: 0.875rem; color: var(--accent-color); font-weight: 500;';
+                    document.querySelector('[for="procedures"]').parentElement.appendChild(el);
+                    return el;
+                })();
+                
+                if (checkboxes.length > 0) {
+                    countElement.textContent = `${checkboxes.length} procedure(s) selected`;
+                } else {
+                    countElement.textContent = '';
+                }
+            }
+            
+            // Add event listeners to checkboxes
+            const checkboxes = document.querySelectorAll('input[name="procedureIds"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateSelectedCount);
+            });
+            
+            // Initialize count
+            updateSelectedCount();
+            
+            // File input styling
+            const fileInput = document.querySelector('input[type="file"]');
+            if (fileInput) {
+                fileInput.addEventListener('change', function() {
+                    if (this.files.length > 0) {
+                        this.style.borderColor = 'var(--accent-color)';
+                        this.style.backgroundColor = 'var(--primary-light)';
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
-
