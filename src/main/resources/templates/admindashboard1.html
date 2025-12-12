@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles1.css}" />
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <ul>
+            <li><a href="#" th:href="@{/api/auth/admin/dashboard}">Home</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/plans}">Plan Management</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/manageenrollment}">ENROLLMENT Management</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/networks}">Network Management</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/claims}">Claims Queue</a></li>
+            <li><a href="#" th:href="@{/api/auth/admin/analytics}">Analytics</a></li>
+            <li><a href="#" th:href="@{/logout}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content">
+        <h1>Admin Dashboard</h1>
+
+        <!-- Summary widgets -->
+        <div class="summary-widgets">
+            <div class="widget">
+                <h3>Total Claims</h3>
+                <p th:text="${totalClaims}"></p>
+            </div>
+            <div class="widget">
+                <h3>Total Payouts</h3>
+                <p th:text="${totalPayouts}"></p>
+            </div>
+            <div class="widget">
+                <h3>Active Plans</h3>
+                <p th:text="${totalPlans}"></p>
+            </div>
+            <div class="widget">
+                <h3>Total Enrollments</h3>
+                <p th:text="${totalEnrollments}"></p>
+            </div>
+        </div>
+
+        <!-- Dashboard details -->
+        <div class="dashboard-details">
+            <h2>Manage Admin Settings</h2>
+            <p><a href="#" th:href="@{/api/auth/admin/plans}">Manage Plans</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/claims}">Manage Claims</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/networks}">Manage Networks</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/fee-schedules}">Manage Fee Schedules</a></p>
+            <p><a href="#" th:href="@{/api/auth/admin/analytics}">View Analytics</a></p>
+        </div>
+    </div>
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareDent Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Custom Color Palette & Styles */
+        :root {
+            --color-bg-light: #f6e5e5;
+            --color-secondary-light: #e6b2c6;
+            --color-primary-accent: #774181;
+            --color-primary-dark: #352961;
+        }
+
+        body {
+            background-color: var(--color-bg-light);
+        }
+
+        /* Sidebar Styling (Structural Dark) */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            position: fixed;
+            background-color: var(--color-primary-dark);
+            color: white;
+            padding-top: 20px;
+        }
+
+        .sidebar a {
+            color: #fff;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar a:hover, .sidebar a.active {
+            background-color: var(--color-primary-accent); /* Primary Accent for active/hover */
+            color: var(--color-bg-light); 
+        }
+
+        /* Main Content Styling */
+        .main-content {
+            margin-left: 250px; /* Offset for fixed sidebar */
+            padding: 20px;
+        }
+
+        /* KPI Card Styling (Accent for importance) */
+        .kpi-card {
+            border-left: 5px solid var(--color-primary-accent);
+            background-color: #fff;
+            color: var(--color-primary-dark);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-left: 5px solid var(--color-secondary-light);
+        }
+
+        .kpi-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary-accent);
+        }
+        
+        /* Table Styling */
+        .table-action th {
+            color: var(--color-primary-dark);
+            border-bottom: 2px solid var(--color-secondary-light);
+        }
+    </style>
+</head>
+<body>
+
+<div class="d-flex">
+    <div class="sidebar d-flex flex-column">
+        <h3 class="text-center mb-4" style="color:var(--color-secondary-light);">CareDent Admin</h3>
+        <nav class="nav nav-pills flex-column">
+            <a class="nav-link active" th:href="@{/admin/dashboard}">Dashboard</a>
+            <a class="nav-link" th:href="@{/admin/claims}">Claims Management</a>
+            <a class="nav-link" th:href="@{/admin/plans}">Plan Management</a>
+            <a class="nav-link" th:href="@{/admin/feeschedules}">Fee Schedules</a>
+            <a class="nav-link" th:href="@{/admin/users}">User Management</a>
+            <a class="nav-link" th:href="@{/logout}">Logout</a>
+        </nav>
+    </div>
+
+    <div class="main-content flex-grow-1">
+        <h1 class="mb-4" style="color:var(--color-primary-dark);">Welcome, Administrator</h1>
+        <p class="text-muted">At-a-glance overview of key operational metrics.</p>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 kpi-card shadow-sm">
+                    <div class="text-uppercase text-muted small">Total Claims Per Year</div>
+                    <div class="kpi-number" th:text="${totalClaims}">1,450</div>
+                    <p class="card-text text-success small">+2.5% vs Last Year</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 kpi-card shadow-sm">
+                    <div class="text-uppercase text-muted small">Total Insurance Payouts</div>
+                    <div class="kpi-number" th:text="${#numbers.formatCurrency(totalPayouts)}">$580,230.50</div>
+                    <p class="card-text text-danger small">-1.2% vs Target</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 kpi-card shadow-sm">
+                    <div class="text-uppercase text-muted small">Total Plan Enrollment</div>
+                    <div class="kpi-number">2,450</div>
+                    <p class="card-text text-success small">+8% This Quarter</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card p-3 kpi-card shadow-sm">
+                    <div class="text-uppercase text-muted small">Claims Pending Review</div>
+                    <div class="kpi-number" th:text="${pendingClaims}">42</div>
+                    <a th:href="@{/admin/claims/pending}" class="btn btn-sm mt-2" style="background-color: var(--color-primary-accent); color: white;">Review Claims</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header" style="background-color: var(--color-primary-dark); color: white;">
+                        <h5 class="mb-0">Priority Action: Pending Claims</h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small">Claims requiring immediate approval/rejection.</p>
+                        <table class="table table-sm table-borderless table-action">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Claim ID</th>
+                                    <th scope="col">Patient</th>
+                                    <th scope="col">Date Submitted</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>CLM-8001</td>
+                                    <td>Jane Doe</td>
+                                    <td>2025-12-09</td>
+                                    <td><a th:href="@{/admin/claims/8001}" class="small" style="color:var(--color-primary-accent);">View/Process</a></td>
+                                </tr>
+                                <tr>
+                                    <td>CLM-7998</td>
+                                    <td>John Smith</td>
+                                    <td>2025-12-08</td>
+                                    <td><a th:href="@{/admin/claims/7998}" class="small" style="color:var(--color-primary-accent);">View/Process</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a th:href="@{/admin/claims/pending}" class="btn btn-sm mt-3" style="background-color: var(--color-secondary-light); color: var(--color-primary-dark);">View All Pending</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header" style="background-color: var(--color-primary-dark); color: white;">
+                        <h5 class="mb-0">Plan Enrollment Trend</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center py-5 border" style="background-color: var(--color-bg-light);">
+                            <p class="text-muted">** Chart Placeholder **</p>
+                            <p class="small" style="color:var(--color-primary-accent);">Monthly Enrollment Data Visualization (e.g., Line Chart)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 
+
+
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Plans</title>
+    <style>
+        /* Styling for the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .btn:hover {
+            background-color: #3498db;
+        }
+        .create-btn {
+            background-color: #27ae60;
+            margin-bottom: 20px;
+        }
+        .create-btn:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Dental Plans</h1>
+    
+    <!-- Button to Create New Plan -->
+    <a href="/api/auth/admin/plans/create" class="btn create-btn">Create New Plan</a>
+    
+    <!-- Table to list all plans -->
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Deductible</th>
+                <th>Annual Max</th>
+                <th>Premium</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through plans and display them -->
+            <tr th:each="plan : ${plans}">
+                <td th:text="${plan.name}"></td>
+                <td th:text="${plan.deductible}"></td>
+                <td th:text="${plan.annualMax}"></td>
+                <td th:text="${plan.premium}"></td>
+                <td class="actions">
+                    <!-- Edit Plan Link -->
+                    <a th:href="@{/api/auth/admin/plans/edit/{id}(id=${plan.id})}" class="btn">Edit</a>
+                    <!-- Manage Coverage Link -->
+                    <a th:href="@{/api/auth/admin/plans/manage-coverage/{planId}(planId=${plan.id})}" class="btn">Manage Coverage</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

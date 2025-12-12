@@ -67,13 +67,17 @@ public String registerPage(Model model) {
     return "register";  // This will look for register.html in the templates folder
 }
 
+@GetMapping("/login")  // Make sure this matches your login endpoint
+public String showLoginForm(Model model) {
+    model.addAttribute("loginDto", new LoginDto());  // Add this line
+    return "login";
+}
 
-
-    // Serve the login page
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login";  // This will look for login.html in the templates folder
-    }
+    // // Serve the login page
+    // @GetMapping("/login")
+    // public String loginPage() {
+    //     return "login";  // This will look for login.html in the templates folder
+    // }
 //     @PostMapping("/login")
 // public String login(@ModelAttribute LoginDto loginDto) {
 //     // Find the user by email

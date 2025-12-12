@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Claim Queue</title>
+    <link rel="stylesheet" th:href="@{/css/styles1.css}" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .status-pill { padding: 2px 8px; border-radius: 12px; background:#ffe08a; }
+        .btn { padding: 6px 10px; margin-right: 6px; cursor:pointer; }
+        .btn-approve { background:#4caf50; color:#fff; border:none; }
+        .btn-reject { background:#f44336; color:#fff; border:none; }
+        .toolbar { margin-bottom: 12px; }
+        .pagination { margin-top: 12px; }
+    </style>
+</head>
+<body>
+<div class="main-content">
+    <h1>Claims Queue</h1>
+
+    <div class="toolbar">
+        <span><b>Pending:</b> <span th:text="${pendingCount}"></span></span>
+        <button class="btn btn-approve" id="approveAllBtn">Approve All</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Claim ID</th>
+            <th>Patient</th>
+            <th>Dentist</th>
+            <th>Submitted</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="c : ${pendingClaims}" th:attr="data-id=${c.id}">
+            <td th:text="${c.id}"></td>
+            <td th:text="${c.patientName}"></td>
+            <td th:text="${c.dentistName}"></td>
+            <td th:text="${#dates.format(c.submissionDate,'dd-MMM-yyyy')}"></td>
+            <td th:text="${c.claimedAmount}"></td>
+            <td><span class="status-pill" th:text="${c.status}"></span></td>
+            <td>
+                <button class="btn btn-approve" th:attr="data-id=${c.id}" onclick="approveClaim(this)">Approve</button>
+                <button class="btn btn-reject" th:attr="data-id=${c.id}" onclick="rejectClaim(this)">Reject</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <a th:if="${page>0}" th:href="@{'/api/auth/admin/claims'(page=${page-1},size=${size})}">Prev</a>
+        <span>Page <span th:text="${page+1}"></span> / <span th:text="${totalPages}"></span></span>
+        <a th:if="${page+1<totalPages}" th:href="@{'/api/auth/admin/claims'(page=${page+1},size=${size})}">Next</a>
+    </div>
+</div>
+
+<script>
+function approveClaim(btn) {
+    const id = btn.getAttribute('data-id');
+    axios.post(`/api/auth/admin/claims/${id}/approve`)
+        .then(() => {
+            const row = btn.closest('tr');
+            row.style.opacity = 0.4;
+            row.querySelector('.status-pill').textContent = 'APPROVED';
+        })
+        .catch(err => alert(err.response?.data?.message || 'Approval failed'));
+}
+
+function rejectClaim(btn) {
+    const id = btn.getAttribute('data-id');
+    const reason = prompt('Enter rejection reason:');
+    if (!reason) return;
+    const params = new URLSearchParams();
+    params.append('reason', reason);
+    axios.post(`/api/auth/admin/claims/${id}/reject?` + params.toString())
+        .then(() => {
+            const row = btn.closest('tr');
+            row.style.opacity = 0.4;
+            row.querySelector('.status-pill').textContent = 'REJECTED';
+        })
+        .catch(err => alert(err.response?.data?.message || 'Rejection failed'));
+}
+
+document.getElementById('approveAllBtn').addEventListener('click', function() {
+    axios.post('/api/auth/admin/claims/approve-all')
+        .then(resp => {
+            alert(resp.data);
+            window.location.reload();
+        })
+        .catch(err => alert(err.response?.data?.message || 'Batch approval failed'));
+});
+</script>
+</body>
+</html>

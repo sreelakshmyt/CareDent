@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -7,16 +7,906 @@
 </head>
 <body>
     <div class="container">
-        <!-- Logo Section -->
-        <div class="logo-container">
+        Logo Section -->
+        <!-- <div class="logo-container">
             <img src="/images/logo.png" alt="Logo" class="logo">
         </div>
 
-        <!-- Action Buttons Section -->
-        <div class="action-container">
+        Action Buttons Section -->
+        <!-- <div class="action-container">
             <a href="/api/auth/login" class="action-btn">Login</a>
             <a href="/api/auth/register" class="action-btn">Register</a>
         </div>
     </div>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareDent | Dental Insurance Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Professional Color Palette */
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #e0e7ff;
+            --secondary-color: #7c3aed;
+            --accent-color: #8b5cf6;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --text-light: #64748b;
+            --background-light: #f8fafc;
+            --background-white: #ffffff;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            --success-color: #10b981;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--background-light);
+            color: var(--text-primary);
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .main-header {
+            background: var(--background-white);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .brand-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            font-weight: 400;
+            margin-top: 0.125rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .nav-link.active {
+            color: var(--primary-color);
+            background: var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            z-index: -1;
+        }
+
+        .hero-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(124, 58, 237, 0.03) 0%, transparent 20%);
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            max-width: 550px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-lg);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(79, 70, 229, 0.2);
+        }
+
+        .hero-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .feature-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            background: var(--primary-light);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Action Container */
+        .action-container {
+            background: var(--background-white);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+        }
+
+        .action-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .action-description {
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-direction: column;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            transition: var(--transition);
+            background: var(--background-white);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+        }
+
+        .action-btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-color));
+            border: none;
+        }
+
+        .btn-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .action-btn-primary .btn-icon {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-content {
+            flex: 1;
+        }
+
+        .btn-title {
+            font-weight: 600;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .action-btn-primary .btn-title {
+            color: white;
+        }
+
+        .btn-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-light);
+        }
+
+        .action-btn-primary .btn-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-arrow {
+            color: var(--text-light);
+            font-size: 1.25rem;
+            transition: var(--transition);
+        }
+
+        .action-btn-primary .btn-arrow {
+            color: white;
+        }
+
+        .action-btn:hover .btn-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: var(--background-white);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-title {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .main-footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 3rem 2rem 1.5rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background: white;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .footer-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-contact {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .footer-contact i {
+            margin-right: 0.5rem;
+            width: 1rem;
+        }
+
+        .footer-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+            
+            .hero-content {
+                max-width: 100%;
+            }
+            
+            .features-grid {
+                max-width: 500px;
+                margin: 0 auto 3rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2.25rem;
+            }
+            
+            .hero-description {
+                font-size: 1rem;
+            }
+            
+            .action-container {
+                padding: 2rem;
+            }
+            
+            .stats-section {
+                padding: 2rem 1rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-content,
+            .hero-section,
+            .stats-section,
+            .main-footer {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .brand {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+            
+            .hero-title {
+                font-size: 1.875rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .action-buttons {
+                gap: 1rem;
+            }
+            
+            .action-btn {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="/" class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div>
+                    <div class="brand-text">CareDent</div>
+                    <div class="brand-tagline">Professional Dental Insurance Solutions</div>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-container">
+            <!-- Left Content -->
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Trusted by 50,000+ Members</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    Comprehensive Dental Insurance <span>Made Simple</span>
+                </h1>
+                
+                <p class="hero-description">
+                    CareDent provides comprehensive dental insurance solutions for individuals and families. 
+                    With extensive coverage, competitive pricing, and a nationwide network of dental professionals, 
+                    we make dental care accessible and affordable for everyone.
+                </p>
+                
+                <div class="features-grid" id="features">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <p class="feature-text">Comprehensive coverage for preventive, basic, and major dental services</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <p class="feature-text">Nationwide network of qualified dental professionals</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <p class="feature-text">No waiting periods for preventive care services</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <p class="feature-text">24/7 customer support and online claims processing</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Content - Action Container -->
+            <div class="action-container">
+                <h2 class="action-title">Access Your Account</h2>
+                <p class="action-description">
+                    Sign in to manage your dental insurance plan or create a new account to explore our coverage options.
+                </p>
+                
+                <div class="action-buttons">
+                    <!-- Login Button -->
+                    <a href="/api/auth/login" class="action-btn action-btn-primary">
+                        <div class="btn-icon">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <div class="btn-content">
+                            <div class="btn-title">Login to Portal</div>
+                            <div class="btn-subtitle">Access your existing account</div>
+                        </div>
+                        <div class="btn-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+
+                    <!-- Register Button -->
+                    <a href="/api/auth/register" class="action-btn">
+                        <div class="btn-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="btn-content">
+                            <div class="btn-title">Create Account</div>
+                            <div class="btn-subtitle">Register for new coverage</div>
+                        </div>
+                        <div class="btn-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Stats Section -->
+    <section class="stats-section" id="about">
+        <div class="stats-container">
+            <h3 class="stats-title">Why Choose CareDent?</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">50,000+</div>
+                    <div class="stat-label">Active Members</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5,000+</div>
+                    <div class="stat-label">Dental Providers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.8%</div>
+                    <div class="stat-label">Claim Satisfaction</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support Available</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-tooth"></i>
+                        </div>
+                        <div class="footer-logo-text">CareDent</div>
+                    </div>
+                    <p class="footer-description">
+                        CareDent Insurance Services provides comprehensive dental insurance solutions 
+                        designed to make quality dental care accessible and affordable for everyone.
+                    </p>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-phone"></i> 1-800-CARE-DENT</p>
+                        <p><i class="fas fa-envelope"></i> support@caredent.com</p>
+                        <p><i class="fas fa-clock"></i> Mon-Fri: 8AM-8PM EST</p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Coverage Plans</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2025 CareDent Insurance Services. All rights reserved. CA License #0A12345</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Header scroll effect
+            const header = document.querySelector('.main-header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    header.style.boxShadow = 'var(--shadow-lg)';
+                } else {
+                    header.style.boxShadow = 'var(--shadow-sm)';
+                }
+            });
+
+            // Stats counter animation
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const observerOptions = {
+                threshold: 0.5,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const statNumber = entry.target;
+                        const targetValue = parseInt(statNumber.textContent.replace(/,/g, ''));
+                        const duration = 2000;
+                        const increment = targetValue / (duration / 16);
+                        let current = 0;
+
+                        const timer = setInterval(() => {
+                            current += increment;
+                            if (current >= targetValue) {
+                                clearInterval(timer);
+                                statNumber.textContent = targetValue.toLocaleString() + (statNumber.textContent.includes('%') ? '%' : '+');
+                            } else {
+                                statNumber.textContent = Math.floor(current).toLocaleString() + (statNumber.textContent.includes('%') ? '%' : '+');
+                            }
+                        }, 16);
+
+                        observer.unobserve(statNumber);
+                    }
+                });
+            }, observerOptions);
+
+            statNumbers.forEach(stat => observer.observe(stat));
+
+            // Set current year in footer
+            const yearSpan = document.querySelector('.footer-bottom p');
+            if (yearSpan) {
+                yearSpan.innerHTML = yearSpan.innerHTML.replace('2025', new Date().getFullYear());
+            }
+
+            // Navigation active state
+            const sections = document.querySelectorAll('section, .hero-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', function() {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (scrollY >= (sectionTop - 150)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + current) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
