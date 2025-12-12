@@ -139,15 +139,36 @@
 
 package com.example.caredent.controller;
 
-import com.example.caredent.bean.DentalProcedure;
-import com.example.caredent.bean.User;
-import com.example.caredent.repository.DentalPlanRepository;
-import com.example.caredent.repository.DentalProcedureRepository;
-import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.example.caredent.bean.DentalPlan;
+import com.example.caredent.bean.DentalProcedure;
+import com.example.caredent.bean.DentistNetwork;
+import com.example.caredent.bean.Enrollment;
+import com.example.caredent.bean.Patient;
+import com.example.caredent.bean.PlanCoverageRule;
+import com.example.caredent.bean.User;
+import com.example.caredent.repository.ClaimRepository;
+import com.example.caredent.repository.DentalPlanRepository;
+import com.example.caredent.repository.DentalProcedureRepository;
+import com.example.caredent.repository.DentistNetworkRepository;
+import com.example.caredent.repository.EnrollmentRepository;
+import com.example.caredent.repository.PatientRepository;
+import com.example.caredent.repository.PlanCoverageRuleRepository;
+import com.example.caredent.service.ClaimService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/api/auth/doctor")
@@ -187,54 +208,91 @@ public class DoctorController {
         return "profile";
     }
 
-    /** Assigned plan */
+
+
+
+    @Autowired 
+    private DentistNetworkRepository dentistNetworkRepo;
+
+    @Autowired
+    private EnrollmentRepository enrollmentRepo;
+
     @GetMapping("/plan")
-    public String plan(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
+    public String myPlan(Model model, HttpSession session) {
+        User dentist = (User) session.getAttribute("loggedInUser");
+        if (dentist == null) {
             return "redirect:/api/auth/login";
         }
 
-        // Dummy plan values for now
-        model.addAttribute("assignedPlanName", "PPO Premier");
-        model.addAttribute("deductible", 200);
-        model.addAttribute("annualMax", 1500);
-        model.addAttribute("user", user);
+        // Find the plan assigned to this dentist
+        Optional<DentistNetwork> dnOpt = dentistNetworkRepo.findByDentist(dentist);
+        DentalPlan plan = dnOpt.map(DentistNetwork::getDentalPlan).orElse(null);
 
-        return "plan";
-    }
-
-    /** Manage procedures */
-    @GetMapping("/manageProcedures")
-    public String manageProcedures(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
-            return "redirect:/api/auth/login";
+        List<Enrollment> activeEnrollments = new ArrayList<>();
+        if (plan != null) {
+            activeEnrollments = enrollmentRepo.findByDentalPlanAndStatus(plan, "ACTIVE");
         }
 
-        model.addAttribute("procedures", procedureRepository.findAll());
-        model.addAttribute("user", user);
-        return "manageProcedures";
+        model.addAttribute("plan", plan);
+        model.addAttribute("enrollments", activeEnrollments);
+        model.addAttribute("user", dentist);
+
+        return "myPlan";
     }
 
-    @PostMapping("/addProcedure")
-    public String addProcedure(@RequestParam String procedureCode,
-                               @RequestParam String description,
-                               @RequestParam String category,
-                               HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
-            return "redirect:/api/auth/login";
-        }
 
-        DentalProcedure procedure = new DentalProcedure();
-        procedure.setProcedureCode(procedureCode);
-        procedure.setDescription(description);
-        procedure.setCategory(category);
-        procedureRepository.save(procedure);
 
-        return "redirect:/api/auth/doctor/manageProcedures";
+
+@Autowired 
+private PlanCoverageRuleRepository planCoverageRuleRepo;
+
+@GetMapping("/manageProcedures")
+public String manageProcedures(Model model, HttpSession session) {
+    User user = (User) session.getAttribute("loggedInUser");
+    if (user == null) {
+        return "redirect:/api/auth/login";
     }
+
+    // Find dentist's plan
+    Optional<DentistNetwork> dnOpt = dentistNetworkRepo.findByDentist(user);
+    DentalPlan plan = dnOpt.map(DentistNetwork::getDentalPlan).orElse(null);
+
+    // Get categories from PlanCoverageRule for this plan
+    List<PlanCoverageRule> coverageRules = new ArrayList<>();
+    if (plan != null) {
+        coverageRules = planCoverageRuleRepo.findByDentalPlan(plan);
+    }
+
+    model.addAttribute("procedures", procedureRepository.findAll());
+    model.addAttribute("categories", coverageRules); // pass categories to view
+    model.addAttribute("user", user);
+
+    return "manageProcedures";
+}
+
+@PostMapping("/addProcedure")
+public String addProcedure(@RequestParam String procedureCode,
+                           @RequestParam String description,
+                           @RequestParam String category,
+                           @RequestParam Double standardFee,
+                           HttpSession session) {
+    User user = (User) session.getAttribute("loggedInUser");
+    if (user == null) {
+        return "redirect:/api/auth/login";
+    }
+
+    DentalProcedure procedure = new DentalProcedure();
+    procedure.setProcedureCode(procedureCode);
+    procedure.setDescription(description);
+    procedure.setCategory(category); // selected from dropdown
+    procedure.setStandardFee(standardFee);
+    procedure.setDentist(user); // set the dentist who added this procedure
+    procedureRepository.save(procedure);
+    
+
+    return "redirect:/api/auth/doctor/manageProcedures";
+}
+
 
     @PostMapping("/deleteProcedure/{id}")
     public String deleteProcedure(@PathVariable Long id, HttpSession session) {
@@ -247,48 +305,94 @@ public class DoctorController {
         return "redirect:/api/auth/doctor/manageProcedures";
     }
 
-    /** Claim submission form */
-    @GetMapping("/claimForm")
-    public String claimForm(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
-            return "redirect:/api/auth/login";
-        }
 
-        model.addAttribute("patients", java.util.Arrays.asList("John", "Mary"));
-        model.addAttribute("procedures", java.util.Arrays.asList("D1110", "D1206"));
-        model.addAttribute("user", user);
+    @Autowired 
+    private ClaimService claimService;
+    @Autowired 
+    private PatientRepository patientRepo;
+    @Autowired 
+    private DentalProcedureRepository procedureRepo;
+    @Autowired 
+    private ClaimRepository claimRepo;
 
-        return "claimForm";
+    // /** Show Claim Form */
+    // @GetMapping("/claimForm")
+    // public String showClaimForm(Model model, HttpSession session) {
+    //     User user = (User) session.getAttribute("loggedInUser");
+    //     if (user == null) {
+    //         return "redirect:/api/auth/login";
+    //     }
+
+    //     model.addAttribute("patients", patientRepo.findAll());
+    //     model.addAttribute("procedures", procedureRepo.findAll());
+    //     model.addAttribute("user", user);
+    //     return "claimForm";
+    // }
+
+
+@GetMapping("/claimForm")
+public String showClaimForm(Model model, HttpSession session) {
+    User dentist = (User) session.getAttribute("loggedInUser");
+    if (dentist == null) {
+        return "redirect:/api/auth/login";
     }
 
+    // Find dentist's plan
+    Optional<DentistNetwork> dnOpt = dentistNetworkRepo.findByDentist(dentist);
+    DentalPlan plan = dnOpt.map(DentistNetwork::getDentalPlan).orElse(null);
+
+    List<Patient> activePatients = new ArrayList<>();
+    if (plan != null) {
+        List<Enrollment> enrollments = enrollmentRepo.findByDentalPlanAndStatus(plan, "ACTIVE");
+        for (Enrollment e : enrollments) {
+            activePatients.add(e.getPatient());
+        }
+    }
+
+    model.addAttribute("patients", activePatients);
+    model.addAttribute("procedures", procedureRepo.findByDentist(dentist)); // dentist’s own CDT codes
+    model.addAttribute("user", dentist);
+
+    return "claimForm";
+}
+
+
+
+    /** Submit Claim */
     @PostMapping("/submitClaim")
     public String submitClaim(@RequestParam Long patientId,
-                              @RequestParam Long procedureId,
+                              @RequestParam List<Long> procedureIds,
                               HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
+        User dentist = (User) session.getAttribute("loggedInUser");
+        if (dentist == null) {
             return "redirect:/api/auth/login";
         }
 
-        // TODO: implement claim persistence
-        return "redirect:/api/auth/doctor/trackClaims";
+        Patient patient = patientRepo.findById(patientId).orElseThrow();
+        List<DentalProcedure> procedures = procedureRepo.findAllById(procedureIds);
+
+        claimService.submitClaim(patient, dentist, procedures);
+        return "redirect:/doctor/trackClaims";
     }
 
-    /** Track claims */
+
+
+    /** Track Claims */
     @GetMapping("/trackClaims")
     public String trackClaims(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
+        User dentist = (User) session.getAttribute("loggedInUser");
+        if (dentist == null) {
             return "redirect:/api/auth/login";
         }
 
-        model.addAttribute("claims", java.util.Arrays.asList(
-                new Object[]{"101", "John", "2025-12-01", "Pending", 300, 50},
-                new Object[]{"102", "Mary", "2025-12-02", "Approved", 400, 20}
-        ));
-        model.addAttribute("user", user);
-
-        return "trackClaims";
+        model.addAttribute("claims", claimRepo.findByDentist(dentist));
+        model.addAttribute("user", dentist);
+        return "doctor/trackClaims";
     }
 }
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Plan - CareDent</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 style="text-align:center;">CareDent</h2>
+        <a th:href="@{/doctor/dashboard}">Overview</a>
+        <a th:href="@{/doctor/profile}">View Profile</a>
+        <a th:href="@{/api/auth/doctor/plan}">My Plan</a>
+        <a th:href="@{/api/auth/doctor/manageProcedures}">Manage Procedures</a>
+        <a th:href="@{/api/auth/doctor/claimForm}">Submit Claim</a>
+        <a th:href="@{/doctor/trackClaims}">Track Claims</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+
+    <div class="topbar">
+        <span>Welcome, Dr. <span th:text="${user.username}">Doctor</span></span>
+    </div>
+
+    <div class="content">
+        <div class="card">
+            <h2>My Plan</h2>
+            <div th:if="${plan != null}">
+                <p><strong>Plan Name:</strong> <span th:text="${plan.name}"></span></p>
+                <p><strong>Deductible:</strong> <span th:text="${plan.deductible}"></span></p>
+                <p><strong>Annual Max:</strong> <span th:text="${plan.annualMax}"></span></p>
+                <p><strong>Premium:</strong> <span th:text="${plan.premium}"></span></p>
+
+                <h3>Active Patients Enrolled</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>DOB</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="enrollment : ${enrollments}">
+                            <td th:text="${enrollment.patient.firstName} + ' ' + ${enrollment.patient.lastName}"></td>
+                            <td th:text="${enrollment.patient.dob}"></td>
+                            <td th:text="${enrollment.patient.phone}"></td>
+                            <td th:text="${enrollment.status}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:if="${plan == null}">
+                <p>No plan assigned to you yet.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

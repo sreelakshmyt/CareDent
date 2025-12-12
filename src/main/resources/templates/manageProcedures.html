@@ -38,7 +38,16 @@
 
                 <input type="text" name="procedureCode" placeholder="Procedure Code" required>
                 <input type="text" name="description" placeholder="Description" required>
-                <input type="text" name="category" placeholder="Category" required>
+                <!-- <input type="text" name="category" placeholder="Category" required> -->
+
+                    <select name="category" required>
+        <option th:each="rule : ${categories}" 
+                th:value="${rule.procedureCategory}" 
+                th:text="${rule.procedureCategory}">
+        </option>
+    </select>
+                <input type="number" name="standardFee" placeholder="Standard Fee" required>
+
                 <button type="submit" class="btn">+ Add Procedure</button>
             </form>
 
@@ -49,7 +58,7 @@
                         <th>Code</th>
                         <th>Description</th>
                         <th>Category</th>
-                        <th>Actions</th>
+                        <th>Standard Fee</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +66,7 @@
                         <td th:text="${procedure.procedureCode}"></td>
                         <td th:text="${procedure.description}"></td>
                         <td th:text="${procedure.category}"></td>
+                        <td th:text="${procedure.standardFee}"></td>
                         <td>
                             <form th:action="@{/api/auth/doctor/deleteProcedure/{id}(id=${procedure.id})}" method="post">
                                 <button type="submit" class="btn">Delete</button>

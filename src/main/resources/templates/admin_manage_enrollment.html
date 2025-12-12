@@ -1,0 +1,31 @@
+<section class="hero-section-purple">
+    <h1 class="hero-title-purple">Active Enrollments</h1>
+    <p class="hero-subtitle-purple">
+        View all patients currently enrolled in each dental plan.
+    </p>
+</section>
+
+<div class="stats-grid-purple">
+    <div th:each="plan : ${plans}" class="purple-card">
+    <h2 th:text="${plan.name}"></h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Patient Name</th>
+                <th>Benefit Year Start</th>
+                <th>Benefit Year End</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="enrollment : ${enrollmentsByPlan[plan.id]}">
+                <td th:text="${enrollment.patient.firstName} + ' ' + ${enrollment.patient.lastName}"></td>
+                <td th:text="${enrollment.benefitYearStart}"></td>
+                <td th:text="${enrollment.benefitYearEnd}"></td>
+                <td th:text="${enrollment.status}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</div>

@@ -21,6 +21,39 @@ public class ClaimLine {
 
     private Double amount;
 
+        // ClaimLine.java (add fields)
+    private Double insurancePaid;
+    private Double patientResponsibility;
+    private Double deductibleApplied;
+    
+
+// getters/setters...
+
+
+    public Double getInsurancePaid() {
+        return insurancePaid;
+    }
+
+    public void setInsurancePaid(Double insurancePaid) {
+        this.insurancePaid = insurancePaid;
+    }
+
+    public Double getPatientResponsibility() {
+        return patientResponsibility;
+    }
+
+    public void setPatientResponsibility(Double patientResponsibility) {
+        this.patientResponsibility = patientResponsibility;
+    }
+
+    public Double getDeductibleApplied() {
+        return deductibleApplied;
+    }
+
+    public void setDeductibleApplied(Double deductibleApplied) {
+        this.deductibleApplied = deductibleApplied;
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;

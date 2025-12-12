@@ -1,0 +1,68 @@
+
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Doctor Dashboard - CareDent</title>
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 style="text-align:center;">CareDent</h2>
+        <a th:href="@{/doctor/dashboard}">Overview</a>
+        <a th:href="@{/doctor/profile}">View Profile</a>
+        <a th:href="@{/doctor/plan}">My Plan</a>
+        <a th:href="@{/api/auth/doctor/manageProcedures}">Manage Procedures</a>
+        <a th:href="@{/api/auth/doctor/claimForm}">Submit Claim</a>
+        <a th:href="@{/doctor/trackClaims}">Track Claims</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+
+
+    <!-- Topbar -->
+    <div class="topbar">
+        <span>Welcome, Dr. <span th:text="${user.username}">Doctor</span></span>
+        <span>Notifications 🔔 | Profile ⚙️</span>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+        <div class="card">
+           
+
+            <form th:action="@{/api/auth/doctor/submitClaim}" method="post" enctype="multipart/form-data">
+    <!-- Select Patient -->
+    <label>Select Patient:</label>
+    <select name="patientId" required>
+        <option th:each="p : ${patients}" th:value="${p.id}" 
+                th:text="${p.firstName} + ' ' + ${p.lastName}"></option>
+    </select>
+
+    <!-- Select Procedures -->
+    <label>Select Procedures:</label>
+    <div th:each="proc : ${procedures}">
+        <input type="checkbox" name="procedureIds" th:value="${proc.id}" />
+        <span th:text="${proc.procedureCode} + ' - ' + ${proc.description} + ' (₹' + ${proc.standardFee} + ')'"></span>
+    </div>
+
+    <!-- Optional Notes -->
+    <label>Notes:</label>
+    <textarea name="notes"></textarea>
+
+    <!-- Optional Supporting Document -->
+    <label>Attach Supporting Document:</label>
+    <input type="file" name="supportingDoc" />
+
+    <button type="submit">Submit Claim</button>
+</form>
+
+
+
+        </div>
+    </div>
+</body>
+</html>
+

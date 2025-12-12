@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class DentalProcedure {
@@ -20,6 +22,24 @@ public class DentalProcedure {
 
     @Column(nullable = false)
     private String category;
+
+    private Double standardFee;
+
+    @ManyToOne
+    @JoinColumn(name = "dentist_id", referencedColumnName = "id")
+    private User dentist; 
+    public User getDentist() {
+        return dentist;
+    }
+    public void setDentist(User dentist) {
+        this.dentist = dentist;
+    }
+    public Double getStandardFee() {
+        return standardFee;
+    }
+    public void setStandardFee(Double standardFee) {
+        this.standardFee = standardFee;
+    }
 
     // Getters and Setters
     public Long getId() {

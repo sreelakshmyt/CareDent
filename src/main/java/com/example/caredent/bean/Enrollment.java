@@ -20,7 +20,7 @@ public class Enrollment {
     @ManyToOne
     @JoinColumn(name = "plan_id", referencedColumnName = "id")
     private DentalPlan dentalPlan;
-    // private String status; // e.g., ACTIVE, CANCELLED
+    //private String status; // e.g., ACTIVE, CANCELLED
 
     // Benefit period
     private LocalDate benefitYearStart;
@@ -30,7 +30,7 @@ public class Enrollment {
     private Double deductibleUsed = 0.0;
     private Double annualMaxUsed = 0.0;
 
-    private String status="PENDING"; // PENDING, ACCEPTED, REJECTED
+    private String status="ACTIVE"; // PENDING, ACCEPTED, REJECTED
     
 
 
