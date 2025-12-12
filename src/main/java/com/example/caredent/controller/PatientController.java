@@ -7,11 +7,14 @@ import com.example.caredent.bean.User;
 import com.example.caredent.bean.CancellationRequest; 
 import com.example.caredent.dto.PatientForm;
 import com.example.caredent.dto.CancellationRequestForm; 
+import com.example.caredent.dto.ProfileForm; // New DTO
 import com.example.caredent.repository.DentalPlanRepository;
 import com.example.caredent.repository.EnrollmentRepository;
 import com.example.caredent.repository.PatientRepository;
 import com.example.caredent.repository.UserRepository;
-import com.example.caredent.repository.CancellationRequestRepository; 
+import com.example.caredent.repository.CancellationRequestRepository;
+import com.example.caredent.service.Patientprofilemanage;
+ // <-- CORRECTED SERVICE IMPORT
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,56 +44,65 @@ public class PatientController {
     @Autowired
     private UserRepository userRepository;
     
-    // REQUIRED: Dependency for handling cancellation requests
     @Autowired
     private CancellationRequestRepository cancellationRepository;
+    
+    @Autowired // Inject the new service
+    private Patientprofilemanage profileService; // <-- CORRECTED TYPE
 
     // Constants for session attributes
     private static final String LOGGED_IN_USER = "loggedInUser";
     private static final String PENDING_ENROLLMENT_FORM = "pendingEnrollmentForm";
 
 
-    /** Dashboard: show patient info + available plans + ALL enrollments (Active/Cancelled) */
+    /** Dashboard: show patient info + available plans + ALL enrollments */
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpSession session) {
         User user = (User) session.getAttribute(LOGGED_IN_USER);
         if (user == null) {
-            // Assuming /api/auth/login is your login endpoint
             return "redirect:/api/auth/login"; 
         }
 
         Patient patient = patientRepository.findByUser(user).orElse(null);
         List<DentalPlan> plans = planRepository.findAll();
         
-        // --- MODIFIED LOGIC: Fetch ALL enrollments for the patient ---
-        // NOTE: This assumes EnrollmentRepository has a findAllByPatient(Patient) method
         List<Enrollment> enrollments = (patient != null)
                 ? enrollmentRepository.findAllByPatient(patient) 
                 : List.of(); 
 
-        // Filter lists for dashboard display based on a simulated status field in Enrollment
         List<Enrollment> activeEnrollments = enrollments.stream()
-            // Plans the patient currently views as active or pending cancellation
             .filter(e -> "ACTIVE".equals(e.getStatus()) || "PENDING_CANCELLATION".equals(e.getStatus()))
             .collect(Collectors.toList());
             
+        // Sorting Active Enrollments (ACTIVE first, PENDING second)
+        activeEnrollments.sort((e1, e2) -> {
+            int statusPriority1 = "ACTIVE".equals(e1.getStatus()) ? 0 : 1;
+            int statusPriority2 = "ACTIVE".equals(e2.getStatus()) ? 0 : 1;
+            return Integer.compare(statusPriority1, statusPriority2);
+        });
+            
         List<Enrollment> historyEnrollments = enrollments.stream()
-            // Plans that are fully cancelled or expired
             .filter(e -> "CANCELLED".equals(e.getStatus()) || "EXPIRED".equals(e.getStatus()))
             .collect(Collectors.toList());
+            
+        // Prepare list of IDs for quick check in Thymeleaf template (enrollment restriction)
+        List<Long> activePlanIds = activeEnrollments.stream()
+                                                    .map(e -> e.getDentalPlan().getId())
+                                                    .collect(Collectors.toList());
 
         model.addAttribute("patient", patient);
         model.addAttribute("user", user);
         model.addAttribute("plans", plans);
-        model.addAttribute("activeEnrollments", activeEnrollments); // List for cards (available plans/active plans)
-        model.addAttribute("historyEnrollments", historyEnrollments); // List for history table (cancelled/taken plans)
+        model.addAttribute("activeEnrollments", activeEnrollments);
+        model.addAttribute("historyEnrollments", historyEnrollments);
+        model.addAttribute("activePlanIds", activePlanIds); // Used for disabling plan cards
         
         return "patientDashboard";
     }
 
-    /** STEP 0: Show enrollment form for selected plan */
+    /** STEP 0: Show enrollment form for selected plan with Enrollment Restriction */
     @GetMapping("/enrollForm/{planId}")
-    public String showEnrollForm(@PathVariable Long planId, Model model, HttpSession session) {
+    public String showEnrollForm(@PathVariable Long planId, Model model, HttpSession session, RedirectAttributes ra) {
         User user = (User) session.getAttribute(LOGGED_IN_USER);
         if (user == null) {
             return "redirect:/api/auth/login";
@@ -98,8 +110,19 @@ public class PatientController {
 
         Patient patient = patientRepository.findByUser(user).orElse(null);
         DentalPlan plan = planRepository.findById(planId).orElseThrow();
+        
+        // --- ENROLLMENT RESTRICTION ---
+        if (patient != null) {
+            boolean alreadyActive = enrollmentRepository.findAllByPatient(patient).stream()
+                .filter(e -> e.getDentalPlan().getId().equals(planId))
+                .anyMatch(e -> "ACTIVE".equals(e.getStatus()));
 
-        // Removed check for single active enrollment to allow multiple plans.
+            if (alreadyActive) {
+                ra.addFlashAttribute("error", "This plan is already enrolled.");
+                return "redirect:/patient/dashboard";
+            }
+        }
+        // --- END RESTRICTION LOGIC ---
 
         PatientForm patientForm = new PatientForm();
         patientForm.setPlanId(plan.getId());
@@ -112,6 +135,11 @@ public class PatientController {
             patientForm.setSsn(patient.getSsn());
             patientForm.setAddress(patient.getAddress());
             patientForm.setPhone(patient.getPhone());
+            
+            // patientForm.setCity(patient.getCity()); 
+            // patientForm.setState(patient.getState());
+            // patientForm.setZipCode(patient.getZipCode());
+            // patientForm.setGender(patient.getGender());
         }
 
         model.addAttribute("patient", patient);
@@ -122,7 +150,7 @@ public class PatientController {
         return "enrollForm";
     }
 
-    /** STEP 1: Process enrollment form, save patient, store form in session, and redirect to payment */
+    /** STEP 1: Process enrollment form, save patient (with new fields), store form in session, and redirect to payment */
     @PostMapping("/enroll")
     public String processEnrollment(@ModelAttribute PatientForm patientForm, HttpSession session) {
         User user = (User) session.getAttribute(LOGGED_IN_USER);
@@ -130,21 +158,24 @@ public class PatientController {
             return "redirect:/api/auth/login";
         }
 
-        // 1. Create or update patient record (Patient info is final at this point)
+        // 1. Create or update patient record
         Patient patient = patientRepository.findByUser(user).orElse(new Patient());
         patient.setUser(user);
+        
+        // Mapping all fields from the comprehensive form to the Patient entity
         patient.setFirstName(patientForm.getFirstName());
         patient.setLastName(patientForm.getLastName());
         patient.setDob(patientForm.getDob());
         patient.setSsn(patientForm.getSsn());
-        
         patient.setPhone(patientForm.getPhone());
-        patient.setGender(patientForm.getGender()); // <--- New mapping
-patient.setAddress(patientForm.getAddress());
-patient.setCity(patientForm.getCity());     // <--- New mapping
-patient.setState(patientForm.getState());   // <--- New mapping
-patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
-        patientRepository.save(patient); // Patient is saved/updated
+        
+        patient.setGender(patientForm.getGender()); 
+        patient.setAddress(patientForm.getAddress());
+        patient.setCity(patientForm.getCity()); 
+        patient.setState(patientForm.getState());
+        patient.setZipCode(patientForm.getZipCode()); 
+        
+        patientRepository.save(patient); 
 
         // 2. Store the full form data in the session for the next step (payment)
         session.setAttribute(PENDING_ENROLLMENT_FORM, patientForm);
@@ -153,7 +184,7 @@ patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
         return "redirect:/patient/payment";
     }
     
-    /** STEP 2a: Show Payment Form (using the new payment.html) */
+    /** STEP 2a: Show Payment Form */
     @GetMapping("/payment")
     public String showPaymentForm(Model model, HttpSession session, RedirectAttributes ra) {
         User user = (User) session.getAttribute(LOGGED_IN_USER);
@@ -164,11 +195,9 @@ patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
         }
         
         if (patientForm == null) {
-            // Data loss: force re-enrollment
             return "redirect:/patient/dashboard?error=sessionExpired";
         }
 
-        // Retrieve the dental plan details needed for payment info
         DentalPlan plan = planRepository.findById(patientForm.getPlanId()).orElseThrow();
         
         model.addAttribute("plan", plan);
@@ -195,8 +224,7 @@ patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
             return "redirect:/patient/dashboard?error=paymentFailed";
         }
 
-        // ** FINALIZATION LOGIC (Only runs if paymentSuccessful) **
-
+        // ** FINALIZATION LOGIC **
         Patient patient = patientRepository.findByUser(user).orElseThrow();
         DentalPlan plan = planRepository.findById(patientForm.getPlanId()).orElseThrow();
 
@@ -208,7 +236,7 @@ patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
         enrollment.setBenefitYearEnd(LocalDate.now().plusYears(1));
         enrollment.setDeductibleUsed(0.0);
         enrollment.setAnnualMaxUsed(0.0);
-        enrollment.setStatus("ACTIVE"); // Set to ACTIVE after successful payment
+        enrollment.setStatus("ACTIVE"); 
 
         enrollmentRepository.save(enrollment);
 
@@ -220,28 +248,27 @@ patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
     }
     
     // =========================================================
-    //               NEW: PLAN CANCELLATION FLOW
+    //               PLAN CANCELLATION FLOW
     // =========================================================
 
     /** Show the cancellation request form, pre-filling data */
     @GetMapping("/cancelForm/{enrollmentId}")
-    public String showCancellationForm(@PathVariable Long enrollmentId, Model model, HttpSession session, RedirectAttributes ra) {
+    public String showCancellationForm(
+        @PathVariable Long enrollmentId, Model model, HttpSession session, RedirectAttributes ra) 
+    {
         User user = (User) session.getAttribute(LOGGED_IN_USER);
         if (user == null) {
             return "redirect:/api/auth/login";
         }
         
-        // Fetch the enrollment
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
             .orElseThrow(() -> new RuntimeException("Enrollment not found."));
 
-        // Check if the plan is already pending cancellation
         if ("PENDING_CANCELLATION".equals(enrollment.getStatus())) {
              ra.addFlashAttribute("error", "This plan is already pending cancellation review by the admin.");
              return "redirect:/patient/dashboard";
         }
         
-        // Pre-fill the form: fetches the enrollment ID automatically
         CancellationRequestForm form = new CancellationRequestForm();
         form.setEnrollmentId(enrollmentId);
 
@@ -250,7 +277,7 @@ patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
         model.addAttribute("planName", planName);
         model.addAttribute("cancellationForm", form);
 
-        return "cancelForm"; // Uses the new Thymeleaf template
+        return "cancelPlanForm"; 
     }
 
     /** Process the submission of the cancellation request */
@@ -276,11 +303,69 @@ patient.setZipCode(patientForm.getZipCode()); // <--- New mapping
         
         cancellationRepository.save(request); 
 
-        // 2. Update Enrollment status to pending (so it disappears from "ACTIVE" and appears as "PENDING_CANCELLATION" on the dashboard)
+        // 2. Update Enrollment status to PENDING_CANCELLATION
         enrollment.setStatus("PENDING_CANCELLATION");
         enrollmentRepository.save(enrollment);
 
         ra.addFlashAttribute("success", "Cancellation request submitted for " + enrollment.getDentalPlan().getName() + ". Awaiting admin review.");
         return "redirect:/patient/dashboard";
+    }
+
+    // =========================================================
+    //               NEW: PROFILE MANAGEMENT ROUTES (Delegated to Service)
+    // =========================================================
+
+    /** Show the minimalist profile management form */
+    @GetMapping("/profile")
+    public String showProfile(Model model, HttpSession session) {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            return "redirect:/api/auth/login";
+        }
+
+        Patient patient = patientRepository.findByUser(user).orElseThrow();
+        
+        // DELEGATE: Fetch data via the service
+        ProfileForm form = profileService.getProfileData(user);
+        
+        model.addAttribute("profileForm", form);
+        // Pass view-only data separately for display (DOB, SSN)
+        model.addAttribute("patient", patient); 
+        
+        return "manageProfile"; 
+    }
+
+    /** Process the update of basic profile details and handle password change requests */
+    @PostMapping("/profile/update")
+    public String updateProfile(@ModelAttribute ProfileForm form, HttpSession session, RedirectAttributes ra) {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            return "redirect:/api/auth/login";
+        }
+
+        try {
+            // DELEGATE: Perform all business logic in the service
+            boolean success = profileService.updateProfile(user, form);
+            
+            if (success) {
+                // Determine if password fields were used
+                if (form.getNewPassword() != null && !form.getNewPassword().isEmpty()) {
+                    ra.addFlashAttribute("success", "Profile and password updated successfully!");
+                } else {
+                    ra.addFlashAttribute("success", "Profile details updated successfully!");
+                }
+            } else {
+                // If service returns false, it implies a password failure (e.g., incorrect current password)
+                ra.addFlashAttribute("error", "Incorrect current password. Changes failed.");
+            }
+            
+        } catch (IllegalArgumentException e) {
+            // Handle validation errors (like mismatched new passwords)
+            ra.addFlashAttribute("error", e.getMessage());
+        } catch (RuntimeException e) {
+            ra.addFlashAttribute("error", "An unexpected error occurred during update.");
+        }
+        
+        return "redirect:/patient/profile";
     }
 }

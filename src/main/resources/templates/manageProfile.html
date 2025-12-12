@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:with="base='/fragments/patientlayout'">
+<head>
+    <th:block th:replace="~{${base} :: head(title='Manage Profile')}" />
+</head>
+<body>
+
+    <th:block th:replace="~{${base} :: navbar-minimal}" />
+    
+    <div class="container">
+        <div class="form-container">
+            <h2 class="mb-4 text-caredent-primary"><i class="fas fa-user-circle me-2"></i> Manage My Profile</h2>
+            
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            
+            <h5 class="mb-3 border-bottom pb-2 text-secondary">Current Details</h5>
+            
+            <div class="p-3 mb-4 border rounded bg-light">
+                <div class="row">
+                    <div class="col-md-6 mb-2"><strong>Name:</strong> <span th:text="*{patient.firstName + ' ' + patient.lastName}"></span></div>
+                    <div class="col-md-6 mb-2"><strong>Username:</strong> <span th:text="*{profileForm.username}"></span></div>
+                    <div class="col-md-6 mb-2"><strong>Email:</strong> <span th:text="*{profileForm.email}"></span></div>
+                    <div class="col-md-6 mb-2"><strong>Phone:</strong> <span th:text="*{profileForm.phone}"></span></div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mb-5">
+                <button type="button" class="btn btn-outline-primary me-2" onclick="toggleForm('editForm')">
+                    <i class="fas fa-edit me-1"></i> Edit Profile
+                </button>
+                <button type="button" class="btn btn-outline-danger" onclick="toggleForm('passwordForm')">
+                    <i class="fas fa-lock me-1"></i> Change Password
+                </button>
+            </div>
+
+
+            <form th:action="@{/patient/profile/update}" method="post" th:object="${profileForm}">
+                
+                <div id="editForm" style="display:none;" class="mb-5 p-4 border rounded">
+                    <h5 class="mb-3 text-caredent-primary">Edit Contact Information</h5>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" th:field="*{firstName}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" th:field="*{lastName}" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" th:field="*{username}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" th:field="*{email}" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address Line 1</label>
+                        <input type="text" th:field="*{address}" class="form-control" required>
+                    </div>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-5">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" th:field="*{city}" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="state" class="form-label">State</label>
+                            <input type="text" th:field="*{state}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="zipCode" class="form-label">Zip Code</label>
+                            <input type="text" th:field="*{zipCode}" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" th:field="*{phone}" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Date of Birth (View Only)</label>
+                            <input type="text" class="form-control" th:value="${#temporals.format(patient.dob, 'MM/dd/yyyy')}" readonly>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-caredent w-100">
+                        <i class="fas fa-save me-1"></i> Save Profile Details
+                    </button>
+                    <small class="d-block text-center mt-2 text-muted">Note: Password changes require the dedicated form.</small>
+                </div>
+
+
+                <div id="passwordForm" style="display:none;" class="mb-5 p-4 border rounded border-danger">
+                    <h5 class="mb-3 text-danger">Change Account Password</h5>
+                    <p class="text-muted small">Enter your current password and a new password below.</p>
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="currentPassword" class="form-label">Current Password</label>
+                            <input type="password" th:field="*{currentPassword}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="newPassword" class="form-label">New Password</label>
+                            <input type="password" th:field="*{newPassword}" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+                            <input type="password" th:field="*{confirmNewPassword}" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="fas fa-lock me-1"></i> Update Password
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    
+    <th:block th:replace="~{${base} :: footer}" />
+    
+    <th:block th:replace="~{${base} :: scripts}" />
+    
+    <script>
+        function toggleForm(formId) {
+            const form = document.getElementById(formId);
+            const otherFormId = (formId === 'editForm') ? 'passwordForm' : 'editForm';
+            const otherForm = document.getElementById(otherFormId);
+            
+            // Toggle visibility of the target form
+            if (form.style.display === 'none') {
+                form.style.display = 'block';
+                // Hide the other form when one is opened
+                otherForm.style.display = 'none';
+            } else {
+                form.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="head(title)">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title th:text="${title}">CareDent Portal</title>
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        <style>
+            /* Define common styles here, including the color palette */
+            :root {
+                --caredent-primary: #005461; /* Dark Teal */
+                --caredent-accent: #00B7B5; /* Bright Cyan for highlights */
+            }
+            .bg-caredent-primary { background-color: var(--caredent-primary) !important; }
+            .text-caredent-primary { color: var(--caredent-primary) !important; }
+            .btn-caredent { background-color: var(--caredent-accent); border-color: var(--caredent-accent); color: #fff; }
+            .btn-caredent:hover { background-color: #009997; border-color: #009997; }
+            /* Specific profile container style */
+            .form-container { max-width: 700px; margin: 3rem auto; padding: 2rem; border: 1px solid #dee2e6; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        </style>
+    </th:block>
+    
+</head>
+<body>
+
+    <th:block th:fragment="navbar-minimal">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-caredent-primary shadow py-3">
+            <div class="container-fluid container">
+                <a class="navbar-brand fw-bold fs-4" th:href="@{/patient/dashboard}"><i class="fas fa-tooth me-2"></i>CareDent Portal</a>
+                <a class="btn btn-outline-light" th:href="@{/patient/dashboard}">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+                </a>
+            </div>
+        </nav>
+    </th:block>
+
+    <th:block th:fragment="footer">
+        <footer class="bg-caredent-primary text-white pt-4 pb-2 mt-5">
+            <div class="container text-center">
+                <small>&copy; 2025 CareDent Insurance System. All rights reserved.</small>
+            </div>
+        </footer>
+    </th:block>
+
+    <th:block th:fragment="scripts">
+        <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+    </th:block>
+
+</body>
+</html>

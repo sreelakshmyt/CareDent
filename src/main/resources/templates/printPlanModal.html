@@ -1,0 +1,19 @@
+<div th:fragment="printModalFragment">
+    <div class="modal fade" id="printPlanModal" tabindex="-1" aria-labelledby="printPlanModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-caredent-secondary text-white">
+                    <h5 class="modal-title" id="printPlanModalLabel"><i class="fas fa-download me-2"></i> Download Plan Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Click the button below to generate and download the detailed PDF document for this plan.</p>
+                    <a href="#" class="btn btn-caredent w-50" 
+                       onclick="alert('PDF generation simulated! File download started.'); document.querySelector('#printPlanModal').classList.remove('show'); return false;">
+                        <i class="fas fa-file-pdf me-1"></i> Download PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
