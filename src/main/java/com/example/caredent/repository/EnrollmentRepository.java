@@ -13,5 +13,6 @@ import com.example.caredent.bean.Patient;
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     Optional<Enrollment> findByPatient(Patient patient); // check if patient already enrolled
      List<Enrollment> findByStatus(String status);
+     List<Enrollment> findAllByPatient(Patient patient);
 
 }

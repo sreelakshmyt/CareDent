@@ -1,138 +1,210 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Dental Enrollment Form</title>
-  <link rel="stylesheet" th:href="@{/css/enroll.css}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Dental Insurance Enrollment - CareDent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* Custom Styles */
+        .bg-caredent { background-color: #17a2b8; /* Teal */ }
+        .text-caredent { color: #17a2b8; }
+        .btn-caredent { background-color: #17a2b8; border-color: #17a2b8; color: white; }
+        .btn-caredent:hover { background-color: #138496; border-color: #138496; color: white; }
+        .form-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+    </style>
 </head>
 <body>
-<div class="container my-5">
-  <h2 class="text-primary">Dental Insurance Enrollment Form</h2>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-caredent shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" th:href="@{/patient/dashboard}"><i class="fas fa-tooth me-2"></i>CareDent Enrollment</a>
+            <a class="btn btn-outline-light" th:href="@{/patient/dashboard}">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+    </nav>
 
-  <!-- Selected Plan Details -->
-  <h4 class="mt-4">Selected Plan</h4>
-  <div class="card p-3 mb-4 shadow-sm">
-    <p><strong th:text="${plan.name}"></strong></p>
-    <p>Deductible: $<span th:text="${plan.deductible}"></span></p>
-    <p>Annual Max: $<span th:text="${plan.annualMax}"></span></p>
-    <p>Premium: $<span th:text="${plan.premium}"></span>/month</p>
-  </div>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="mb-4 text-caredent"><i class="fas fa-user-plus me-2"></i> Dental Insurance Application</h2>
+            <p class="text-muted">Please complete all required fields to submit your enrollment request.</p>
 
-  <form th:action="@{/patient/enroll}" method="post" th:object="${patientForm}">
-    <!-- Hidden Plan ID -->
-    <input type="hidden" th:field="*{planId}" />
+            <h4 class="mt-4">Selected Plan Summary</h4>
+            <div class="card p-3 mb-4 shadow-sm bg-light">
+                <p class="mb-1">Plan: <strong><span th:text="${plan.name}"></span></strong></p>
+                <p class="mb-1">Deductible: $<span th:text="${plan.deductible}"></span> | Annual Max: $<span th:text="${plan.annualMax}"></span></p>
+                <p class="mb-0">Premium: $<span th:text="${plan.premium}"></span>/month</p>
+            </div>
 
-    <!-- Member Information -->
-    <h4 class="mt-4">Member Information</h4>
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label>First Name</label>
-        <input type="text" th:field="*{firstName}" class="form-control" required>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label>Last Name</label>
-        <input type="text" th:field="*{lastName}" class="form-control" required>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label>Date of Birth</label>
-        <input type="date" th:field="*{dob}" class="form-control" required>
-      </div>
-      <div class="col-md-6 mb-3">
-        <label>National ID / SSN</label>
-        <input type="text" th:field="*{ssn}" class="form-control">
-      </div>
-      <div class="col-md-12 mb-3">
-        <label>Address</label>
-        <input type="text" th:field="*{address}" class="form-control">
-      </div>
-      <div class="col-md-6 mb-3">
-        <label>Phone</label>
-        <input type="text" th:field="*{phone}" class="form-control">
-      </div>
-      <div class="col-md-6 mb-3">
-        <label>Email</label>
-        <input type="email" th:field="*{email}" class="form-control">
-      </div>
+            <form th:action="@{/patient/enroll}" th:object="${patientForm}" method="post">
+                <input type="hidden" th:field="*{planId}" />
+
+                <h5 class="mt-4 mb-3 border-bottom pb-2 text-secondary">1. Primary Member Information</h5>
+                
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="firstName" class="form-label">First Name</label>
+                        <input type="text" th:field="*{firstName}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="lastName" class="form-label">Last Name</label>
+                        <input type="text" th:field="*{lastName}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="dob" class="form-label">Date of Birth</label>
+                        <input type="date" th:field="*{dob}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="gender" class="form-label">Gender</label>
+                        <select id="gender" th:field="*{gender}" class="form-select" required>
+                            <option value="">Select Gender...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ssn" class="form-label">National ID / SSN</label>
+                        <input type="text" th:field="*{ssn}" class="form-control" placeholder="Full ID or Last 4 Digits" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" th:field="*{email}" class="form-control" placeholder="name@example.com" required>
+                    </div>
+                </div>
+
+                <h5 class="mt-4 mb-3 border-bottom pb-2 text-secondary">2. Address & Contact</h5>
+                
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address Line 1</label>
+                    <input type="text" th:field="*{address}" class="form-control" required>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-5">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" th:field="*{city}" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" th:field="*{state}" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="zipCode" class="form-label">Zip Code</label>
+                        <input type="text" th:field="*{zipCode}" class="form-control" pattern="[0-9]{5}(-[0-9]{4})?" required>
+                    </div>
+                </div>
+
+                <div class="mb-4 mt-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="tel" th:field="*{phone}" class="form-control" placeholder="555-555-5555" required>
+                </div>
+
+
+                <h5 class="mt-4 mb-3 border-bottom pb-2 text-secondary">3. Coverage Selection</h5>
+                <div class="mb-4">
+                    <label for="coverageType" class="form-label">Coverage Type</label>
+                    <select id="coverageType" th:field="*{coverageType}" class="form-select" required>
+                        <option value="Individual">Individual</option>
+                        <option value="Individual + Spouse">Individual + Spouse</option>
+                        <option value="Individual + Child(ren)">Individual + Child(ren)</option>
+                        <option value="Family">Family</option>
+                        <option value="Waive">Waive Coverage</option>
+                    </select>
+                </div>
+
+                <h5 class="mt-4 mb-3 border-bottom pb-2 text-secondary">4. Primary Dependent Information (If applicable)</h5>
+                <p class="text-muted small">Complete this section if you selected a coverage type other than "Individual".</p>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Name</label>
+                        <input type="text" th:field="*{dependentName}" class="form-control" placeholder="Full Name">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" th:field="*{dependentDob}" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Relationship</label>
+                        <select th:field="*{dependentRelationship}" class="form-select">
+                            <option value="">Select...</option>
+                            <option value="Spouse">Spouse</option>
+                            <option value="Child">Child</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">Gender</label>
+                        <select th:field="*{dependentGender}" class="form-select">
+                            <option value="">Select...</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input type="checkbox" th:field="*{dependentStudent}" class="form-check-input">
+                            <label class="form-check-label">Is full-time student (if over age limit)?</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input type="checkbox" th:field="*{dependentDisabled}" class="form-check-input">
+                            <label class="form-check-label">Is disabled/handicapped?</label>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="mt-4 mb-3 border-bottom pb-2 text-secondary">5. Other Dental Insurance (COB)</h5>
+                <div class="mb-3">
+                    <label for="otherInsurance" class="form-label">Do you or any dependent have other dental insurance?</label>
+                    <select id="otherInsurance" th:field="*{otherInsurance}" class="form-select">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="carrierName" class="form-label">If Yes, Other Insurance Carrier Name</label>
+                    <input type="text" id="carrierName" th:field="*{carrierName}" class="form-control" placeholder="e.g., Delta Dental, Aetna">
+                </div>
+
+                <h5 class="mt-4 mb-3 border-bottom pb-2 text-secondary">6. Consent & Authorization</h5>
+                <div class="form-check mb-4">
+                    <input type="checkbox" id="consentCheck" class="form-check-input" required>
+                    <label class="form-check-label" for="consentCheck">
+                        I certify that the above information is true and complete. I understand coverage is subject to plan rules, deductibles, annual maximums, and exclusions.
+                    </label>
+                </div>
+
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-caredent btn-lg">
+                        <i class="fas fa-arrow-right me-2"></i> Submit Enrollment
+                    </button>
+                    <a th:href="@{/patient/dashboard}" class="btn btn-outline-secondary">Cancel and Return</a>
+                </div>
+            </form>
+            
+        </div>
     </div>
 
-    <!-- Coverage Selection -->
-    <h4 class="mt-4">Coverage Selection</h4>
-    <div class="form-group mb-3">
-      <label>Coverage Type</label>
-      <select th:field="*{coverageType}" class="form-control" required>
-        <option value="Individual">Individual</option>
-        <option value="Individual + Spouse">Individual + Spouse</option>
-        <option value="Individual + Child(ren)">Individual + Child(ren)</option>
-        <option value="Family">Family</option>
-        <option value="Waive">Waive Coverage</option>
-      </select>
-    </div>
+    <footer class="bg-caredent text-white text-center py-3 mt-5">
+        <small>&copy; 2025 CareDent Insurance Portal. All rights reserved.</small>
+    </footer>
 
-    <!-- Dependent Information -->
-    <h4 class="mt-4">Dependent Information (Optional)</h4>
-<p>Please list spouse and children you want covered under this plan.</p>
-
-<div class="row mb-3">
-  <div class="col-md-4">
-    <label>Dependent Name</label>
-    <input type="text" th:field="*{dependentName}" class="form-control" placeholder="Full Name">
-  </div>
-  <div class="col-md-3">
-    <label>Date of Birth</label>
-    <input type="date" th:field="*{dependentDob}" class="form-control">
-  </div>
-  <div class="col-md-3">
-    <label>Relationship</label>
-    <select th:field="*{dependentRelationship}" class="form-control">
-      <option value="Spouse">Spouse</option>
-      <option value="Child">Child</option>
-    </select>
-  </div>
-  <div class="col-md-2">
-    <label>Gender</label>
-    <select th:field="*{dependentGender}" class="form-control">
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-      <option value="Other">Other</option>
-    </select>
-  </div>
-</div>
-
-<!-- Optional flags -->
-<div class="form-check mb-2">
-  <input type="checkbox" th:field="*{dependentStudent}" class="form-check-input">
-  <label class="form-check-label">Is full-time student (if over 19)?</label>
-</div>
-<div class="form-check mb-2">
-  <input type="checkbox" th:field="*{dependentDisabled}" class="form-check-input">
-  <label class="form-check-label">Is disabled/handicapped?</label>
-</div>
-
-    <!-- Other Insurance -->
-    <h4 class="mt-4">Other Dental Insurance</h4>
-    <div class="form-group mb-3">
-      <label>Do you have other dental insurance?</label>
-      <select th:field="*{otherInsurance}" class="form-control">
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-      </select>
-    </div>
-    <div class="form-group mb-3">
-      <label>If Yes, Carrier Name</label>
-      <input type="text" th:field="*{carrierName}" class="form-control">
-    </div>
-
-    <!-- Consent -->
-    <h4 class="mt-4">Consent & Authorization</h4>
-    <div class="form-check mb-3">
-      <input type="checkbox" class="form-check-input" required>
-      <label class="form-check-label">
-        I certify that the above information is true and complete. I understand coverage is subject to plan rules, deductibles, annual maximums, and exclusions.
-      </label>
-    </div>
-
-    <button type="submit" class="btn btn-success">Submit Enrollment</button>
-  </form>
-</div>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
 </body>
 </html>

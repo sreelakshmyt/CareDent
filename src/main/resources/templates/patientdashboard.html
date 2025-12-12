@@ -2,206 +2,379 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Patient Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.1.3/css/bootstrap.min.css}" />
-    <link rel="stylesheet" th:href="@{/css/patient.css}" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Patient Dashboard - CareDent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
     <style>
-      /* Custom modal styles */
-      .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
+      /* --- Custom Dark Green Color Scheme (Health-Proof Look) --- */
+      .bg-caredent { background-color: #006400; /* Dark Green */ }
+      .text-caredent { color: #006400; }
+      .border-caredent { border-color: #006400 !important; }
+      .btn-caredent { background-color: #006400; border-color: #006400; color: white; }
+      .btn-caredent:hover { background-color: #004d00; border-color: #003300; }
+
+      /* --- ATM Card Styles (Shining/Professional) --- */
+      .insurance-card {
+        border-radius: 12px;
+        color: white;
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Base shadow */
       }
-      .modal-box {
-        background: #fff;
-        width: 80%;
-        max-width: 700px;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      .insurance-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
       }
-      .terms-content {
-        max-height: 300px;
-        overflow-y: auto;
-        background: #f8f9fa;
-        border: 1px solid #dee2e6;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border-radius: 8px;
+      /* Shining effect overlay (simulated) */
+      .insurance-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(120deg, rgba(255, 255, 255, 0.1) 30%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0.1) 70%);
+        transform: translateX(-100%);
+        transition: transform 0.5s ease-in-out;
       }
-      .modal-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
-        align-items: center;
+      .insurance-card:hover::before {
+        transform: translateX(100%);
       }
-      .btn-accept, .btn-decline {
-        padding: 0.6rem 1.2rem;
-        border-radius: 5px;
-        font-weight: bold;
-        cursor: pointer;
-        border: none;
+      
+      .insurance-card .card-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        font-size: 1rem;
+        background: rgba(0, 0, 0, 0.2);
       }
-      .btn-accept {
-        background: #28a745;
-        color: #fff;
+      
+      /* Dynamic Card Colors (Using gradients for ATM effect) */
+      .card-ppo { background: linear-gradient(135deg, #0d47a1, #1976d2); } /* Dark Blue */
+      .card-hmo { background: linear-gradient(135deg, #388e3c, #66bb6a); } /* Medium Green */
+      .card-premium { background: linear-gradient(135deg, #ff8f00, #ffb300); color: #333 !important; } /* Amber/Gold */
+      .card-default { background: linear-gradient(135deg, #004d40, #00796b); } /* Dark Teal fallback */
+      .insurance-card.card-premium .card-header {
+          color: #333 !important;
+          background: rgba(0, 0, 0, 0.1);
       }
-      .btn-accept:disabled {
-        background: #6c757d;
-        cursor: not-allowed;
+
+      /* Status Styling */
+      .status-pending { background-color: #ffc107; color: #333; }
+      .status-cancelled { background-color: #dc3545; color: white; }
+      
+      /* Other features (kept the look consistent) */
+      .feature-box {
+          transition: transform 0.2s, box-shadow 0.2s;
+          cursor: pointer;
       }
-      .btn-decline {
-        background: #dc3545;
-        color: #fff;
+      .feature-box:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
       }
     </style>
-
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-caredent shadow">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="#">CareDent Portal</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-                    data-bs-target="#navbarNav" aria-controls="navbarNav" 
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <a class="navbar-brand fw-bold" th:href="@{/}"><i class="fas fa-tooth me-2"></i>CareDent Portal</a>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" th:href="@{/patient/dashboard}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/patient/enrollment}">Enrollment</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/patient/claims}">Claims</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/patient/benefits}">Benefits</a></li>
-                    <li class="nav-item"><a class="nav-link" th:href="@{/patient/tools}">Tools</a></li>
-                </ul>
-               
-                <span class="navbar-text me-3">
-    Welcome, 
-    <span th:text="${patient != null ? patient.firstName : user.username}"></span>
-</span>
-
-                <a class="btn btn-outline-light" th:href="@{/logout}">Logout</a>
+                <span class="navbar-text me-3 text-white">
+                    Welcome, <span th:text="${patient != null ? patient.firstName : user.username}"></span>
+                </span>
+                <a class="btn btn-outline-light" th:href="@{/logout}">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <header class="bg-light py-4 shadow-sm">
         <div class="container text-center">
-            <h2 class="fw-bold">Your Dental Insurance Dashboard</h2>
-            <p class="text-muted">Review available plans, enroll, and manage your benefits with ease.</p>
+            <h2 class="fw-bold text-caredent">Your Member Dashboard</h2>
+            <p class="text-muted">Manage your plans, view benefits, and access your digital ID cards.</p>
         </div>
     </header>
 
-   
-
-
-            <main class="container my-5">
-        <h3 class="mb-4">Available Plans</h3>
-        <div class="row">
-            <!-- Dynamic plan cards -->
-            <div class="col-md-4 mb-4" th:each="plan : ${plans}">
-                <div class="card h-100 shadow-sm border-0">
+    <main class="container my-5">
+        
+        <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong th:if="${param.success[0] == 'paid'}">Payment Successful!</strong> Your enrollment is now finalized and active.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong th:if="${param.error[0] == 'alreadyEnrolled'}">Enrollment Blocked!</strong> You already have an active plan.
+            <strong th:if="${param.error[0] == 'termsDeclined'}">Enrollment Canceled.</strong> You must accept the terms to proceed.
+            <strong th:if="${param.error[0] == 'paymentFailed'}">Payment Failed.</strong> Please try again.
+            <strong th:if="${param.error[0] == 'sessionExpired'}">Error.</strong> Enrollment data lost. Please re-enroll.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+        <h3 class="mb-4 text-caredent">Active Coverage (<span th:text="${activeEnrollments.size()}">0</span> Plans)</h3>
+        
+        <div th:if="${activeEnrollments.isEmpty()}" class="alert alert-warning text-center">
+             <i class="fas fa-exclamation-circle me-2"></i> You currently have no active dental coverage. View plans below to enroll.
+        </div>
+        
+        <div class="row" th:if="${!activeEnrollments.isEmpty()}">
+            <div class="col-lg-6 mb-4" th:each="enrollment : ${activeEnrollments}">
+                <div th:with="planName=${enrollment.dentalPlan.name.toLowerCase()}"
+                     th:classappend="${#strings.contains(planName, 'ppo') ? 'card-ppo' : (#strings.contains(planName, 'hmo') ? 'card-hmo' : (#strings.contains(planName, 'premium') ? 'card-premium' : 'card-default'))}"
+                     class="card insurance-card shadow-lg h-100"
+                     onclick="printCardModal()"> <div class="card-header fw-bold">
+                        <i class="fas fa-id-card me-2"></i> CareDent Digital ID Card
+                        <span class="float-end badge bg-light text-dark fw-bold" th:text="${enrollment.dentalPlan.name}"></span>
+                    </div>
                     <div class="card-body">
-                        <h5 class="card-title text-primary fw-bold" th:text="${plan.name}"></h5>
-                        <p class="card-text mb-1">Deductible: $<span th:text="${plan.deductible}"></span></p>
-                        <p class="card-text mb-1">Annual Max: $<span th:text="${plan.annualMax}"></span></p>
-                        <p class="card-text mb-3">Premium: $<span th:text="${plan.premium}"></span>/month</p>
-                        <!-- Enroll button triggers modal -->
-                        <a href="#" class="btn btn-primary w-100" 
-                           th:attr="data-plan-id=${plan.id}" 
-                           onclick="openTerms(this)">Enroll</a>
+                        <div th:if="${enrollment.status == 'PENDING_CANCELLATION'}" class="alert alert-warning p-1 text-center small fw-bold">
+                            <i class="fas fa-hourglass-half me-1"></i> Cancellation Pending Admin Review
+                         </div>
+                         
+                        <div class="row">
+                            <div class="col-12 border-bottom border-white mb-3 pb-3">
+                                <h5 class="card-title fw-bolder mb-1" th:text="${enrollment.dentalPlan.name}">Dental Plan Name</h5>
+                                <p class="mb-0 small">ID: <span th:text="'P' + ${patient.id} + 'E' + ${enrollment.id}"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1 small">**Member**: <span th:text="${patient.firstName + ' ' + patient.lastName}"></span></p>
+                                <p class="mb-1 small">**Deductible**: $<span th:text="${enrollment.dentalPlan.deductible}"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1 small">**Effective**: <span th:text="${#temporals.format(enrollment.benefitYearStart, 'MM/dd/yyyy')}"></span></p>
+                                <p class="mb-1 small">**Annual Max**: $<span th:text="${enrollment.dentalPlan.annualMax}"></span></p>
+                            </div>
+                        </div>
+                        <small class="mt-3 d-block">
+                            *Coverage is active until <span th:text="${#temporals.format(enrollment.benefitYearEnd, 'MM/dd/yyyy')}"></span>.
+                        </small>
+                        
+                        <a th:if="${enrollment.status == 'ACTIVE'}"
+                           th:href="@{/patient/cancelForm/{id}(id=${enrollment.id})}" 
+                           class="btn btn-sm mt-3 btn-outline-danger float-end">
+                            <i class="fas fa-times-circle"></i> Cancel Plan
+                        </a>
+                        <button th:if="${enrollment.status == 'PENDING_CANCELLATION'}"
+                                class="btn btn-sm mt-3 btn-outline-secondary float-end" disabled>
+                            <i class="fas fa-clock"></i> Cancellation Requested
+                        </button>
+                        
+                        <a href="#" class="btn btn-sm mt-3" th:classappend="${#strings.contains(planName, 'premium')} ? 'btn-outline-dark' : 'btn-warning'" onclick="printCardModal()">
+                            <i class="fas fa-print"></i> Print Card
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
 
-            
-
-        <!-- Current Enrollment Section -->
-        <div class="mt-5">
-            <h3>Your Current Enrollment</h3>
-            <div th:if="${enrollment != null}">
-                <p>You are enrolled in: <strong th:text="${enrollment.dentalPlan.name}"></strong></p>
-                <p>Coverage Period: 
-                    <span th:text="${enrollment.benefitYearStart}"></span> to 
-                    <span th:text="${enrollment.benefitYearEnd}"></span>
-                </p>
+        <hr class="my-5">
+        
+        <h3 class="mb-4 text-caredent">Quick Access</h3>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6">
+                <a th:href="@{/patient/claims}" class="card text-center text-decoration-none feature-box shadow-sm border-caredent">
+                    <div class="card-body">
+                        <i class="fas fa-file-invoice fa-2x text-caredent mb-2"></i>
+                        <h6 class="card-title text-dark">Submit/View Claims</h6>
+                    </div>
+                </a>
             </div>
-            <div th:if="${enrollment == null}">
-                <p class="text-muted">You are not enrolled in any plan yet.</p>
+            <div class="col-md-3 col-sm-6">
+                <a th:href="@{/patient/benefits}" class="card text-center text-decoration-none feature-box shadow-sm border-caredent">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-2x text-caredent mb-2"></i>
+                        <h6 class="card-title text-dark">View Benefits/Usage</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <a th:href="@{/patient/network}" class="card text-center text-decoration-none feature-box shadow-sm border-caredent">
+                    <div class="card-body">
+                        <i class="fas fa-map-marker-alt fa-2x text-caredent mb-2"></i>
+                        <h6 class="card-title text-dark">Find a Dentist</h6>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <a th:href="@{/patient/profile}" class="card text-center text-decoration-none feature-box shadow-sm border-caredent">
+                    <div class="card-body">
+                        <i class="fas fa-user-circle fa-2x text-caredent mb-2"></i>
+                        <h6 class="card-title text-dark">Manage Profile</h6>
+                    </div>
+                </a>
             </div>
         </div>
+        
+        <hr class="my-5" id="plans">
+
+        <h3 class="mb-4 text-caredent">Available Plans</h3>
+        <div th:if="${!activeEnrollments.isEmpty()}" class="alert alert-info small">
+             You are currently enrolled in <span th:text="${activeEnrollments.size()}"></span> plan(s). You may choose to enroll in another if desired.
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4" th:each="plan : ${plans}">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <h5 class="card-title text-caredent fw-bold" th:text="${plan.name}"></h5>
+                        <p class="card-text mb-1">Deductible: $<span th:text="${plan.deductible}"></span></p>
+                        <p class="card-text mb-1">Annual Max: $<span th:text="${plan.annualMax}"></span></p>
+                        <p class="card-text mb-3">Premium: $<span th:text="${plan.premium}"></span>/month</p>
+                        
+                        <a href="#" class="btn btn-caredent w-100" 
+                           th:attr="data-plan-id=${plan.id}" 
+                           onclick="openTerms(this)">
+                           <i class="fas fa-file-contract me-1"></i> Enroll Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="my-5">
+
+        <h3 class="mb-4 text-caredent">Plan History</h3>
+        
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border-caredent">
+                    <div class="card-header bg-caredent text-white fw-bold">Current & Pending Plans</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center" th:each="enrollment : ${activeEnrollments}">
+                            <span th:text="${enrollment.dentalPlan.name}">Plan Name</span>
+                            <span class="badge" 
+                                  th:classappend="${enrollment.status == 'ACTIVE' ? 'bg-success' : 'bg-warning text-dark'}" 
+                                  th:text="${enrollment.status}">
+                                  ACTIVE
+                            </span>
+                        </li>
+                        <li th:if="${activeEnrollments.isEmpty()}" class="list-group-item text-muted">No current active plans.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border-caredent">
+                    <div class="card-header bg-caredent text-white fw-bold">Cancelled & Expired Plans</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center" th:each="enrollment : ${historyEnrollments}">
+                            <span th:text="${enrollment.dentalPlan.name}">Plan Name</span>
+                            <span class="badge bg-secondary" 
+                                  th:text="${enrollment.status}">
+                                  CANCELLED
+                            </span>
+                        </li>
+                        <li th:if="${historyEnrollments.isEmpty()}" class="list-group-item text-muted">No past plans recorded.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
     </main>
 
-    <!-- Terms & Conditions Modal -->
     <div id="termsModal" class="modal-overlay">
-      <div class="modal-box">
-        <h2>Terms & Conditions</h2>
-        <p>Please review the following before enrolling:</p>
-        <div class="terms-content">
-          <ul>
-            <li>I certify that I am eligible to enroll in this dental plan and my dependents meet eligibility requirements.</li>
-            <li>I understand coverage is subject to deductibles, annual maximums, exclusions, and waiting periods.</li>
-            <li>I agree to provide accurate information; misrepresentation may result in termination of coverage.</li>
-            <li>I acknowledge that claims are processed according to plan rules and provider networks.</li>
-            <li>I consent to the use of my information for plan administration in compliance with privacy laws.</li>
-            <li>I understand that enrollment is binding for the benefit year unless a qualifying life event occurs.</li>
-            <li>I agree to pay premiums on time; non-payment may result in cancellation of coverage.</li>
-          </ul>
         </div>
-        <div class="modal-actions">
-          <label>
-            <input type="checkbox" id="termsCheckbox" onchange="toggleAccept()"> 
-            I have read and agree to the Terms & Conditions
-          </label>
-          <button id="acceptBtn" class="btn-accept" onclick="acceptTerms()" disabled>Accept</button>
-          <button class="btn-decline" onclick="declineTerms()">Decline</button>
+    
+    <div id="printModal" class="modal fade" tabindex="-1" aria-labelledby="printModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-caredent text-white">
+                    <h5 class="modal-title" id="printModalLabel"><i class="fas fa-print me-2"></i> Print Digital ID Card</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Click the button below to generate a PDF of your ID card for printing or offline use.</p>
+                    <a href="#" class="btn btn-caredent w-50" onclick="alert('PDF generation simulated! In a real application, this link would generate the PDF.'); $('#printModal').modal('hide');">
+                        <i class="fas fa-file-pdf me-1"></i> Generate PDF Card
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
+    
+    <footer class="bg-caredent text-white pt-5 pb-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="text-uppercase fw-bold mb-3"><i class="fas fa-tooth me-2"></i> CareDent Insurance</h5>
+                    <p class="small text-white-50">
+                        *The Health-Proof Choice.* Our mission is to provide clear, affordable, and comprehensive dental coverage to every member. We simplify insurance so you can focus on your smile.
+                    </p>
+                    <div class="d-flex social-icons mt-3">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
 
-    <!-- Footer -->
-    <footer class="bg-primary text-white text-center py-3 mt-5">
-        <small>&copy; 2025 CareDent Insurance Portal. All rights reserved.</small>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a th:href="@{/patient/claims}" class="text-white text-decoration-none mb-2 d-block">Claims & Submissions</a></li>
+                        <li><a th:href="@{/patient/benefits}" class="text-white text-decoration-none mb-2 d-block">Benefit Usage</a></li>
+                        <li><a th:href="@{/patient/network}" class="text-white text-decoration-none mb-2 d-block">Find a Dentist</a></li>
+                        <li><a href="#plans" class="text-white text-decoration-none mb-2 d-block">View Plans</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-3">Policy & Legal</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none mb-2 d-block">Privacy Policy</a></li>
+                        <li><a href="#" class="text-white text-decoration-none mb-2 d-block">Terms of Service</a></li>
+                        <li><a href="#" class="text-white text-decoration-none mb-2 d-block">Non-Discrimination Notice</a></li>
+                        <li><a href="#" class="text-white text-decoration-none mb-2 d-block">Sitemap</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold mb-3">Contact Us</h6>
+                    <p class="small mb-1"><i class="fas fa-home me-2"></i> 123 Dental Way, Suite 400</p>
+                    <p class="small mb-1"><i class="fas fa-envelope me-2"></i> support@caredent.com</p>
+                    <p class="small mb-1"><i class="fas fa-phone me-2"></i> (800) 555-5555</p>
+                    <p class="small"><i class="fas fa-clock me-2"></i> Mon - Fri, 8:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+            
+            <hr class="text-white-50 my-3">
+            <div class="text-center">
+                <small>&copy; 2025 CareDent Insurance Portal. All rights reserved.</small>
+            </div>
+        </div>
     </footer>
 
-    <!-- JavaScript -->
+
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
     <script>
       let selectedPlanId = null;
+      
+      // We assume your 'termsModal' is still using the older styling, so we'll 
+      // simulate the terms modal interaction with a simple alert for now.
 
       function openTerms(button) {
         selectedPlanId = button.getAttribute("data-plan-id");
-        document.getElementById("termsModal").style.display = "flex";
+        if (confirm("You must accept the Terms & Conditions to enroll. Do you accept?")) {
+            window.location.href = "/patient/enrollForm/" + selectedPlanId;
+        } else {
+            window.location.href = "/patient/dashboard?error=termsDeclined";
+        }
       }
 
-      function toggleAccept() {
-        const checkbox = document.getElementById("termsCheckbox");
-        const acceptBtn = document.getElementById("acceptBtn");
-        acceptBtn.disabled = !checkbox.checked;
-      }
-
-      function acceptTerms() {
-        window.location.href = "/patient/enrollForm/" + selectedPlanId;
-      }
-
-      function declineTerms() {
-        document.getElementById("termsModal").style.display = "none";
-        window.location.href = "/patient/dashboard?error=termsDeclined";
+      // Print Card Modal Logic (NEW)
+      function printCardModal() {
+        // Initializes and shows the Bootstrap Modal
+        const printModalEl = document.getElementById('printModal');
+        const printModal = new bootstrap.Modal(printModalEl);
+        printModal.show();
       }
     </script>
 </body>
 </html>
-
-
-   
-
-

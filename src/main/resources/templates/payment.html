@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Make Payment - CareDent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        .bg-caredent { background-color: #17a2b8; }
+        .text-caredent { color: #17a2b8; }
+        .payment-form-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .summary-box {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-caredent shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/patient/dashboard}">
+                <i class="fas fa-tooth me-2"></i>CareDent Payment
+            </a>
+            <span class="navbar-text text-white">Secure Checkout</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="payment-form-container">
+            <h2 class="mb-4 text-caredent"><i class="fas fa-credit-card me-2"></i> Secure Payment</h2>
+            <p class="text-muted">Pay your first monthly premium to activate your dental coverage immediately.</p>
+
+            <div class="summary-box">
+                <h4 class="text-secondary mb-3">Order Summary</h4>
+                <div class="d-flex justify-content-between">
+                    <strong>Plan:</strong>
+                    <span th:text="${plan.name}">Standard Plan</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+                    <strong>First Monthly Premium:</strong>
+                    <span>$<span th:text="${plan.premium}">50.00</span></span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold mt-3">
+                    <strong class="text-caredent">TOTAL DUE TODAY:</strong>
+                    <span class="text-success">$<span th:text="${plan.premium}">50.00</span></span>
+                </div>
+            </div>
+
+            <form th:action="@{/patient/completePayment}" method="post">
+                
+                <h5 class="mt-4 mb-3 border-bottom pb-2 text-secondary">Payment Details (Simulation)</h5>
+                
+                <div class="mb-3">
+                    <label for="cardName" class="form-label">Name on Card</label>
+                    <input type="text" class="form-control" id="cardName" required placeholder="John Doe">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="cardNumber" class="form-label">Card Number</label>
+                    <input type="text" class="form-control" id="cardNumber" required placeholder="XXXX XXXX XXXX 4242" pattern="[0-9\s]{13,19}" maxlength="19">
+                </div>
+                
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fas fa-lock me-2"></i> Pay $<span th:text="${plan.premium}">50.00</span> and Activate Plan
+                    </button>
+                    <a th:href="@{/patient/dashboard}" class="btn btn-outline-secondary">Cancel Enrollment</a>
+                </div>
+            </form>
+            
+        </div>
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
