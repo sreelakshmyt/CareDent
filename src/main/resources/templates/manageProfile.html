@@ -1,12 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:with="base='/fragments/patientlayout'">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:replace="~{${base} :: head(title='Manage Profile')}" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Manage Profile - CareDent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* Define common styles here, including the color palette */
+        :root {
+            --caredent-primary: #005461; /* Dark Teal */
+            --caredent-accent: #00B7B5; /* Bright Cyan for highlights */
+        }
+        .bg-caredent-primary { background-color: var(--caredent-primary) !important; }
+        .text-caredent-primary { color: var(--caredent-primary) !important; }
+        .btn-caredent { background-color: var(--caredent-accent); border-color: var(--caredent-accent); color: #fff; }
+        .btn-caredent:hover { background-color: #009997; border-color: #009997; }
+        /* Specific profile container style */
+        .form-container { max-width: 700px; margin: 3rem auto; padding: 2rem; border: 1px solid #dee2e6; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    </style>
 </head>
 <body>
 
-    <th:block th:replace="~{${base} :: navbar-minimal}" />
+    <nav class="navbar navbar-expand-lg navbar-dark bg-caredent-primary shadow py-3">
+        <div class="container-fluid container">
+            <a class="navbar-brand fw-bold fs-4" th:href="@{/patient/dashboard}"><i class="fas fa-tooth me-2"></i>CareDent Portal</a>
+            <a class="btn btn-outline-light" th:href="@{/patient/dashboard}">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+    </nav>
     
     <div class="container">
         <div class="form-container">
@@ -14,30 +37,29 @@
             
             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
             <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-            
-            <h5 class="mb-3 border-bottom pb-2 text-secondary">Current Details</h5>
-            
-            <div class="p-3 mb-4 border rounded bg-light">
-                <div class="row">
-                    <div class="col-md-6 mb-2"><strong>Name:</strong> <span th:text="*{patient.firstName + ' ' + patient.lastName}"></span></div>
-                    <div class="col-md-6 mb-2"><strong>Username:</strong> <span th:text="*{profileForm.username}"></span></div>
-                    <div class="col-md-6 mb-2"><strong>Email:</strong> <span th:text="*{profileForm.email}"></span></div>
-                    <div class="col-md-6 mb-2"><strong>Phone:</strong> <span th:text="*{profileForm.phone}"></span></div>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-between mb-5">
-                <button type="button" class="btn btn-outline-primary me-2" onclick="toggleForm('editForm')">
-                    <i class="fas fa-edit me-1"></i> Edit Profile
-                </button>
-                <button type="button" class="btn btn-outline-danger" onclick="toggleForm('passwordForm')">
-                    <i class="fas fa-lock me-1"></i> Change Password
-                </button>
-            </div>
-
 
             <form th:action="@{/patient/profile/update}" method="post" th:object="${profileForm}">
                 
+                <h5 class="mb-3 border-bottom pb-2 text-secondary">Current Details</h5>
+                <div class="p-3 mb-4 border rounded bg-light">
+                    <div class="row">
+                        <div class="col-md-6 mb-2"><strong>Name:</strong> <span th:text="*{patient.firstName + ' ' + patient.lastName}"></span></div>
+                        <div class="col-md-6 mb-2"><strong>Username:</strong> <span th:text="*{profileForm.username}"></span></div>
+                        <div class="col-md-6 mb-2"><strong>Email:</strong> <span th:text="*{profileForm.email}"></span></div>
+                        <div class="col-md-6 mb-2"><strong>Phone:</strong> <span th:text="*{profileForm.phone}"></span></div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mb-5">
+                    <button type="button" class="btn btn-outline-primary me-2" onclick="toggleForm('editForm')">
+                        <i class="fas fa-edit me-1"></i> Edit Profile
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" onclick="toggleForm('passwordForm')">
+                        <i class="fas fa-lock me-1"></i> Change Password
+                    </button>
+                </div>
+
+
                 <div id="editForm" style="display:none;" class="mb-5 p-4 border rounded">
                     <h5 class="mb-3 text-caredent-primary">Edit Contact Information</h5>
 
@@ -131,9 +153,13 @@
         </div>
     </div>
     
-    <th:block th:replace="~{${base} :: footer}" />
-    
-    <th:block th:replace="~{${base} :: scripts}" />
+    <footer class="bg-caredent-primary text-white pt-4 pb-2 mt-5">
+        <div class="container text-center">
+            <small>&copy; 2025 CareDent Insurance System. All rights reserved.</small>
+        </div>
+    </footer>
+
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
     
     <script>
         function toggleForm(formId) {
