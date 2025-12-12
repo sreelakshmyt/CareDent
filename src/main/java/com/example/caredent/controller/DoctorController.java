@@ -387,7 +387,7 @@ public String showClaimForm(Model model, HttpSession session) {
 
         model.addAttribute("claims", claimRepo.findByDentist(dentist));
         model.addAttribute("user", dentist);
-        return "doctor/trackClaims";
+        return "trackClaims";
     }
 }
 

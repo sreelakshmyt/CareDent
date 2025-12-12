@@ -10,26 +10,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Professional Purple Gradient Theme */
+        /* Updated Color Palette - Modern & Professional */
         :root {
-            --gradient-bg: linear-gradient(135deg, #f8f0ff 0%, #f3e8ff 100%);
-            --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            --gradient-primary-light: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-            --gradient-card: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
-            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            --color-text-primary: #1e1b4b;
-            --color-text-secondary: #6d28d9;
-            --color-text-muted: #8b5cf6;
-            --color-border: #e9d5ff;
-            --color-border-light: #f3e8ff;
-            --shadow-sm: 0 1px 3px rgba(139, 92, 246, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(139, 92, 246, 0.1), 0 2px 4px -1px rgba(139, 92, 246, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(139, 92, 246, 0.1), 0 4px 6px -2px rgba(139, 92, 246, 0.05);
-            --radius-sm: 8px;
-            --radius-md: 12px;
-            --radius-lg: 16px;
-            --radius-xl: 20px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary-color: #005461;       /* Deep teal blue */
+            --primary-dark: #003d47;        /* Darker shade for hover */
+            --primary-light: #e6f2f3;       /* Very light teal for backgrounds */
+            --secondary-color: #018790;     /* Medium teal */
+            --accent-color: #00B7B5;        /* Bright teal accent */
+            --text-primary: #333333;        /* Dark gray for main text */
+            --text-secondary: #666666;      /* Medium gray for secondary text */
+            --text-light: #888888;          /* Light gray for subtle text */
+            --text-on-dark: #ffffff;        /* White text for dark backgrounds */
+            --background-light: #f8f9fa;    /* Light neutral background */
+            --background-white: #ffffff;    /* Pure white */
+            --border-color: #e0e0e0;        /* Light gray border */
+            --border-light: #f0f0f0;        /* Very light border */
+            --gradient-primary: linear-gradient(135deg, #005461 0%, #018790 100%);
+            --gradient-primary-light: linear-gradient(135deg, #018790 0%, #00B7B5 100%);
+            --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            --gradient-success: linear-gradient(135deg, #00B7B5 0%, #018790 100%);
+            --gradient-bg: linear-gradient(135deg, #f8f9fa 0%, #e6f2f3 100%);
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.08);
+            --shadow-md: 0 4px 6px rgba(0, 84, 97, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 84, 97, 0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --transition: all 0.25s ease;
         }
 
         * {
@@ -40,7 +48,7 @@
 
         body {
             background: var(--gradient-bg);
-            color: var(--color-text-primary);
+            color: var(--text-primary);
             font-family: 'Inter', 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
@@ -118,7 +126,7 @@
             margin: 0 auto 20px;
             color: white;
             font-size: 1.8rem;
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 8px 25px rgba(0, 84, 97, 0.25);
             position: relative;
             overflow: hidden;
         }
@@ -138,28 +146,26 @@
         }
 
         .brand-title {
+            font-family: 'Poppins', sans-serif;
             font-size: 2.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #1e1b4b 0%, #6d28d9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--primary-color);
             margin-bottom: 8px;
-            font-family: 'Poppins', sans-serif;
         }
 
         .brand-subtitle {
-            color: var(--color-text-muted);
+            color: var(--text-secondary);
             font-size: 1rem;
             font-weight: 400;
         }
 
         /* Registration Card */
         .register-card {
-            background: var(--gradient-card);
+            background: var(--background-white);
             border-radius: var(--radius-xl);
             padding: 40px;
             box-shadow: var(--shadow-lg);
-            border: 1px solid var(--color-border);
+            border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
         }
@@ -171,7 +177,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--gradient-primary);
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
         }
 
         /* Form Elements */
@@ -183,7 +189,7 @@
         .form-label {
             display: block;
             margin-bottom: 10px;
-            color: var(--color-text-primary);
+            color: var(--text-primary);
             font-weight: 600;
             font-size: 0.95rem;
             display: flex;
@@ -192,17 +198,17 @@
         }
 
         .form-label i {
-            color: var(--color-text-secondary);
+            color: var(--accent-color);
             font-size: 1.1rem;
         }
 
         .form-input {
             width: 100%;
             padding: 15px 20px;
-            border: 2px solid var(--color-border);
+            border: 2px solid var(--border-color);
             border-radius: var(--radius-md);
-            background: white;
-            color: var(--color-text-primary);
+            background: var(--background-white);
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
             transition: var(--transition);
@@ -211,16 +217,16 @@
 
         .form-input:focus {
             outline: none;
-            border-color: var(--color-text-secondary);
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0, 183, 181, 0.1);
         }
 
         .form-input:hover {
-            border-color: #a78bfa;
+            border-color: var(--secondary-color);
         }
 
         .form-input::placeholder {
-            color: var(--color-text-muted);
+            color: var(--text-light);
             opacity: 0.6;
         }
 
@@ -236,14 +242,14 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: var(--color-text-muted);
+            color: var(--text-light);
             cursor: pointer;
             padding: 4px;
             transition: var(--transition);
         }
 
         .toggle-password:hover {
-            color: var(--color-text-secondary);
+            color: var(--accent-color);
         }
 
         /* Submit Button */
@@ -263,13 +269,13 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 84, 97, 0.25);
         }
 
         .submit-btn:hover {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            background: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35);
+            box-shadow: 0 8px 25px rgba(0, 84, 97, 0.35);
         }
 
         .submit-btn:active {
@@ -281,13 +287,13 @@
             text-align: center;
             margin-top: 30px;
             padding-top: 25px;
-            border-top: 1px solid var(--color-border-light);
-            color: var(--color-text-muted);
+            border-top: 1px solid var(--border-light);
+            color: var(--text-secondary);
             font-size: 0.95rem;
         }
 
         .login-link a {
-            color: var(--color-text-secondary);
+            color: var(--accent-color);
             text-decoration: none;
             font-weight: 600;
             transition: var(--transition);
@@ -295,7 +301,7 @@
         }
 
         .login-link a:hover {
-            color: #7c3aed;
+            color: var(--secondary-color);
             text-decoration: underline;
         }
 
@@ -321,21 +327,38 @@
 
         /* Success State */
         .success-message {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05));
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            background: rgba(0, 183, 181, 0.1);
+            border: 1px solid rgba(0, 183, 181, 0.2);
             border-radius: var(--radius-md);
             padding: 16px;
             margin-bottom: 24px;
             display: flex;
             align-items: center;
             gap: 12px;
-            color: #059669;
+            color: var(--accent-color);
             animation: fadeIn 0.5s ease;
         }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Error Message Container */
+        .error-message-container {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ef4444;
+        }
+
+        .error-message-container i {
+            color: #ef4444;
         }
 
         /* Form Validation */
@@ -345,14 +368,14 @@
         }
 
         .form-input.success {
-            border-color: #10b981;
-            background: rgba(16, 185, 129, 0.05);
+            border-color: var(--accent-color);
+            background: rgba(0, 183, 181, 0.05);
         }
 
         /* Password Strength Indicator */
         .password-strength {
             height: 4px;
-            background: var(--color-border);
+            background: var(--border-color);
             border-radius: 2px;
             margin-top: 8px;
             overflow: hidden;
@@ -366,39 +389,19 @@
             transition: width 0.3s ease, background-color 0.3s ease;
         }
 
-        .strength-weak { width: 33%; background: #ef4444; }
-        .strength-medium { width: 66%; background: #f59e0b; }
-        .strength-strong { width: 100%; background: #10b981; }
-
-        /* Responsive Design */
-        @media (max-width: 576px) {
-            .register-card {
-                padding: 30px 24px;
-            }
-            
-            .brand-title {
-                font-size: 2rem;
-            }
-            
-            .brand-logo {
-                width: 60px;
-                height: 60px;
-                font-size: 1.5rem;
-            }
-            
-            .form-input {
-                padding: 14px 16px;
-            }
+        .strength-weak { 
+            width: 33%; 
+            background: #ef4444; 
         }
-
-        @media (max-width: 400px) {
-            .register-card {
-                padding: 24px 20px;
-            }
-            
-            .brand-title {
-                font-size: 1.8rem;
-            }
+        
+        .strength-medium { 
+            width: 66%; 
+            background: #f59e0b; 
+        }
+        
+        .strength-strong { 
+            width: 100%; 
+            background: var(--accent-color); 
         }
 
         /* Loading State */
@@ -444,8 +447,39 @@
         .register-footer {
             text-align: center;
             margin-top: 30px;
-            color: var(--color-text-muted);
+            color: var(--text-light);
             font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 576px) {
+            .register-card {
+                padding: 30px 24px;
+            }
+            
+            .brand-title {
+                font-size: 2rem;
+            }
+            
+            .brand-logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .form-input {
+                padding: 14px 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .register-card {
+                padding: 24px 20px;
+            }
+            
+            .brand-title {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -475,7 +509,7 @@
             </div>
 
             <!-- Error Message (if applicable) -->
-            <div th:if="${errorMessage}" class="error-message" style="margin-bottom: 20px; opacity: 1; transform: none;">
+            <div th:if="${errorMessage}" class="error-message-container" style="margin-bottom: 20px;">
                 <i class="fas fa-exclamation-circle"></i>
                 <span th:text="${errorMessage}">Please check your details and try again.</span>
             </div>
