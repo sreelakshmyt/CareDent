@@ -10,46 +10,71 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-        /* Purple Gradient Color Palette - Same as Dashboard */
+        /* Professional Teal Color Palette */
         :root {
-            --gradient-bg: linear-gradient(135deg, #f8f0ff 0%, #f3e8ff 100%);
-            --gradient-card: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);
-            --gradient-primary: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            --gradient-primary-light: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
-            --gradient-secondary: linear-gradient(135deg, #d946ef 0%, #c026d3 100%);
-            --gradient-accent: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+            /* Primary Colors */
+            --color-primary: #005461;
+            --color-primary-dark: #003c46;
+            --color-primary-light: #006d7d;
+            --color-secondary: #018790;
+            --color-secondary-light: #02a3aa;
+            --color-accent: #00B7B5;
+            --color-accent-light: #00d4d2;
+            
+            /* Neutral Colors */
+            --color-surface: #ffffff;
+            --color-surface-light: #f8fafc;
+            --color-surface-dark: #f1f5f9;
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #334155;
+            --color-text-muted: #64748b;
+            --color-text-light: #94a3b8;
+            
+            /* Status Colors */
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+            
+            /* Gradients */
+            --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            --gradient-primary-light: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
             --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
             --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-            --color-surface: #ffffff;
-            --color-surface-light: #faf5ff;
-            --color-border: #e9d5ff;
-            --color-border-light: #f3e8ff;
-            --color-text-primary: #1e1b4b;
-            --color-text-secondary: #6d28d9;
-            --color-text-muted: #8b5cf6;
-            --shadow-sm: 0 1px 3px rgba(139, 92, 246, 0.1);
-            --shadow-md: 0 4px 6px -1px rgba(139, 92, 246, 0.1), 0 2px 4px -1px rgba(139, 92, 246, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(139, 92, 246, 0.1), 0 4px 6px -2px rgba(139, 92, 246, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(139, 92, 246, 0.1), 0 10px 10px -5px rgba(139, 92, 246, 0.04);
-            --radius-sm: 10px;
-            --radius-md: 16px;
-            --radius-lg: 20px;
-            --radius-xl: 28px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.08);
+            --shadow-md: 0 4px 6px -1px rgba(0, 84, 97, 0.1), 0 2px 4px -1px rgba(0, 84, 97, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 84, 97, 0.08), 0 4px 6px -2px rgba(0, 84, 97, 0.03);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 84, 97, 0.08), 0 10px 10px -5px rgba(0, 84, 97, 0.02);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
             background: var(--gradient-bg);
             color: var(--color-text-primary);
-            font-family: 'Poppins', 'Inter', sans-serif;
+            font-family: 'Inter', 'Poppins', sans-serif;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Animated Purple Background Elements - Same as Dashboard */
-        .purple-gradient-bg {
+        /* Animated Background Elements */
+        .teal-gradient-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -59,15 +84,15 @@
             pointer-events: none;
         }
 
-        .purple-blob {
+        .teal-blob {
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.15;
+            opacity: 0.08;
             animation: float 25s infinite ease-in-out;
         }
 
-        .purple-blob-1 {
+        .teal-blob-1 {
             width: 700px;
             height: 700px;
             top: -300px;
@@ -76,21 +101,21 @@
             animation-delay: 0s;
         }
 
-        .purple-blob-2 {
+        .teal-blob-2 {
             width: 500px;
             height: 500px;
             bottom: -200px;
             left: -150px;
-            background: var(--gradient-secondary);
+            background: var(--gradient-accent);
             animation-delay: 8s;
         }
 
-        .purple-blob-3 {
+        .teal-blob-3 {
             width: 400px;
             height: 400px;
             top: 30%;
             left: 25%;
-            background: var(--gradient-accent);
+            background: var(--gradient-primary-light);
             animation-delay: 16s;
         }
 
@@ -100,7 +125,7 @@
             66% { transform: translate(-30px, 30px) scale(0.9) rotate(240deg); }
         }
 
-        /* Geometric Pattern Overlay - Same as Dashboard */
+        /* Geometric Pattern Overlay */
         .geometric-pattern {
             position: fixed;
             top: 0;
@@ -110,14 +135,14 @@
             z-index: -1;
             opacity: 0.03;
             background-image: 
-                radial-gradient(circle at 25% 25%, #8b5cf6 2px, transparent 2px),
-                radial-gradient(circle at 75% 75%, #d946ef 2px, transparent 2px);
+                radial-gradient(circle at 25% 25%, var(--color-accent) 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, var(--color-secondary) 2px, transparent 2px);
             background-size: 100px 100px;
         }
 
-        /* Modern Purple Header - Same as Dashboard */
-        .purple-header {
-            background: rgba(255, 255, 255, 0.9);
+        /* Modern Header */
+        .modern-header {
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--color-border);
@@ -153,7 +178,7 @@
             justify-content: center;
             color: white;
             font-size: 1.4rem;
-            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 6px 20px rgba(0, 84, 97, 0.15);
             position: relative;
             overflow: hidden;
         }
@@ -163,7 +188,7 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transform: translateX(-100%);
             animation: shine 3s infinite;
         }
@@ -175,29 +200,27 @@
         .brand-text {
             font-size: 2rem;
             font-weight: 700;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--color-primary);
             letter-spacing: -0.5px;
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Purple Navigation - Same as Dashboard */
-        .purple-nav {
+        /* Navigation */
+        .modern-nav {
             display: flex;
             gap: 6px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
             padding: 8px;
             border-radius: var(--radius-lg);
             border: 1px solid var(--color-border);
             backdrop-filter: blur(10px);
         }
 
-        .nav-item-purple {
+        .nav-item-modern {
             position: relative;
         }
 
-        .nav-link-purple {
+        .nav-link-modern {
             padding: 14px 26px;
             color: var(--color-text-secondary);
             text-decoration: none;
@@ -212,7 +235,7 @@
             overflow: hidden;
         }
 
-        .nav-link-purple::before {
+        .nav-link-modern::before {
             content: '';
             position: absolute;
             top: 0;
@@ -225,19 +248,19 @@
             z-index: -1;
         }
 
-        .nav-link-purple:hover {
-            color: #7c3aed;
-            background: rgba(139, 92, 246, 0.08);
+        .nav-link-modern:hover {
+            color: var(--color-primary);
+            background: rgba(0, 84, 97, 0.05);
             transform: translateY(-2px);
         }
 
-        .nav-link-purple.active {
+        .nav-link-modern.active {
             color: white;
             background: var(--gradient-primary);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 84, 97, 0.2);
         }
 
-        .nav-link-purple.active::before {
+        .nav-link-modern.active::before {
             opacity: 1;
         }
 
@@ -251,7 +274,7 @@
         }
 
         /* Page Header */
-        .page-header-purple {
+        .page-header-modern {
             background: var(--gradient-card);
             border-radius: var(--radius-xl);
             padding: 40px;
@@ -262,7 +285,7 @@
             overflow: hidden;
         }
 
-        .page-header-purple::before {
+        .page-header-modern::before {
             content: '';
             position: absolute;
             top: 0;
@@ -272,19 +295,17 @@
             background: var(--gradient-primary);
         }
 
-        .page-title-purple {
+        .page-title-modern {
             font-size: 2.8rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #1e1b4b 0%, #6d28d9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--color-primary);
             line-height: 1.2;
             margin-bottom: 10px;
             letter-spacing: -0.5px;
             font-family: 'Poppins', sans-serif;
         }
 
-        .page-subtitle-purple {
+        .page-subtitle-modern {
             color: var(--color-text-muted);
             font-size: 1.1rem;
             font-weight: 400;
@@ -293,7 +314,7 @@
         }
 
         /* Action Buttons */
-        .action-btn-primary-purple {
+        .action-btn-primary {
             background: var(--gradient-primary);
             color: white;
             padding: 14px 32px;
@@ -307,18 +328,18 @@
             transition: var(--transition);
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+            box-shadow: 0 4px 15px rgba(0, 84, 97, 0.2);
         }
 
-        .action-btn-primary-purple:hover {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        .action-btn-primary:hover {
+            background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35);
+            box-shadow: 0 8px 25px rgba(0, 84, 97, 0.25);
         }
 
         /* Plans Table Container */
-        .plans-table-container-purple {
+        .plans-table-container {
             background: var(--gradient-card);
             border-radius: var(--radius-xl);
             padding: 40px;
@@ -329,25 +350,25 @@
             overflow: hidden;
         }
 
-        .plans-table-container-purple::before {
+        .plans-table-container::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 6px;
-            background: var(--gradient-secondary);
+            background: var(--gradient-accent);
         }
 
         /* Plans Table */
-        .plans-table-purple {
+        .plans-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             margin-top: 30px;
         }
 
-        .plans-table-purple thead th {
+        .plans-table thead th {
             background: var(--gradient-primary);
             color: white;
             padding: 22px;
@@ -359,58 +380,58 @@
             position: relative;
         }
 
-        .plans-table-purple thead th:first-child {
+        .plans-table thead th:first-child {
             border-top-left-radius: var(--radius-md);
         }
 
-        .plans-table-purple thead th:last-child {
+        .plans-table thead th:last-child {
             border-top-right-radius: var(--radius-md);
         }
 
-        .plans-table-purple tbody tr {
+        .plans-table tbody tr {
             background: var(--color-surface-light);
             border-bottom: 1px solid var(--color-border);
             transition: var(--transition);
         }
 
-        .plans-table-purple tbody tr:hover {
+        .plans-table tbody tr:hover {
             background: white;
             transform: translateY(-4px);
             box-shadow: var(--shadow-md);
         }
 
-        .plans-table-purple tbody td {
+        .plans-table tbody td {
             padding: 28px 22px;
             color: var(--color-text-primary);
             border-bottom: 1px solid var(--color-border-light);
             vertical-align: middle;
         }
 
-        .plans-table-purple tbody tr:last-child td {
+        .plans-table tbody tr:last-child td {
             border-bottom: none;
         }
 
         /* Plan Name Styling */
-        .plan-name-purple {
+        .plan-name {
             font-weight: 700;
             color: var(--color-text-primary);
             font-size: 1.1rem;
         }
 
-        .plan-meta-purple {
+        .plan-meta {
             color: var(--color-text-muted);
             font-size: 0.9rem;
             margin-top: 6px;
         }
 
         /* Plan Stats */
-        .plan-stat-purple {
+        .plan-stat {
             font-size: 1.2rem;
             font-weight: 700;
-            color: var(--color-text-primary);
+            color: var(--color-primary);
         }
 
-        .plan-stat-label-purple {
+        .plan-stat-label {
             color: var(--color-text-muted);
             font-size: 0.85rem;
             text-transform: uppercase;
@@ -420,12 +441,12 @@
         }
 
         /* Action Buttons */
-        .action-buttons-purple {
+        .action-buttons {
             display: flex;
             gap: 12px;
         }
 
-        .btn-action-purple {
+        .btn-action {
             padding: 10px 22px;
             border-radius: var(--radius-sm);
             font-weight: 600;
@@ -438,46 +459,56 @@
             border: 2px solid transparent;
         }
 
-        .btn-edit-purple {
+        .btn-edit {
             background: var(--gradient-primary);
             color: white;
         }
 
-        .btn-edit-purple:hover {
-            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+        .btn-edit:hover {
+            background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 84, 97, 0.2);
         }
 
-        .btn-manage-purple {
-            background: var(--gradient-secondary);
+        .btn-manage {
+            background: var(--gradient-accent);
             color: white;
         }
 
-        .btn-manage-purple:hover {
-            background: linear-gradient(135deg, #c026d3, #a21caf);
+        .btn-manage:hover {
+            background: linear-gradient(135deg, var(--color-accent-light), var(--color-accent));
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(217, 70, 239, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 183, 181, 0.2);
+        }
+
+        .btn-delete {
+            background: var(--gradient-danger);
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
         }
 
         /* Empty State */
-        .empty-state-purple {
+        .empty-state {
             text-align: center;
             padding: 80px 40px;
             color: var(--color-text-muted);
         }
 
-        .empty-state-icon-purple {
+        .empty-state-icon {
             font-size: 4rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--color-primary);
             margin-bottom: 24px;
         }
 
-        .empty-state-title-purple {
+        .empty-state-title {
             font-family: 'Poppins', sans-serif;
             font-size: 1.8rem;
             color: var(--color-text-primary);
@@ -485,7 +516,7 @@
             font-weight: 700;
         }
 
-        .empty-state-text-purple {
+        .empty-state-text {
             max-width: 500px;
             margin: 0 auto 32px;
             line-height: 1.6;
@@ -493,7 +524,7 @@
         }
 
         /* Footer */
-        .footer-purple {
+        .footer {
             text-align: center;
             padding: 35px 0;
             color: var(--color-text-muted);
@@ -503,7 +534,7 @@
         }
 
         /* Logout Button */
-        .logout-btn-purple {
+        .logout-btn {
             background: transparent;
             border: 2px solid var(--color-border);
             color: var(--color-text-secondary);
@@ -519,31 +550,31 @@
             overflow: hidden;
         }
 
-        .logout-btn-purple::before {
+        .logout-btn::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
             transition: left 0.6s ease;
         }
 
-        .logout-btn-purple:hover::before {
+        .logout-btn:hover::before {
             left: 100%;
         }
 
-        .logout-btn-purple:hover {
-            background: rgba(236, 72, 153, 0.1);
-            border-color: #ec4899;
-            color: #db2777;
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.15);
+            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.1);
         }
 
         /* System Status */
-        .system-status-purple {
+        .system-status {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -552,15 +583,15 @@
             font-weight: 500;
         }
 
-        .status-indicator-purple {
+        .status-indicator {
             width: 10px;
             height: 10px;
-            background: var(--gradient-success);
+            background: var(--color-success);
             border-radius: 50%;
             position: relative;
         }
 
-        .status-indicator-purple::after {
+        .status-indicator::after {
             content: '';
             position: absolute;
             width: 100%;
@@ -587,21 +618,21 @@
             }
         }
 
-        .plans-table-container-purple, .page-header-purple {
+        .plans-table-container, .page-header-modern {
             animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             opacity: 0;
         }
 
-        .plans-table-purple tbody tr {
+        .plans-table tbody tr {
             animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             opacity: 0;
         }
 
-        .plans-table-purple tbody tr:nth-child(1) { animation-delay: 0.1s; }
-        .plans-table-purple tbody tr:nth-child(2) { animation-delay: 0.2s; }
-        .plans-table-purple tbody tr:nth-child(3) { animation-delay: 0.3s; }
-        .plans-table-purple tbody tr:nth-child(4) { animation-delay: 0.4s; }
-        .plans-table-purple tbody tr:nth-child(5) { animation-delay: 0.5s; }
+        .plans-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
+        .plans-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
+        .plans-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
+        .plans-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
+        .plans-table tbody tr:nth-child(5) { animation-delay: 0.5s; }
 
         /* Responsive Design */
         @media (max-width: 1200px) {
@@ -613,46 +644,35 @@
                 padding: 0 30px;
             }
             
-            .page-title-purple {
+            .page-title-modern {
                 font-size: 2.4rem;
             }
         }
 
         @media (max-width: 992px) {
-            .purple-nav {
+            .modern-nav {
                 overflow-x: auto;
                 padding-bottom: 12px;
             }
             
-            .nav-link-purple {
+            .nav-link-modern {
                 padding: 12px 20px;
             }
             
-            .page-title-purple {
+            .page-title-modern {
                 font-size: 2rem;
             }
             
-            .action-buttons-purple {
+            .action-buttons {
                 flex-direction: column;
                 width: 100%;
             }
             
-            .btn-action-purple {
+            .btn-action {
                 width: 100%;
                 justify-content: center;
             }
         }
-        .btn-delete-purple {
-    background: var(--gradient-danger);
-    color: white;
-}
-
-.btn-delete-purple:hover {
-    background: linear-gradient(135deg, #dc2626, #b91c1c);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-}
 
         @media (max-width: 768px) {
             .main-container {
@@ -665,19 +685,19 @@
                 gap: 20px;
             }
             
-            .page-header-purple {
+            .page-header-modern {
                 padding: 30px 20px;
             }
             
-            .plans-table-container-purple {
+            .plans-table-container {
                 padding: 20px;
             }
             
-            .plans-table-purple thead {
+            .plans-table thead {
                 display: none;
             }
             
-            .plans-table-purple tbody tr {
+            .plans-table tbody tr {
                 display: block;
                 margin-bottom: 24px;
                 border-radius: var(--radius-lg);
@@ -685,18 +705,18 @@
                 padding: 20px;
             }
             
-            .plans-table-purple tbody td {
+            .plans-table tbody td {
                 display: block;
                 padding: 16px 0;
                 border-bottom: 1px solid var(--color-border-light);
                 text-align: center;
             }
             
-            .plans-table-purple tbody td:last-child {
+            .plans-table tbody td:last-child {
                 border-bottom: none;
             }
             
-            .plans-table-purple tbody td::before {
+            .plans-table tbody td::before {
                 content: attr(data-label);
                 font-weight: 600;
                 color: var(--color-text-secondary);
@@ -713,42 +733,42 @@
         }
 
         @media (max-width: 576px) {
-            .nav-link-purple span {
+            .nav-link-modern span {
                 font-size: 0.8rem;
             }
             
-            .nav-link-purple i {
+            .nav-link-modern i {
                 font-size: 1rem;
             }
             
-            .action-btn-primary-purple {
+            .action-btn-primary {
                 width: 100%;
                 justify-content: center;
             }
             
-            .page-title-purple {
+            .page-title-modern {
                 font-size: 1.8rem;
             }
             
-            .empty-state-purple {
+            .empty-state {
                 padding: 60px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Purple Background -->
-    <div class="purple-gradient-bg">
-        <div class="purple-blob purple-blob-1"></div>
-        <div class="purple-blob purple-blob-2"></div>
-        <div class="purple-blob purple-blob-3"></div>
+    <!-- Animated Teal Background -->
+    <div class="teal-gradient-bg">
+        <div class="teal-blob teal-blob-1"></div>
+        <div class="teal-blob teal-blob-2"></div>
+        <div class="teal-blob teal-blob-3"></div>
     </div>
     
     <!-- Geometric Pattern Overlay -->
     <div class="geometric-pattern"></div>
 
-    <!-- Modern Purple Header -->
-    <header class="purple-header">
+    <!-- Modern Header -->
+    <header class="modern-header">
         <div class="header-content">
             <div class="brand-wrapper">
                 <div class="brand-icon">
@@ -756,45 +776,45 @@
                 </div>
                 <div>
                     <div class="brand-text">CareDent</div>
-                    <div class="system-status-purple">
-                        <span class="status-indicator-purple"></span>
+                    <div class="system-status">
+                        <span class="status-indicator"></span>
                         <span>System Online • Plan Management</span>
                     </div>
                 </div>
             </div>
 
-            <nav class="purple-nav">
-                <div class="nav-item-purple">
-                    <a class="nav-link-purple" th:href="@{/api/auth/admin/dashboard}">
+            <nav class="modern-nav">
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/dashboard}">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </div>
-                <div class="nav-item-purple">
-                    <a class="nav-link-purple active" th:href="@{/api/auth/admin/plans}">
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern active" th:href="@{/api/auth/admin/plans}">
                         <i class="fas fa-boxes"></i>
                         <span>Plans</span>
                     </a>
                 </div>
-                <div class="nav-item-purple">
-                    <a class="nav-link-purple" th:href="@{/api/auth/admin/manageenrollment}">
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/manageenrollment}">
                         <i class="fas fa-users"></i>
                         <span>Enrollment</span>
                     </a>
                 </div>
-                <div class="nav-item-purple">
-                    <a class="nav-link-purple" th:href="@{/api/auth/admin/claims}">
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/claims}">
                         <i class="fas fa-file-invoice-dollar"></i>
                         <span>Claims</span>
                     </a>
                 </div>
-                <div class="nav-item-purple">
-                    <a class="nav-link-purple" th:href="@{/api/auth/admin/analytics}">
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/analytics}">
                         <i class="fas fa-chart-line"></i>
                         <span>Analytics</span>
                     </a>
                 </div>
-                <a th:href="@{/logout}" class="logout-btn-purple">
+                <a th:href="@{/api/auth/login_register}" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -806,22 +826,22 @@
     <div class="main-container">
         
         <!-- Page Header -->
-        <div class="page-header-purple d-flex justify-content-between align-items-start flex-wrap">
+        <div class="page-header-modern d-flex justify-content-between align-items-start flex-wrap">
             <div>
-                <h1 class="page-title-purple">Plan Management</h1>
-                <p class="page-subtitle-purple">Manage all dental insurance plans, coverage options, and premium configurations</p>
+                <h1 class="page-title-modern">Plan Management</h1>
+                <p class="page-subtitle-modern">Manage all dental insurance plans, coverage options, and premium configurations</p>
             </div>
-            <a href="/api/auth/admin/plans/create" class="action-btn-primary-purple">
+            <a href="/api/auth/admin/plans/create" class="action-btn-primary">
                 <i class="fas fa-plus-circle"></i>
                 <span>Create New Plan</span>
             </a>
         </div>
 
         <!-- Plans Table -->
-        <div class="plans-table-container-purple">
+        <div class="plans-table-container">
             <!-- Check if plans exist -->
             <div th:if="${plans != null and !plans.empty}">
-                <table class="plans-table-purple">
+                <table class="plans-table">
                     <thead>
                         <tr>
                             <th>Plan Details</th>
@@ -835,41 +855,40 @@
                         <!-- Loop through plans and display them -->
                         <tr th:each="plan : ${plans}">
                             <td data-label="Plan Details">
-                                <div class="plan-name-purple" th:text="${plan.name}">Premium Dental Plan</div>
-                                <div class="plan-meta-purple">ID: <span th:text="${plan.id}">PLN-001</span></div>
+                                <div class="plan-name" th:text="${plan.name}">Premium Dental Plan</div>
+                                <div class="plan-meta">ID: <span th:text="${plan.id}">PLN-001</span></div>
                             </td>
                             <td data-label="Deductible">
-                                <div class="plan-stat-purple">$<span th:text="${plan.deductible}">50</span></div>
-                                <div class="plan-stat-label-purple">Per Year</div>
+                                <div class="plan-stat">$<span th:text="${plan.deductible}">50</span></div>
+                                <div class="plan-stat-label">Per Year</div>
                             </td>
                             <td data-label="Annual Maximum">
-                                <div class="plan-stat-purple">$<span th:text="${plan.annualMax}">1,500</span></div>
-                                <div class="plan-stat-label-purple">Maximum Coverage</div>
+                                <div class="plan-stat">$<span th:text="${plan.annualMax}">1,500</span></div>
+                                <div class="plan-stat-label">Maximum Coverage</div>
                             </td>
                             <td data-label="Monthly Premium">
-                                <div class="plan-stat-purple">$<span th:text="${plan.premium}">89.99</span></div>
-                                <div class="plan-stat-label-purple">Per Member</div>
+                                <div class="plan-stat">$<span th:text="${plan.premium}">89.99</span></div>
+                                <div class="plan-stat-label">Per Member</div>
                             </td>
                             <td data-label="Actions">
-                                <div class="action-buttons-purple">
+                                <div class="action-buttons">
                                     <!-- Edit Plan Link -->
-                                    <a th:href="@{/api/auth/admin/plans/edit/{id}(id=${plan.id})}" class="btn-action-purple btn-edit-purple">
+                                    <a th:href="@{/api/auth/admin/plans/edit/{id}(id=${plan.id})}" class="btn-action btn-edit">
                                         <i class="fas fa-edit"></i>
                                         Edit
                                     </a>
                                     <!-- Manage Coverage Link -->
-                                    <a th:href="@{/api/auth/admin/plans/manage-coverage/{planId}(planId=${plan.id})}" class="btn-action-purple btn-manage-purple">
+                                    <a th:href="@{/api/auth/admin/plans/manage-coverage/{planId}(planId=${plan.id})}" class="btn-action btn-manage">
                                         <i class="fas fa-cogs"></i>
                                         Manage Coverage
                                     </a>
-                                            <!-- Delete Plan Link (New) -->
-        <a th:href="@{/api/auth/admin/plans/delete/{id}(id=${plan.id})}" 
-           class="btn-action-purple btn-delete-purple"
-           onclick="return confirm('Are you sure you want to delete this plan? This action cannot be undone.');">
-            <i class="fas fa-trash-alt"></i>
-            Delete
-        </a>
-
+                                    <!-- Delete Plan Link -->
+                                    <a th:href="@{/api/auth/admin/plans/delete/{id}(id=${plan.id})}" 
+                                       class="btn-action btn-delete"
+                                       onclick="return confirm('Are you sure you want to delete this plan? This action cannot be undone.');">
+                                        <i class="fas fa-trash-alt"></i>
+                                        Delete
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -878,13 +897,13 @@
             </div>
             
             <!-- Empty state if no plans exist -->
-            <div th:if="${plans == null or plans.empty}" class="empty-state-purple">
-                <div class="empty-state-icon-purple">
+            <div th:if="${plans == null or plans.empty}" class="empty-state">
+                <div class="empty-state-icon">
                     <i class="fas fa-clipboard-list"></i>
                 </div>
-                <h3 class="empty-state-title-purple">No Dental Plans Found</h3>
-                <p class="empty-state-text-purple">There are currently no dental plans configured in the system. Create your first plan to start offering insurance coverage to members.</p>
-                <a href="/api/auth/admin/plans/create" class="action-btn-primary-purple">
+                <h3 class="empty-state-title">No Dental Plans Found</h3>
+                <p class="empty-state-text">There are currently no dental plans configured in the system. Create your first plan to start offering insurance coverage to members.</p>
+                <a href="/api/auth/admin/plans/create" class="action-btn-primary">
                     <i class="fas fa-plus-circle"></i>
                     <span>Create Your First Plan</span>
                 </a>
@@ -892,11 +911,11 @@
         </div>
 
         <!-- Footer -->
-        <div class="footer-purple">
+        <div class="footer">
             <p class="mb-2">CareDent Admin Dashboard • v3.2</p>
             <p class="small text-muted">
                 Report Date: <span th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}">December 11, 2025</span> • 
-                System Status: <span class="text-success fw-bold">Operational</span>
+                System Status: <span style="color: var(--color-success); font-weight: 500;">Operational</span>
             </p>
         </div>
     </div>
@@ -906,7 +925,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Highlight active navigation
             const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll('.nav-link-purple');
+            const navLinks = document.querySelectorAll('.nav-link-modern');
             
             navLinks.forEach(link => {
                 if (link.getAttribute('href') && currentPath.includes(link.getAttribute('href'))) {
@@ -917,34 +936,33 @@
             });
 
             // Add confirmation for delete actions
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.btn-delete-purple');
-    deleteButtons.forEach(button => {
-        if (button.tagName === 'A') { // For GET method links
-            button.addEventListener('click', function(e) {
-                if (!confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
-                    e.preventDefault();
-                }
+            document.addEventListener('DOMContentLoaded', function() {
+                const deleteButtons = document.querySelectorAll('.btn-delete');
+                deleteButtons.forEach(button => {
+                    if (button.tagName === 'A') {
+                        button.addEventListener('click', function(e) {
+                            if (!confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
+                                e.preventDefault();
+                            }
+                        });
+                    }
+                });
+                
+                const deleteForms = document.querySelectorAll('form[onsubmit*="confirm"]');
+                deleteForms.forEach(form => {
+                    form.addEventListener('submit', function(e) {
+                        if (!confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
+                            e.preventDefault();
+                        }
+                    });
+                });
             });
-        }
-    });
-    
-    // For forms with POST method
-    const deleteForms = document.querySelectorAll('form[onsubmit*="confirm"]');
-    deleteForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            if (!confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
-                e.preventDefault();
-            }
-        });
-    });
-});
 
             // Add responsive table labels for mobile
             function setupResponsiveTable() {
                 if (window.innerWidth < 768) {
-                    const tableHeaders = document.querySelectorAll('.plans-table-purple thead th');
-                    const tableCells = document.querySelectorAll('.plans-table-purple tbody td');
+                    const tableHeaders = document.querySelectorAll('.plans-table thead th');
+                    const tableCells = document.querySelectorAll('.plans-table tbody td');
                     
                     if (tableHeaders.length > 0) {
                         tableCells.forEach((cell, index) => {
@@ -961,7 +979,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('resize', setupResponsiveTable);
 
             // Add hover animations to table rows
-            const tableRows = document.querySelectorAll('.plans-table-purple tbody tr');
+            const tableRows = document.querySelectorAll('.plans-table tbody tr');
             tableRows.forEach(row => {
                 row.addEventListener('mouseenter', function() {
                     this.style.transform = 'translateY(-4px)';
@@ -974,20 +992,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
 
-            // Add confirmation for delete actions if added in the future
-            const deleteButtons = document.querySelectorAll('.btn-delete-purple');
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function(e) {
-                    if (!confirm('Are you sure you want to delete this plan? This action cannot be undone.')) {
-                        e.preventDefault();
-                    }
-                });
-            });
-
             // Parallax effect on scroll
             window.addEventListener('scroll', function() {
                 const scrolled = window.pageYOffset;
-                const blobs = document.querySelectorAll('.purple-blob');
+                const blobs = document.querySelectorAll('.teal-blob');
                 
                 blobs.forEach((blob, index) => {
                     const speed = 0.05 + (index * 0.03);
