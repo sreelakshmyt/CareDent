@@ -2,20 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Request Plan Cancellation</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
-      .bg-caredent { background-color: #006400; }
-      .text-caredent { color: #006400; }
-      .btn-caredent { background-color: #006400; border-color: #006400; color: white; }
-      .btn-caredent:hover { background-color: #004d00; }
+        /* Standardized CareDent Colors for consistency */
+        :root {
+            --caredent-primary: #005461; /* Dark Teal */
+            --caredent-accent: #00B7B5; /* Bright Cyan for highlights */
+        }
+        /* Custom classes adjusted to the standard Dark Teal */
+        .bg-caredent-primary { background-color: var(--caredent-primary) !important; }
+        .text-caredent-primary { color: var(--caredent-primary) !important; }
+        .btn-caredent-primary { background-color: var(--caredent-accent); border-color: var(--caredent-accent); color: white; }
+        .btn-caredent-primary:hover { background-color: #009997; border-color: #009997; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-caredent shadow">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-caredent-primary shadow">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" th:href="@{/patient/dashboard}"><i class="fas fa-tooth me-2"></i>CareDent Portal</a>
+            <a th:href="@{/patient/dashboard}" class="btn btn-outline-light">
+                 <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+             </a>
         </div>
     </nav>
 
@@ -23,7 +33,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card shadow">
-                    <div class="card-header bg-caredent text-white">
+                    <div class="card-header bg-caredent-primary text-white">
                         <h4 class="mb-0"><i class="fas fa-times-circle me-2"></i> Request Plan Cancellation</h4>
                     </div>
                     <div class="card-body">
@@ -39,14 +49,17 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Effective Until</label>
-                                <input type="text" class="form-control" th:value="${#temporals.format(enrollment.benefitYearEnd, 'MM/dd/yyyy')}" readonly>
+                                <input type="text" class="form-control" 
+                                       th:value="${#temporals.format(enrollment.benefitYearEnd, 'MM/dd/yyyy')}" 
+                                       readonly>
                             </div>
 
                             <hr/>
 
                             <div class="mb-3">
                                 <label for="reason" class="form-label fw-bold">Reason for Cancellation (Required)</label>
-                                <textarea th:field="*{reason}" class="form-control" id="reason" rows="3" required></textarea>
+                                <textarea th:field="*{reason}" class="form-control" id="reason" rows="3" required
+                                          placeholder="Please provide a brief reason for the cancellation request. This helps the administrator process your request."></textarea>
                             </div>
 
                             <div class="form-check mb-4">
@@ -71,7 +84,7 @@
         </div>
     </main>
 
-    <footer class="bg-caredent text-white text-center py-3 mt-5">
+    <footer class="bg-caredent-primary text-white text-center py-3 mt-5">
         <small>&copy; 2025 CareDent Insurance Portal. All rights reserved.</small>
     </footer>
 

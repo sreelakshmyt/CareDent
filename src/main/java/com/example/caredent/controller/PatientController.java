@@ -26,7 +26,7 @@ import com.example.caredent.repository.ClaimRepository;
 // --- END NEW CLAIMS IMPORTS ---
 
 import com.example.caredent.service.Patientprofilemanage;
-import com.example.caredent.service.PdfService; // <-- NEW IMPORT: For PDF Generation
+import com.example.caredent.service.PdfService; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,12 +35,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpServletResponse; // <-- NEW IMPORT: For PDF Streaming
+import jakarta.servlet.http.HttpServletResponse; 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.thymeleaf.context.Context; // <-- NEW IMPORT
+import org.thymeleaf.context.Context; 
 
 @Controller
 @RequestMapping("/patient")
@@ -79,7 +79,7 @@ public class PatientController {
 
     // --- PDF SERVICE ---
     @Autowired
-    private PdfService pdfService; // <-- NEW INJECTION
+    private PdfService pdfService; 
     // --- END PDF SERVICE ---
 
     // Constants for session attributes
@@ -304,7 +304,8 @@ public class PatientController {
         model.addAttribute("planName", planName);
         model.addAttribute("cancellationForm", form);
 
-        return "cancelPlanForm"; 
+        // FIX APPLIED HERE: The view name matches the HTML file name (cancelForm.html)
+        return "cancelForm"; 
     }
 
     /** Process the submission of the cancellation request */
@@ -518,9 +519,14 @@ public class PatientController {
             response.setStatus(HttpServletResponse.SC_OK);
 
         } catch (Exception e) {
-            // Log the error for debugging (optional)
-            // logger.error("PDF generation failed for enrollment ID " + enrollmentId, e);
+            // If PDF fails, set error status and stream a small error message (optional)
+            // Note: This often only shows a blank page, but prevents a crash.
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            try {
+                response.getWriter().write("Error: Could not generate PDF. Check server logs.");
+            } catch (java.io.IOException ioE) {
+                // Ignore secondary IO exception
+            }
         }
     }
 }
