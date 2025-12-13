@@ -7,14 +7,26 @@ import com.example.caredent.bean.User;
 import com.example.caredent.bean.CancellationRequest; 
 import com.example.caredent.dto.PatientForm;
 import com.example.caredent.dto.CancellationRequestForm; 
-import com.example.caredent.dto.ProfileForm; // New DTO
+import com.example.caredent.dto.ProfileForm; 
 import com.example.caredent.repository.DentalPlanRepository;
 import com.example.caredent.repository.EnrollmentRepository;
 import com.example.caredent.repository.PatientRepository;
 import com.example.caredent.repository.UserRepository;
 import com.example.caredent.repository.CancellationRequestRepository;
+
+// --- FIND A DENTIST IMPORTS ---
+import com.example.caredent.bean.Doctor; 
+import com.example.caredent.repository.DentistNetworkRepository; 
+import com.example.caredent.service.NetworkService; 
+// --- END FIND A DENTIST IMPORTS ---
+
+// --- CLAIMS IMPORTS ---
+import com.example.caredent.bean.Claim; 
+import com.example.caredent.repository.ClaimRepository; 
+// --- END NEW CLAIMS IMPORTS ---
+
 import com.example.caredent.service.Patientprofilemanage;
- // <-- CORRECTED SERVICE IMPORT
+import com.example.caredent.service.PdfService; // <-- NEW IMPORT: For PDF Generation
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,10 +35,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse; // <-- NEW IMPORT: For PDF Streaming
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.thymeleaf.context.Context; // <-- NEW IMPORT
 
 @Controller
 @RequestMapping("/patient")
@@ -47,8 +61,26 @@ public class PatientController {
     @Autowired
     private CancellationRequestRepository cancellationRepository;
     
-    @Autowired // Inject the new service
-    private Patientprofilemanage profileService; // <-- CORRECTED TYPE
+    @Autowired
+    private Patientprofilemanage profileService; 
+    
+    // --- FIND A DENTIST REPOSITORIES ---
+    @Autowired
+    private DentistNetworkRepository dentistNetworkRepository;
+
+    @Autowired
+    private NetworkService networkService;
+    // --- END FIND A DENTIST REPOSITORIES ---
+    
+    // --- CLAIMS REPOSITORY ---
+    @Autowired
+    private ClaimRepository claimRepository; 
+    // --- END CLAIMS REPOSITORY ---
+
+    // --- PDF SERVICE ---
+    @Autowired
+    private PdfService pdfService; // <-- NEW INJECTION
+    // --- END PDF SERVICE ---
 
     // Constants for session attributes
     private static final String LOGGED_IN_USER = "loggedInUser";
@@ -87,8 +119,8 @@ public class PatientController {
             
         // Prepare list of IDs for quick check in Thymeleaf template (enrollment restriction)
         List<Long> activePlanIds = activeEnrollments.stream()
-                                                    .map(e -> e.getDentalPlan().getId())
-                                                    .collect(Collectors.toList());
+                                                     .map(e -> e.getDentalPlan().getId())
+                                                     .collect(Collectors.toList());
 
         model.addAttribute("patient", patient);
         model.addAttribute("user", user);
@@ -135,11 +167,6 @@ public class PatientController {
             patientForm.setSsn(patient.getSsn());
             patientForm.setAddress(patient.getAddress());
             patientForm.setPhone(patient.getPhone());
-            
-            // patientForm.setCity(patient.getCity()); 
-            // patientForm.setState(patient.getState());
-            // patientForm.setZipCode(patient.getZipCode());
-            // patientForm.setGender(patient.getGender());
         }
 
         model.addAttribute("patient", patient);
@@ -312,7 +339,7 @@ public class PatientController {
     }
 
     // =========================================================
-    //               NEW: PROFILE MANAGEMENT ROUTES (Delegated to Service)
+    //               PROFILE MANAGEMENT ROUTES 
     // =========================================================
 
     /** Show the minimalist profile management form */
@@ -367,5 +394,133 @@ public class PatientController {
         }
         
         return "redirect:/patient/profile";
+    }
+    
+    // =========================================================
+    //               FIND A DENTIST ROUTE
+    // =========================================================
+    
+    /** Show the Find a Dentist form and display results if a plan is selected. */
+    @GetMapping("/network")
+    public String showFindDentist(
+        @RequestParam(name = "planId", required = false) Long planId,
+        Model model, HttpSession session) 
+    {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            return "redirect:/api/auth/login";
+        }
+        
+        // Fetch all available dental plans to populate the dropdown
+        List<DentalPlan> plans = planRepository.findAll();
+        model.addAttribute("plans", plans);
+        
+        List<Doctor> doctors = List.of();
+        DentalPlan selectedPlan = null;
+        
+        if (planId != null) {
+            // Find doctors based on the selected plan ID, delegated to networkService
+            doctors = networkService.findInNetworkDoctors(planId);
+            selectedPlan = planRepository.findById(planId).orElse(null);
+        }
+        
+        model.addAttribute("selectedPlan", selectedPlan);
+        model.addAttribute("doctors", doctors);
+        
+        return "findDentist";
+    }
+    
+    // =========================================================
+    //               NEW: VIEW CLAIMS ROUTE (MODIFIED FOR NO plan_id COLUMN)
+    // =========================================================
+
+    /** Shows all claims submitted by the dentist for the currently logged-in patient. */
+    @GetMapping("/claims")
+    public String viewClaims(Model model, HttpSession session) {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            return "redirect:/api/auth/login";
+        }
+
+        // 1. Identify the patient record associated with the logged-in user
+        Patient patient = patientRepository.findByUser(user)
+            .orElseThrow(() -> new RuntimeException("Patient record not found for logged-in user."));
+
+        // 2. Retrieve all claims associated with this patient
+        List<Claim> patientClaims = claimRepository.findAllByPatient(patient); 
+        
+        // 3. DETERMINE THE PLAN NAME (WORKAROUND for missing claim.plan_id column)
+        // We find the patient's current active plan and pass its name to the view.
+        
+        // First, get all enrollments for the patient
+        List<Enrollment> enrollments = enrollmentRepository.findAllByPatient(patient);
+        
+        // Find the currently active enrollment
+        Optional<Enrollment> activeEnrollment = enrollments.stream()
+            .filter(e -> "ACTIVE".equals(e.getStatus()))
+            .findFirst();
+
+        String activePlanName = "N/A - Check Enrollment";
+        if (activeEnrollment.isPresent()) {
+            DentalPlan plan = activeEnrollment.get().getDentalPlan();
+            if (plan != null) {
+                 activePlanName = plan.getName();
+            }
+        }
+        
+        // 4. Add data to model
+        model.addAttribute("patientClaims", patientClaims);
+        model.addAttribute("activePlanName", activePlanName); // Pass the plan name for display
+        model.addAttribute("user", user); 
+
+        return "patientClaimsView";
+    }
+    
+    // =========================================================
+    //               NEW: DOWNLOAD PDF ROUTE
+    // =========================================================
+
+    /** Downloads the insurance card as a PDF by rendering the PDF template. */
+    @GetMapping("/card/download/{enrollmentId}")
+    public void downloadInsuranceCard(
+        @PathVariable Long enrollmentId,
+        HttpServletResponse response,
+        HttpSession session
+    ) {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+            .orElseThrow(() -> new RuntimeException("Enrollment not found."));
+
+        // 1. Prepare data context for the PDF template
+        Context context = new Context();
+        context.setVariable("enrollment", enrollment);
+        context.setVariable("patientName", enrollment.getPatient().getFirstName() + " " + enrollment.getPatient().getLastName());
+
+        // 2. Generate PDF bytes
+        try {
+            byte[] pdfBytes = pdfService.generatePdfFromHtml("insuranceCardPdf", context);
+
+            // 3. Set HTTP Headers for PDF Download
+            String filename = "CareDent_Card_" + enrollment.getDentalPlan().getName().replaceAll("\\s", "") + "_" + enrollmentId + ".pdf";
+            
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
+            response.setContentLength(pdfBytes.length);
+
+            // 4. Stream PDF to response output stream
+            response.getOutputStream().write(pdfBytes);
+            response.getOutputStream().flush();
+            response.setStatus(HttpServletResponse.SC_OK);
+
+        } catch (Exception e) {
+            // Log the error for debugging (optional)
+            // logger.error("PDF generation failed for enrollment ID " + enrollmentId, e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }

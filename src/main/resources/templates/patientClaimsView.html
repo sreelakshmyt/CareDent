@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareDent | Track Claims</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- START CSS (Copied from Doctor's template) --- */
+        :root {
+            --primary-color: #005461;
+            --primary-dark: #003d47;
+            --primary-light: #e6f2f3;
+            --secondary-color: #018790;
+            --accent-color: #00B7B5;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-on-dark: #ffffff;
+            --background-light: #f8f9fa;
+            --background-white: #ffffff;
+            --border-color: #e0e0e0;
+            --border-light: #f0f0f0;
+            --success-color: #00B7B5;
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.08);
+            --shadow-md: 0 4px 6px rgba(0, 84, 97, 0.1);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --radius-xl: 18px;
+            --transition: all 0.25s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--background-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .main-header {
+            background: var(--background-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.25rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+        }
+
+        .brand-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .brand-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-top: 0.125rem;
+        }
+
+        .main-nav {
+            display: flex;
+            gap: 0.5rem;
+            background: var(--background-white);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: var(--primary-light);
+            color: var(--primary-color);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-details p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--background-white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            background: var(--primary-light);
+            border-color: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+        }
+
+        .action-btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-color));
+            color: white;
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            background: var(--background-white);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem 3rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        .claims-section {
+            background: var(--background-white);
+            border-radius: var(--radius-xl);
+            padding: 3rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+        }
+
+        .claims-table-container {
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .claims-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        .claims-table thead {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .claims-table th {
+            color: white;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            text-align: left;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .claims-table th:first-child {
+            border-top-left-radius: var(--radius-lg);
+        }
+
+        .claims-table th:last-child {
+            border-top-right-radius: var(--radius-lg);
+        }
+
+        .claims-table tbody tr {
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .claims-table tbody tr:hover {
+            background: var(--primary-light);
+        }
+
+        .claims-table td {
+            padding: 1.25rem 1.5rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .claims-table td:first-child {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.375rem 1rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .status-approved {
+            background: rgba(0, 183, 181, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(0, 183, 181, 0.2);
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.2);
+        }
+
+        .status-denied {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        .status-under-review {
+            background: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+            border: 1px solid rgba(13, 110, 253, 0.2);
+        }
+
+        .amount-positive {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .main-footer {
+            background: var(--primary-color);
+            color: var(--text-on-dark);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background: white;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .footer-logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .footer-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-heading {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.5rem;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            color: var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state h3 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        /* --- END CSS --- */
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content">
+            <a th:href="@{/patient/dashboard}" class="brand">
+                <div class="brand-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div>
+                    <div class="brand-text">CareDent</div>
+                    <div class="brand-tagline">Patient Portal</div>
+                </div>
+            </a>
+
+            <nav class="main-nav">
+                <a th:href="@{/patient/dashboard}" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+                <a th:href="@{/patient/profile}" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <a th:href="@{/patient/network}" class="nav-link">
+                    <i class="fas fa-network-wired"></i>
+                    Find a Dentist
+                </a>
+                <a th:href="@{/patient/claims}" class="nav-link active">
+                    <i class="fas fa-chart-line"></i>
+                    Track Claims
+                </a>
+            </nav>
+
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3><span th:text="${user.username}">Patient</span></h3>
+                        <p>Plan Member</p>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <a th:href="@{/patient/network}" class="action-btn action-btn-primary">
+                        <i class="fas fa-search"></i>
+                        Find Dentist
+                    </a>
+                    <a th:href="@{/logout}" class="action-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="page-header">
+            <h1 class="page-title">Track My Dental Claims</h1>
+            <p class="page-subtitle">
+                Monitor the status and financial details of claims submitted on your behalf.
+                <span th:if="${user}" style="color: var(--accent-color); font-weight: 500;">
+                    • Member: <span th:text="${user.username}">Member ID</span>
+                </span>
+            </p>
+        </section>
+
+        <section class="claims-section">
+            <div class="section-header">
+                <h2 class="section-title">Submitted Claims History</h2>
+                <p class="section-description">Details for claims submitted by your dental providers.</p>
+            </div>
+
+            <div class="claims-table-container" th:if="${not #lists.isEmpty(patientClaims)}"> 
+                <table class="claims-table">
+                    <thead>
+                        <tr>
+                            <th>Claim ID</th>
+                            <th>Provider</th> 
+                            <th>Plan</th> 
+                            <th>Date of Submission</th>
+                            <th>Claim Amount</th>
+                            <th>Status</th>
+                            <th>Insurance Paid</th>
+                            <th>Your Responsibility</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="claim : ${patientClaims}">
+                            <td th:text="${claim.id}">#</td>
+                            
+                            <td th:text="${claim.dentist.username}">Dentist Name</td>
+                            
+                            <td th:text="${activePlanName}">Basic Plan</td>
+
+                            <td th:text="${#dates.format(claim.submissionDate, 'yyyy-MM-dd')}">Date</td>
+
+                            <td th:text="${'$' + #numbers.formatDecimal(claim.claimAmount, 0, 'COMMA', 2, 'POINT')}">$0.00</td>
+                            
+                            <td>
+                                <span th:switch="${claim.claimStatus}" class="status-badge">
+                                    <span th:case="'APPROVED'" class="status-approved">PAID</span>
+                                    <span th:case="'PENDING'" class="status-pending">PENDING</span>
+                                    <span th:case="'DENIED'" class="status-denied">DENIED</span>
+                                    <span th:case="'UNDER_REVIEW'" class="status-under-review">UNDER REVIEW</span>
+                                    <span th:case="*" th:text="${claim.claimStatus}">STATUS</span>
+                                </span>
+                            </td>
+                            
+                            <td>
+                                <span th:if="${claim.claimStatus == 'APPROVED' and claim.insurancePaid != null}" 
+                                            th:text="${'$' + #numbers.formatDecimal(claim.insurancePaid, 0, 'COMMA', 2, 'POINT')}"
+                                            class="amount-positive">
+                                    $0.00
+                                </span>
+                                <span th:if="${claim.claimStatus != 'APPROVED' or claim.insurancePaid == null}" 
+                                            class="text-muted">
+                                    TBD
+                                </span>
+                            </td>
+                            
+                            <td>
+                                <span th:if="${claim.claimStatus == 'APPROVED' and claim.patientResponsibility != null}" 
+                                            th:text="${'$' + #numbers.formatDecimal(claim.patientResponsibility, 0, 'COMMA', 2, 'POINT')}">
+                                    $0.00
+                                </span>
+                                <span th:if="${claim.claimStatus != 'APPROVED' or claim.patientResponsibility == null}" 
+                                            class="text-muted">
+                                    TBD
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" th:if="${#lists.isEmpty(patientClaims)}">
+                <div class="empty-icon">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h3>No Claims Found</h3>
+                <p>No dental claims have been submitted on your behalf yet. If a claim was recently submitted, it may take a day to appear here.</p>
+                <a th:href="@{/patient/network}" class="action-btn action-btn-primary" style="margin-top: 1.5rem;">
+                    <i class="fas fa-search"></i>
+                    Find a Dentist to start
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-tooth"></i>
+                        </div>
+                        <div class="footer-logo-text">CareDent</div>
+                    </div>
+                    <p class="footer-description">
+                        Your trusted partner in dental insurance and health management. 
+                        Streamlining claims and network access for a brighter smile.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a th:href="@{/patient/dashboard}">Dashboard</a></li>
+                        <li><a th:href="@{/patient/profile}">My Profile</a></li>
+                        <li><a th:href="@{/patient/network}">Find a Dentist</a></li>
+                        <li><a th:href="@{/patient/claims}">Track Claims</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Billing & Coverage</a></li>
+                        <li><a href="#">Member Handbook</a></li>
+                        <li><a href="#">Contact Support</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© 2024 CareDent Insurance Services. All rights reserved. Member Portal.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Update current year in footer
+            const yearElement = document.querySelector('.footer-bottom p');
+            if (yearElement) {
+                yearElement.innerHTML = yearElement.innerHTML.replace('2024', new Date().getFullYear());
+            }
+
+            // Set active navigation based on current URL
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.main-nav a');
+            
+            navLinks.forEach(link => {
+                const href = link.getAttribute('th:href');
+                if (href && currentPath.includes(href.split('/').pop())) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Add hover effects and status highlights to table rows
+            const tableRows = document.querySelectorAll('.claims-table tbody tr');
+            tableRows.forEach(row => {
+                
+                // Hover Effects
+                row.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(4px)';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+
+                // Status Highlights (Border left)
+                const statusSpan = row.querySelector('.status-badge');
+                if (statusSpan) {
+                    const status = statusSpan.textContent.trim();
+                    if (status === 'PAID') {
+                        row.style.borderLeft = '4px solid var(--accent-color)';
+                    } else if (status === 'DENIED') {
+                        row.style.borderLeft = '4px solid #dc3545';
+                    } else if (status === 'PENDING' || status === 'UNDER REVIEW') {
+                        row.style.borderLeft = '4px solid #ffc107';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Find a Dentist - CareDent</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        .bg-caredent-primary { background-color: #005461; }
+        .text-caredent-primary { color: #005461; }
+        .btn-caredent { background-color: #00B7B5; border-color: #00B7B5; color: #fff; }
+        .btn-caredent:hover { background-color: #009997; border-color: #009997; }
+        .result-card {
+            border-left: 5px solid #005461;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-caredent-primary shadow py-3">
+        <div class="container-fluid container">
+            <a class="navbar-brand fw-bold fs-4" th:href="@{/patient/dashboard}"><i class="fas fa-tooth me-2"></i>CareDent Portal</a>
+            <a class="btn btn-outline-light" th:href="@{/patient/dashboard}">
+                <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+        </div>
+    </nav>
+    
+    <div class="container my-5">
+        <h2 class="mb-4 text-caredent-primary"><i class="fas fa-search me-2"></i> Find an In-Network Dentist</h2>
+        <p class="text-muted">Select your plan below to see a list of covered providers.</p>
+
+        <div class="card mb-5 p-4 shadow-sm">
+            <form th:action="@{/patient/network}" method="get">
+                <div class="row align-items-end">
+                    <div class="col-md-8">
+                        <label for="planSelect" class="form-label fw-bold">Select Your Dental Plan:</label>
+                        <select id="planSelect" name="planId" class="form-select" required>
+                            <option value="">-- Choose a Plan --</option>
+                            <option th:each="plan : ${plans}" 
+                                    th:value="${plan.id}" 
+                                    th:text="${plan.name + ' (Deductible: $' + plan.deductible + ')'}"
+                                    th:selected="${selectedPlan != null and selectedPlan.id == plan.id}">Plan Name</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 mt-3 mt-md-0">
+                        <button type="submit" class="btn btn-caredent w-100">Search Providers</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div th:if="${selectedPlan != null}">
+            <h4 class="mb-4 text-secondary">
+                <span th:text="${doctors.size()}">0</span> Providers Found for 
+                <strong th:text="${selectedPlan.name}"></strong>
+            </h4>
+
+            <div th:if="${doctors.isEmpty()}" class="alert alert-warning text-center">
+                No providers found in the network for this plan.
+            </div>
+
+            <div th:unless="${doctors.isEmpty()}" class="row">
+                <div class="col-md-6 mb-4" th:each="doctor : ${doctors}">
+                    <div class="card p-3 result-card shadow-sm">
+                        <h5 class="fw-bold text-caredent-primary" th:text="${doctor.name}"></h5>
+                        <p class="mb-1 small">
+                            <i class="fas fa-hospital me-1"></i> Hospital: <strong th:text="${doctor.hospitalName}"></strong>
+                        </p>
+                        <p class="mb-1 small">
+                            <i class="fas fa-stethoscope me-1"></i> Specialty: <span th:text="${doctor.specialty}"></span>
+                        </p>
+                        <p class="mb-0 small">
+                            <i class="fas fa-graduation-cap me-1"></i> Qualification: <span th:text="${doctor.qualification}"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-caredent-primary text-white pt-4 pb-2 mt-5">
+        <div class="container text-center">
+            <small>&copy; 2025 CareDent Insurance System. All rights reserved.</small>
+        </div>
+    </footer>
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

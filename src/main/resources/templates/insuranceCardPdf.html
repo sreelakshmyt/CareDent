@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insurance Card</title>
+    <style>
+        /* Keep CSS very simple for PDF compatibility */
+        body { font-family: sans-serif; font-size: 10pt; margin: 20px; }
+        .card-container { width: 400px; height: 220px; border: 2px solid #005461; border-radius: 8px; padding: 15px; background-color: #e6f2f3; color: #333; }
+        .header { font-size: 14pt; font-weight: bold; color: #005461; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 10px; }
+        .plan-name { font-size: 18pt; font-weight: bolder; margin-top: 5px; color: #00B7B5; }
+        .detail-row { display: block; margin-bottom: 5px; }
+        .detail-row span { font-weight: bold; color: #005461; }
+    </style>
+</head>
+<body>
+    <div class="card-container" th:object="${enrollment}">
+        <div class="header">CareDent Dental Insurance Card</div>
+        
+        <h1 class="plan-name" th:text="*{dentalPlan.name}">Basic Care Plan</h1>
+        
+        <p class="detail-row">Member: <span th:text="${patientName}">Alice Member</span></p>
+        <p class="detail-row">Member ID: <span th:text="'P' + *{patient.id} + 'E' + *{id}">P1E1001</span></p>
+        <p class="detail-row">Effective Date: <span th:text="${#temporals.format(enrollment.benefitYearStart, 'MM/dd/yyyy')}"></span></p>
+        <p class="detail-row">Annual Max: <span th:text="'$' + *{dentalPlan.annualMax}">$1500.00</span></p>
+        
+        <p style="font-size: 9pt; margin-top: 15px;">**Present this card to your provider for billing.**</p>
+    </div>
+</body>
+</html>

@@ -43,10 +43,11 @@
                 <h5 class="mb-3 border-bottom pb-2 text-secondary">Current Details</h5>
                 <div class="p-3 mb-4 border rounded bg-light">
                     <div class="row">
-                        <div class="col-md-6 mb-2"><strong>Name:</strong> <span th:text="*{patient.firstName + ' ' + patient.lastName}"></span></div>
-                        <div class="col-md-6 mb-2"><strong>Username:</strong> <span th:text="*{profileForm.username}"></span></div>
-                        <div class="col-md-6 mb-2"><strong>Email:</strong> <span th:text="*{profileForm.email}"></span></div>
-                        <div class="col-md-6 mb-2"><strong>Phone:</strong> <span th:text="*{profileForm.phone}"></span></div>
+                        <div class="col-md-6 mb-2"><strong>Name:</strong> <span th:text="${patient.firstName + ' ' + patient.lastName}"></span></div>
+                        
+                        <div class="col-md-6 mb-2"><strong>Username:</strong> <span th:text="*{username}"></span></div>
+                        <div class="col-md-6 mb-2"><strong>Email:</strong> <span th:text="*{email}"></span></div>
+                        <div class="col-md-6 mb-2"><strong>Phone:</strong> <span th:text="*{phone}"></span></div>
                     </div>
                 </div>
 
