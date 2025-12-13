@@ -2,30 +2,693 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Network Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Professional Teal Color Palette */
+        :root {
+            /* Primary Colors */
+            --color-primary: #005461;
+            --color-primary-dark: #003c46;
+            --color-primary-light: #006d7d;
+            --color-secondary: #018790;
+            --color-secondary-light: #02a3aa;
+            --color-accent: #00B7B5;
+            --color-accent-light: #00d4d2;
+            
+            /* Neutral Colors */
+            --color-surface: #ffffff;
+            --color-surface-light: #f8fafc;
+            --color-surface-dark: #f1f5f9;
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #334155;
+            --color-text-muted: #64748b;
+            --color-text-light: #94a3b8;
+            
+            /* Status Colors */
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+            
+            /* Gradients */
+            --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.08);
+            --shadow-md: 0 4px 6px -1px rgba(0, 84, 97, 0.1), 0 2px 4px -1px rgba(0, 84, 97, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 84, 97, 0.08), 0 4px 6px -2px rgba(0, 84, 97, 0.03);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--gradient-bg);
+            color: var(--color-text-primary);
+            font-family: 'Inter', 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Modern Header */
+        .modern-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border);
+            padding: 18px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .brand-icon {
+            width: 52px;
+            height: 52px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            box-shadow: 0 6px 20px rgba(0, 84, 97, 0.15);
+        }
+
+        .brand-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: -0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navigation */
+        .modern-nav {
+            display: flex;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item-modern {
+            position: relative;
+        }
+
+        .nav-link-modern {
+            padding: 14px 26px;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-link-modern:hover {
+            color: var(--color-primary);
+            background: rgba(0, 84, 97, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .nav-link-modern.active {
+            color: white;
+            background: var(--gradient-primary);
+            box-shadow: 0 4px 15px rgba(0, 84, 97, 0.2);
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background: transparent;
+            border: 2px solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: 12px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+            transform: translateY(-2px);
+        }
+
+        /* System Status */
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            background: var(--color-success);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+        }
+
+        .status-indicator::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            animation: pulse 2s infinite;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+
+        .page-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 16px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .page-subtitle {
+            color: var(--color-text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Plan Cards Grid */
+        .plan-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+
+        /* Plan Card */
+        .plan-card {
+            background: var(--gradient-card);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-accent-light);
+        }
+
+        .plan-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Plan Header */
+        .plan-header {
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .plan-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .plan-id {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Assigned Dentists Section */
+        .dentists-section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--color-accent);
+        }
+
+        /* Dentists List */
+        .dentists-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dentist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            background: var(--color-surface-light);
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            border: 1px solid var(--color-border);
+            transition: var(--transition);
+        }
+
+        .dentist-item:hover {
+            background: white;
+            transform: translateX(4px);
+            border-color: var(--color-accent);
+        }
+
+        .dentist-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 183, 181, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-accent);
+        }
+
+        .dentist-name {
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+
+        /* Add Dentist Form */
+        .add-dentist-form {
+            background: var(--color-surface-light);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 2px solid var(--color-border);
+            transition: var(--transition);
+        }
+
+        .add-dentist-form:hover {
+            border-color: var(--color-accent);
+        }
+
+        .form-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-title i {
+            color: var(--color-primary);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            color: var(--color-text-primary);
+            background: white;
+            transition: var(--transition);
+            margin-bottom: 20px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23005461' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 16px;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(0, 183, 181, 0.1);
+        }
+
+        .form-select option {
+            padding: 12px;
+            font-size: 0.95rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 84, 97, 0.2);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-text-muted);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 35px 0;
+            color: var(--color-text-muted);
+            font-size: 0.95rem;
+            margin-top: 50px;
+            border-top: 1px solid var(--color-border);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                padding: 40px 30px;
+            }
+            
+            .header-content {
+                padding: 0 30px;
+            }
+            
+            .page-title {
+                font-size: 2.4rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .modern-nav {
+                overflow-x: auto;
+                padding-bottom: 12px;
+            }
+            
+            .nav-link-modern {
+                padding: 12px 20px;
+            }
+            
+            .plan-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container, .header-content {
+                padding: 30px 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .plan-card {
+                padding: 24px;
+            }
+            
+            .brand-text {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-link-modern span {
+                font-size: 0.8rem;
+            }
+            
+            .nav-link-modern i {
+                font-size: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.6rem;
+            }
+            
+            .plan-title {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>Network Management</h1>
+    <!-- Modern Header -->
+    <header class="modern-header">
+        <div class="header-content">
+            <div class="brand-wrapper">
+                <div class="brand-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div>
+                    <div class="brand-text">CareDent</div>
+                    <div class="system-status">
+                        <span class="status-indicator"></span>
+                        <span>System Online • Network Management</span>
+                    </div>
+                </div>
+            </div>
 
-<div th:each="plan : ${dentalPlans}" class="plan-box">
-    <h2 th:text="${plan.name}"></h2>
+            <nav class="modern-nav">
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/dashboard}">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/plans}">
+                        <i class="fas fa-boxes"></i>
+                        <span>Plans</span>
+                    </a>
+                </div>
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/manageenrollment}">
+                        <i class="fas fa-users"></i>
+                        <span>Enrollment</span>
+                    </a>
+                </div>
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/claims}">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Claims</span>
+                    </a>
+                </div>
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern" th:href="@{/api/auth/admin/analytics}">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </a>
+                </div>
+                <div class="nav-item-modern">
+                    <a class="nav-link-modern active" th:href="@{/api/auth/admin/networks}">
+                        <i class="fas fa-network-wired"></i>
+                        <span>Networks</span>
+                    </a>
+                </div>
+                <a th:href="@{/api/auth/login_register}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+    </header>
 
-    <!-- Show assigned dentists -->
-    <h3>Assigned Dentists:</h3>
-    <ul>
-        <li th:each="network : ${plan.dentistNetworks}"
-            th:text="${network.dentist.username}"></li>
-    </ul>
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">Network Management</h1>
+            <p class="page-subtitle">
+                Manage dental provider networks by assigning dentists to insurance plans.
+                Add or remove dentists from each plan's network.
+            </p>
+        </div>
 
-    <!-- Form to add dentist -->
-    <form th:action="@{/api/auth/admin/networks/add-dentist-to-plan}" method="post">
-        <input type="hidden" name="planId" th:value="${plan.id}" />
-        <select name="dentistId">
-            <option th:each="dentist : ${dentists}"
-                    th:value="${dentist.id}"
-                    th:text="${dentist.username}"></option>
-        </select>
-        <button type="submit">Add Dentist</button>
-    </form>
-</div>
+        <!-- Plan Cards Grid -->
+        <div class="plan-cards-grid">
+            <div th:each="plan : ${dentalPlans}" class="plan-card">
+                <!-- Plan Header -->
+                <div class="plan-header">
+                    <h2 class="plan-title" th:text="${plan.name}"></h2>
+                    <div class="plan-id">Plan ID: <span th:text="${plan.id}"></span></div>
+                </div>
+
+                <!-- Assigned Dentists -->
+                <div class="dentists-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-user-md"></i>
+                        Assigned Dentists
+                    </h3>
+                    
+                    <th:block th:if="${plan.dentistNetworks != null and !plan.dentistNetworks.empty}">
+                        <ul class="dentists-list">
+                            <li th:each="network : ${plan.dentistNetworks}" class="dentist-item">
+                                <div class="dentist-icon">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <span class="dentist-name" th:text="${network.dentist.username}"></span>
+                            </li>
+                        </ul>
+                    </th:block>
+                    
+                    <th:block th:if="${plan.dentistNetworks == null or plan.dentistNetworks.empty}">
+                        <div class="empty-state">
+                            <i class="fas fa-user-slash"></i>
+                            <p>No dentists assigned to this plan</p>
+                        </div>
+                    </th:block>
+                </div>
+
+                <!-- Add Dentist Form -->
+                <div class="add-dentist-form">
+                    <h3 class="form-title">
+                        <i class="fas fa-user-plus"></i>
+                        Add Dentist to Network
+                    </h3>
+                    
+                    <form th:action="@{/api/auth/admin/networks/add-dentist-to-plan}" method="post">
+                        <input type="hidden" name="planId" th:value="${plan.id}" />
+                        
+                        <select name="dentistId" class="form-select" required>
+                            <option value="">Select a dentist...</option>
+                            <option th:each="dentist : ${dentists}"
+                                    th:value="${dentist.id}"
+                                    th:text="${dentist.username}"></option>
+                        </select>
+                        
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-plus-circle"></i>
+                            Add Dentist
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="mb-2">CareDent Admin Dashboard • v3.2</p>
+            <p class="small text-muted">
+                Report Date: <span th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}">December 11, 2025</span> • 
+                System Status: <span style="color: var(--color-success); font-weight: 500;">Operational</span>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
