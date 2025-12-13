@@ -8,13 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.caredent.bean.Claim;
+import com.example.caredent.bean.Patient;
 import com.example.caredent.bean.User;
 
 public interface ClaimRepository extends JpaRepository<Claim, Long> {
     List<Claim> findByClaimStatus(String claimStatus);
 
     List<Claim> findByDentist(User user);
-
+List<Claim> findAllByPatient(Patient patient);
 
         Page<Claim> findByClaimStatus(String claimStatus, Pageable pageable);
 

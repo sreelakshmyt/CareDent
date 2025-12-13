@@ -141,29 +141,29 @@
         <h3 class="mb-4 text-caredent-primary">Your Current Coverage (<span th:text="${activeEnrollments.size()}">0</span> Plans)</h3>
         
         <div th:if="${activeEnrollments.isEmpty()}" class="alert alert-warning text-center mb-5">
-             You have no active plans. Scroll down to select a plan.
+              You have no active plans. Scroll down to select a plan.
         </div>
 
         <div th:unless="${activeEnrollments.isEmpty()}" class="row mb-5">
             
              <div class="col-lg-6 mb-4 order-lg-2">
                 <div class="card bg-light p-3 h-100">
-                     <p class="fw-bold text-caredent-primary">Benefit Usage Summary:</p>
-                     <p class="small mb-1">Annual Max Remaining: <strong>$XX.XX</strong></p>
-                     <p class="small mb-1">Deductible Remaining: <strong>$XX.XX</strong></p>
-                     <p class="small mt-3" th:if="${activeEnrollments.size() > 1}">
-                         <i class="fas fa-info-circle me-1"></i> You have <span th:text="${activeEnrollments.size() - 1}"></span> other plan(s) active.
-                     </p>
-                 </div>
+                    <p class="fw-bold text-caredent-primary">Benefit Usage Summary:</p>
+                    <p class="small mb-1">Annual Max Remaining: <strong>$XX.XX</strong></p>
+                    <p class="small mb-1">Deductible Remaining: <strong>$XX.XX</strong></p>
+                    <p class="small mt-3" th:if="${activeEnrollments.size() > 1}">
+                        <i class="fas fa-info-circle me-1"></i> You have <span th:text="${activeEnrollments.size() - 1}"></span> other plan(s) active.
+                    </p>
+                </div>
             </div>
 
 
             <div class="col-lg-6 mb-4 order-lg-1">
-                 <div th:each="enrollment : ${activeEnrollments}" class="mb-4">
+                <div th:each="enrollment : ${activeEnrollments}" class="mb-4">
                     
                     <div th:classappend="${#strings.contains(enrollment.dentalPlan.name.toLowerCase(), 'basic') ? 'id-card-basic' : 
-                                      (#strings.contains(enrollment.dentalPlan.name.toLowerCase(), 'premium') ? 'id-card-premium' : 'id-card-standard')}"
-                         class="insurance-card-active">
+                                  (#strings.contains(enrollment.dentalPlan.name.toLowerCase(), 'premium') ? 'id-card-premium' : 'id-card-standard')}"
+                          class="insurance-card-active">
                         
                         <div class="card-header-title fw-bold">Insurance Card</div>
                         
@@ -179,9 +179,9 @@
                         </div>
                         
                         <div class="d-flex justify-content-start">
-                            <a href="#" class="btn btn-sm btn-light me-2 text-caredent-primary" 
-                               data-bs-toggle="modal" data-bs-target="#printPlanModal">
-                                <i class="fas fa-print me-1"></i> Print
+                            <a th:href="@{/patient/card/download/{id}(id=${enrollment.id})}" 
+                               class="btn btn-sm btn-light me-2 text-caredent-primary">
+                                <i class="fas fa-file-pdf me-1"></i> Download PDF
                             </a>
                             
                             <a th:href="@{/patient/cancelForm/{id}(id=${enrollment.id})}" 
@@ -199,17 +199,16 @@
                 </div>
             </div>
 
-        </div>
-            
-
+        </div>
+            
         <h3 class="mb-4 text-caredent-primary">Choose Your Plan</h3>
         
         <div class="row">
             <div class="col-md-4 mb-4" th:each="plan : ${plans}">
                 <div th:with="planName=${plan.name.toLowerCase()}"
-                     th:classappend="${#strings.contains(planName, 'basic')} ? 'card-basic' : 
-                                      (${#strings.contains(planName, 'premium')} ? 'card-premium' : 'card-standard')"
-                     class="card card-minimalist shadow-sm h-100 p-2">
+                    th:classappend="${#strings.contains(planName, 'basic')} ? 'card-basic' : 
+                                    (${#strings.contains(planName, 'premium')} ? 'card-premium' : 'card-standard')"
+                    class="card card-minimalist shadow-sm h-100 p-2">
                     
                     <div class="card-body">
                         <h5 class="card-title fw-bold text-caredent-primary" th:text="${plan.name}"></h5>
@@ -225,7 +224,7 @@
                         <div th:unless="${#lists.contains(activePlanIds, plan.id)}">
                             <a th:href="@{/patient/enrollForm/{id}(id=${plan.id})}" 
                                class="btn btn-caredent w-100 fw-bold small">
-                                Start Enrollment
+                                <i class="fas fa-plus me-1"></i> Start Enrollment
                             </a>
                         </div>
                     </div>
@@ -283,9 +282,9 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center" th:each="enrollment : ${activeEnrollments}">
                             <span th:text="${enrollment.dentalPlan.name}">Plan Name</span>
                             <span class="badge" 
-                                  th:classappend="${enrollment.status == 'ACTIVE' ? 'bg-success' : 'bg-warning text-dark'}" 
-                                  th:text="${enrollment.status}">
-                                  ACTIVE
+                                    th:classappend="${enrollment.status == 'ACTIVE' ? 'bg-success' : 'bg-warning text-dark'}" 
+                                    th:text="${enrollment.status}">
+                                    ACTIVE
                             </span>
                         </li>
                         <li th:if="${activeEnrollments.isEmpty()}" class="list-group-item text-muted">No current active plans.</li>
@@ -300,8 +299,8 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center" th:each="enrollment : ${historyEnrollments}">
                             <span th:text="${enrollment.dentalPlan.name}">Plan Name</span>
                             <span class="badge bg-secondary" 
-                                  th:text="${enrollment.status}">
-                                  CANCELLED
+                                    th:text="${enrollment.status}">
+                                    CANCELLED
                             </span>
                         </li>
                         <li th:if="${historyEnrollments.isEmpty()}" class="list-group-item text-muted">No past plans recorded.</li>
