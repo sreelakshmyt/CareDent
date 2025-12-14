@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Make Claim Payment</title>
+</head>
+<body>
+    <div class="container my-5">
+        <h2>Payment for Claim #<span th:text="${claimId}"></span></h2>
+        <p th:text="${description}"></p>
+        
+        <div class="card p-4">
+            <h4 class="text-danger">Amount Due: $<span th:text="${#numbers.formatDecimal(amountDue, 0, 'COMMA', 2, 'POINT')}"></span></h4>
+            
+            <form th:action="@{/patient/claims/completePayment}" method="post">
+                <input type="hidden" name="claimId" th:value="${claimId}" />
+                
+                <p class="text-muted small mt-4">Simulation: Click Pay Now to mark claim responsibility as paid.</p>
+
+                <button type="submit" class="btn btn-caredent btn-lg">
+                    Pay Now
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

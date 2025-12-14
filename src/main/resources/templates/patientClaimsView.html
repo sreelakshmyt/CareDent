@@ -521,7 +521,7 @@
         </div>
     </header>
 
-    <main class="main-content">
+    <!-- <main class="main-content">
         <section class="page-header">
             <h1 class="page-title">Track My Dental Claims</h1>
             <p class="page-subtitle">
@@ -613,7 +613,95 @@
                 </a>
             </div>
         </section>
-    </main>
+    </main> -->
+
+
+    <main class="main-content">
+    <section class="claims-section">
+        <div class="section-header">
+            <h2 class="section-title">Submitted Claims History</h2>
+            <p class="section-description">Details for claims submitted by your dental providers.</p>
+        </div>
+
+        <div class="claims-table-container" th:if="${not #lists.isEmpty(patientClaims)}"> 
+            <table class="claims-table">
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Provider</th> 
+                        <th>Plan</th> 
+                        <th>Date of Submission</th>
+                        <th>Claim Amount</th>
+                        <th>Status</th>
+                        <th>Insurance Paid</th>
+                        <th>Your Responsibility</th>
+                        <th>Action</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="claim : ${patientClaims}">
+                        <td th:text="${claim.id}">#</td>
+                        <td th:text="${claim.dentist.username}">Dentist Name</td>
+                        <td th:text="${activePlanName}">Basic Plan</td>
+                        <td th:text="${#dates.format(claim.submissionDate, 'yyyy-MM-dd')}">Date</td>
+                        <td th:text="${'$' + #numbers.formatDecimal(claim.claimAmount, 0, 'COMMA', 2, 'POINT')}">$0.00</td>
+                        
+                        <td>
+                            <span th:switch="${claim.claimStatus}" class="status-badge">
+                                <span th:case="'APPROVED'" class="status-approved">PAID</span>
+                                <span th:case="'PENDING'" class="status-pending">PENDING</span>
+                                <span th:case="'DENIED'" class="status-denied">DENIED</span>
+                                <span th:case="'UNDER_REVIEW'" class="status-under-review">UNDER REVIEW</span>
+                                <span th:case="*" th:text="${claim.claimStatus}">STATUS</span>
+                            </span>
+                        </td>
+                        
+                        <td>
+                            <span th:if="${claim.claimStatus == 'APPROVED' and claim.insurancePaid != null}" 
+                                    th:text="${'$' + #numbers.formatDecimal(claim.insurancePaid, 0, 'COMMA', 2, 'POINT')}"
+                                    class="amount-positive">
+                                $0.00
+                            </span>
+                            <span th:if="${claim.claimStatus != 'APPROVED' or claim.insurancePaid == null}" 
+                                    class="text-muted">
+                                TBD
+                            </span>
+                        </td>
+                        
+                        <td>
+                            <span th:if="${claim.claimStatus == 'APPROVED' and claim.patientResponsibility != null}" 
+                                    th:text="${'$' + #numbers.formatDecimal(claim.patientResponsibility, 0, 'COMMA', 2, 'POINT')}"
+                                    class="text-danger fw-bold"> 
+                                $0.00
+                            </span>
+                            <span th:if="${claim.claimStatus != 'APPROVED' or claim.patientResponsibility == null}" 
+                                    class="text-muted">
+                                TBD
+                            </span>
+                        </td>
+                        
+                        <td>
+                            <div th:if="${claim.claimStatus == 'APPROVED' and claim.patientResponsibility != null and claim.patientResponsibility > 0}">
+                                <a th:href="@{/patient/claims/pay/{claimId}(claimId=${claim.id})}" 
+                                   class="btn btn-sm btn-caredent">
+                                    Pay $<span th:text="${#numbers.formatDecimal(claim.patientResponsibility, 0, 'COMMA', 2, 'POINT')}"></span> Now
+                                </a>
+                            </div>
+                            <div th:if="${claim.claimStatus == 'APPROVED' and (claim.patientResponsibility == null or claim.patientResponsibility <= 0)}"
+                                 class="text-success small">
+                                Responsibility met.
+                            </div>
+                            <div th:if="${claim.claimStatus != 'APPROVED'}" class="text-muted small">
+                                N/A
+                            </div>
+                        </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+
+        </section>
+</main>
 
     <footer class="main-footer">
         <div class="footer-container">

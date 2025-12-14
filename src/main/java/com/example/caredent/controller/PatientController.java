@@ -452,6 +452,82 @@ public class PatientController {
         return "patientClaimsView";
     }
 
+
+
+    // =========================================================
+    //               CLAIM PAYMENT ROUTES
+    // =========================================================
+
+    /** STEP 1: Show Payment Form for a specific Claim */
+    @GetMapping("/claims/pay/{claimId}")
+    public String showPaymentFormForClaim(@PathVariable Long claimId, Model model, HttpSession session, RedirectAttributes ra) {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            return "redirect:/api/auth/login";
+        }
+
+        Claim claim = claimRepository.findById(claimId).orElse(null);
+
+        // Basic checks
+        if (claim == null || !claim.getPatient().getUser().equals(user)) {
+            ra.addFlashAttribute("error", "Claim not found or access denied.");
+            return "redirect:/patient/claims";
+        }
+
+        Double amountDue = claim.getPatientResponsibility();
+        if (amountDue == null || amountDue <= 0) {
+            ra.addFlashAttribute("success", "This claim has already been fully paid or has zero responsibility.");
+            return "redirect:/patient/claims";
+        }
+        
+        // Pass necessary data to the payment view
+        model.addAttribute("claimId", claimId);
+        model.addAttribute("amountDue", amountDue);
+        model.addAttribute("description", "Patient Responsibility for Claim #" + claimId);
+
+        // NOTE: This assumes you will create a new payment view, e.g., 'claimPayment.html'
+        return "claimPayment"; 
+    }
+
+    /** STEP 2: Process payment and confirm claim status update */
+    @PostMapping("/claims/completePayment")
+    public String completeClaimPayment(@RequestParam Long claimId, HttpSession session, RedirectAttributes ra) {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            return "redirect:/api/auth/login";
+        }
+        
+        Claim claim = claimRepository.findById(claimId).orElse(null);
+        
+        // Final checks
+        if (claim == null || !claim.getPatient().getUser().equals(user) || claim.getPatientResponsibility() == null || claim.getPatientResponsibility() <= 0) {
+            ra.addFlashAttribute("error", "Payment link invalid or amount already paid.");
+            return "redirect:/patient/claims";
+        }
+
+        // ** SIMULATE PAYMENT SUCCESS **
+        // In a real application, you'd integrate with a payment gateway here.
+        boolean paymentSuccessful = true; // Hardcoded to true for simulation
+
+        if (paymentSuccessful) {
+            // Update the claim status to reflect payment of patient responsibility
+            // NOTE: You might need a new field/status (e.g., 'PAID_IN_FULL' or similar).
+            // For now, we'll assume the 'APPROVED' status implies the insurance portion is done.
+            // If the patient pays, the claim is complete from the patient perspective.
+            
+            // Here we assume the amount is cleared on payment (for simulation)
+            claim.setPatientResponsibility(0.0); 
+            // If you want a new status: claim.setClaimStatus("SETTLED");
+            claimRepository.save(claim);
+
+            ra.addFlashAttribute("success", "Payment of $" + claim.getPatientResponsibility() + " for Claim #" + claimId + " was successful!");
+            return "redirect:/patient/claims";
+        } else {
+            ra.addFlashAttribute("error", "Payment failed. Please try again.");
+            return "redirect:/patient/claims";
+        }
+    }
+
     // =========================================================
     //               DOWNLOAD PDF ROUTE
     // =========================================================
