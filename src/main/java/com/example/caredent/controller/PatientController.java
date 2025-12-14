@@ -371,40 +371,40 @@ public class PatientController {
     // =========================================================
 
     /** Show the Find a Dentist form and display results if a plan is selected. */
-    @GetMapping("/network")
-    public String showFindDentist(
-        @RequestParam(name = "planId", required = false) Long planId,
-        Model model, HttpSession session)
-    {
-        User user = (User) session.getAttribute(LOGGED_IN_USER);
-        if (user == null) {
-            return "redirect:/api/auth/login";
-        }
+    // @GetMapping("/network")
+    // public String showFindDentist(
+    //     @RequestParam(name = "planId", required = false) Long planId,
+    //     Model model, HttpSession session)
+    // {
+    //     User user = (User) session.getAttribute(LOGGED_IN_USER);
+    //     if (user == null) {
+    //         return "redirect:/api/auth/login";
+    //     }
 
-        // Fetch all available dental plans to populate the dropdown
-        List<DentalPlan> plans = planRepository.findAll();
-        model.addAttribute("plans", plans);
+    //     // Fetch all available dental plans to populate the dropdown
+    //     List<DentalPlan> plans = planRepository.findAll();
+    //     model.addAttribute("plans", plans);
 
-        List<Doctor> doctors = List.of();
-        DentalPlan selectedPlan = null;
+    //     List<Doctor> doctors = List.of();
+    //     DentalPlan selectedPlan = null;
 
-        if (planId != null) {
-            // Find doctors based on the selected plan ID, delegated to networkService
-            doctors = networkService.findInNetworkDoctors(planId);
-            selectedPlan = planRepository.findById(planId).orElse(null);
-        }
+    //     if (planId != null) {
+    //         // Find doctors based on the selected plan ID, delegated to networkService
+    //         doctors = networkService.findInNetworkDoctors(planId);
+    //         selectedPlan = planRepository.findById(planId).orElse(null);
+    //     }
 
-        model.addAttribute("selectedPlan", selectedPlan);
-        model.addAttribute("doctors", doctors);
+    //     model.addAttribute("selectedPlan", selectedPlan);
+    //     model.addAttribute("doctors", doctors);
 
-        return "findDentist";
-    }
+    //     return "findDentist";
+    // }
 
-    // =========================================================
-    //               VIEW CLAIMS ROUTE 
-    // =========================================================
+    // // =========================================================
+    // //               VIEW CLAIMS ROUTE 
+    // // =========================================================
 
-    /** Shows all claims submitted by the dentist for the currently logged-in patient. */
+    // /** Shows all claims submitted by the dentist for the currently logged-in patient. */
     @GetMapping("/claims")
     public String viewClaims(Model model, HttpSession session) {
         User user = (User) session.getAttribute(LOGGED_IN_USER);
@@ -528,6 +528,72 @@ public class PatientController {
         }
     }
 
+
+    // INSIDE PatientController.java
+
+    /** STEP 1: Show Payment Form for a specific Claim */
+    // @GetMapping("/claims/pay/{claimId}")
+    // public String showPaymentFormForClaim(@PathVariable Long claimId, Model model, HttpSession session, RedirectAttributes ra) {
+    //     User user = (User) session.getAttribute(LOGGED_IN_USER);
+    //     if (user == null) {
+    //         return "redirect:/api/auth/login";
+    //     }
+
+    //     Claim claim = claimRepository.findById(claimId).orElse(null);
+
+    //     // Basic checks
+    //     if (claim == null || !claim.getPatient().getUser().equals(user)) {
+    //         ra.addFlashAttribute("error", "Claim not found or access denied.");
+    //         return "redirect:/patient/claims";
+    //     }
+
+    //     Double amountDue = claim.getPatientResponsibility();
+    //     if (amountDue == null || amountDue <= 0) {
+    //         // FIX: If amount is zero, redirect immediately with success message
+    //         ra.addFlashAttribute("success", "This claim has already been fully paid or has zero responsibility.");
+    //         return "redirect:/patient/claims";
+    //     }
+        
+    //     // Pass necessary data to the payment view
+    //     model.addAttribute("claimId", claimId);
+    //     model.addAttribute("amountDue", amountDue);
+    //     model.addAttribute("description", "Patient Responsibility for Claim #" + claimId);
+
+    //     return "claimPayment"; 
+    // }
+
+    // /** STEP 2: Process payment and confirm claim status update */
+    // @PostMapping("/claims/completePayment")
+    // public String completeClaimPayment(@RequestParam Long claimId, HttpSession session, RedirectAttributes ra) {
+    //     User user = (User) session.getAttribute(LOGGED_IN_USER);
+    //     if (user == null) {
+    //         return "redirect:/api/auth/login";
+    //     }
+        
+    //     Claim claim = claimRepository.findById(claimId).orElse(null);
+        
+    //     if (claim == null || !claim.getPatient().getUser().equals(user) || claim.getPatientResponsibility() == null || claim.getPatientResponsibility() <= 0) {
+    //         ra.addFlashAttribute("error", "Payment link invalid or amount already paid.");
+    //         return "redirect:/patient/claims";
+    //     }
+
+    //     // ** SIMULATE PAYMENT SUCCESS **
+    //     boolean paymentSuccessful = true; 
+        
+    //     Double paidAmount = claim.getPatientResponsibility(); // Save the amount for the success message
+
+    //     if (paymentSuccessful) {
+    //         // CRITICAL FIX: Set the responsibility to 0.0 after successful payment simulation
+    //         claim.setPatientResponsibility(0.0); 
+    //         claimRepository.save(claim);
+
+    //         ra.addFlashAttribute("success", "Payment of $" + paidAmount + " for Claim #" + claimId + " was successful. Your responsibility is now zero.");
+    //         return "redirect:/patient/claims";
+    //     } else {
+    //         ra.addFlashAttribute("error", "Payment failed. Please try again.");
+    //         return "redirect:/patient/claims";
+    //     }
+    // }
     // =========================================================
     //               DOWNLOAD PDF ROUTE
     // =========================================================
