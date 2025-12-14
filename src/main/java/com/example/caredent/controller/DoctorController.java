@@ -143,6 +143,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -155,6 +156,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.caredent.bean.DentalPlan;
 import com.example.caredent.bean.DentalProcedure;
 import com.example.caredent.bean.DentistNetwork;
+import com.example.caredent.bean.Doctor;
 import com.example.caredent.bean.Enrollment;
 import com.example.caredent.bean.Patient;
 import com.example.caredent.bean.PlanCoverageRule;
@@ -167,6 +169,7 @@ import com.example.caredent.repository.EnrollmentRepository;
 import com.example.caredent.repository.PatientRepository;
 import com.example.caredent.repository.PlanCoverageRuleRepository;
 import com.example.caredent.service.ClaimService;
+import com.example.caredent.service.NetworkService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -197,16 +200,7 @@ public class DoctorController {
         return "overview"; // Thymeleaf template
     }
 
-    /** Profile page */
-    @GetMapping("/profile")
-    public String profile(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null) {
-            return "redirect:/api/auth/login";
-        }
-        model.addAttribute("user", user);
-        return "profile";
-    }
+    
 
 
 
@@ -330,6 +324,7 @@ public String addProcedure(@RequestParam String procedureCode,
     // }
 
 
+
 @GetMapping("/claimForm")
 public String showClaimForm(Model model, HttpSession session) {
     User dentist = (User) session.getAttribute("loggedInUser");
@@ -372,7 +367,7 @@ public String showClaimForm(Model model, HttpSession session) {
         List<DentalProcedure> procedures = procedureRepo.findAllById(procedureIds);
 
         claimService.submitClaim(patient, dentist, procedures);
-        return "redirect:/doctor/trackClaims";
+        return "redirect:/api/auth/doctor/trackClaims";
     }
 
 
@@ -389,6 +384,25 @@ public String showClaimForm(Model model, HttpSession session) {
         model.addAttribute("user", dentist);
         return "trackClaims";
     }
+    @Autowired
+    NetworkService networkService;
+
+@GetMapping("/profile")
+public String showDoctorProfile(HttpSession session, Model model) {
+    // Get logged-in user from session
+    User loggedInUser = (User) session.getAttribute("loggedInUser");
+    if (loggedInUser == null) {
+        return "redirect:/api/auth/login"; // force login if session expired
+    }
+
+    // Use the user's ID to fetch doctor details
+    Doctor doctor = networkService.getSimulatedDoctorDetails(loggedInUser.getId());
+    model.addAttribute("doctor", doctor);
+
+    return "profile"; // must match doctor-profile.html
+}
+
+
 }
 
 

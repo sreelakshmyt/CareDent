@@ -373,17 +373,17 @@
             </a>
 
             <nav class="main-nav">
-                <a th:href="@{/doctor/dashboard}" class="nav-link">
+                <a th:href="@{/api/auth/doctor/dashboard}" class="nav-link">
                     <i class="fas fa-tachometer-alt"></i>
                     Overview
                 </a>
-                <a th:href="@{/doctor/profile}" class="nav-link">
+                <a th:href="@{/api/auth/doctor/profile}" class="nav-link">
                     <i class="fas fa-user"></i>
                     View Profile
                 </a>
                 <a th:href="@{/api/auth/doctor/plan}" class="nav-link active">
                     <i class="fas fa-network-wired"></i>
-                    My Plan
+                    My Network
                 </a>
                 <a th:href="@{/api/auth/doctor/manageProcedures}" class="nav-link">
                     <i class="fas fa-procedures"></i>
@@ -409,13 +409,9 @@
                         <p>Dental Practitioner</p>
                     </div>
                 </div>
-                
-                <div class="header-actions">
-                    <a th:href="@{/api/auth/doctor/claimForm}" class="action-btn action-btn-primary">
-                        <i class="fas fa-plus"></i>
-                        New Claim
-                    </a>
-                    <a th:href="@{/logout}" class="action-btn">
+
+
+                    <a th:href="@{/api/auth/login_register}" class="action-btn">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout
                     </a>

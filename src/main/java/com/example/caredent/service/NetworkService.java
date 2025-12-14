@@ -24,7 +24,7 @@ public class NetworkService {
      * Simulates external lookup of Doctor professional details based on User ID.
      * Includes five different doctor profiles.
      */
-    private Doctor getSimulatedDoctorDetails(Long userId) {
+    public Doctor getSimulatedDoctorDetails(Long userId) {
         
         // Dentist 1: General Practitioner (User ID 3)
         if (userId.equals(3L)) {
