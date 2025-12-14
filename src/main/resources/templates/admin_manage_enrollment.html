@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareDent Admin - Enrollment Management</title>
+    <title>CareDent - Manage Enrollments</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -12,7 +12,6 @@
     <style>
         /* Professional Teal Color Palette */
         :root {
-            /* Primary Colors */
             --color-primary: #005461;
             --color-primary-dark: #003c46;
             --color-primary-light: #006d7d;
@@ -20,8 +19,6 @@
             --color-secondary-light: #02a3aa;
             --color-accent: #00B7B5;
             --color-accent-light: #00d4d2;
-            
-            /* Neutral Colors */
             --color-surface: #ffffff;
             --color-surface-light: #f8fafc;
             --color-surface-dark: #f1f5f9;
@@ -31,26 +28,20 @@
             --color-text-secondary: #334155;
             --color-text-muted: #64748b;
             --color-text-light: #94a3b8;
-            
-            /* Status Colors */
             --color-success: #10b981;
             --color-warning: #f59e0b;
             --color-danger: #ef4444;
             --color-info: #3b82f6;
             
             /* Gradients */
-            --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            --gradient-card: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
             --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
             --gradient-primary-light: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
             --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
-            --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --gradient-surface: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-light) 100%);
             
             /* Shadows */
-            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.08);
-            --shadow-md: 0 4px 6px -1px rgba(0, 84, 97, 0.1), 0 2px 4px -1px rgba(0, 84, 97, 0.06);
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 84, 97, 0.08), 0 2px 4px -1px rgba(0, 84, 97, 0.04);
             --shadow-lg: 0 10px 15px -3px rgba(0, 84, 97, 0.08), 0 4px 6px -2px rgba(0, 84, 97, 0.03);
             --shadow-xl: 0 20px 25px -5px rgba(0, 84, 97, 0.08), 0 10px 10px -5px rgba(0, 84, 97, 0.02);
             
@@ -65,16 +56,20 @@
         }
 
         body {
-            background: var(--gradient-bg);
+            background: var(--color-surface);
             color: var(--color-text-primary);
-            font-family: 'Inter', 'Poppins', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            font-weight: 400;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
 
-        /* Animated Background Elements */
-        .teal-gradient-bg {
+        /* Minimalist Background Elements */
+        .geometric-background {
             position: fixed;
             top: 0;
             left: 0;
@@ -82,75 +77,23 @@
             bottom: 0;
             z-index: -1;
             pointer-events: none;
-        }
-
-        .teal-blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.08;
-            animation: float 25s infinite ease-in-out;
-        }
-
-        .teal-blob-1 {
-            width: 700px;
-            height: 700px;
-            top: -300px;
-            right: -200px;
-            background: var(--gradient-primary);
-            animation-delay: 0s;
-        }
-
-        .teal-blob-2 {
-            width: 500px;
-            height: 500px;
-            bottom: -200px;
-            left: -150px;
-            background: var(--gradient-accent);
-            animation-delay: 8s;
-        }
-
-        .teal-blob-3 {
-            width: 400px;
-            height: 400px;
-            top: 30%;
-            left: 25%;
-            background: var(--gradient-primary-light);
-            animation-delay: 16s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-            33% { transform: translate(40px, -40px) scale(1.1) rotate(120deg); }
-            66% { transform: translate(-30px, 30px) scale(0.9) rotate(240deg); }
-        }
-
-        /* Geometric Pattern Overlay */
-        .geometric-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
             opacity: 0.03;
             background-image: 
-                radial-gradient(circle at 25% 25%, var(--color-accent) 2px, transparent 2px),
-                radial-gradient(circle at 75% 75%, var(--color-secondary) 2px, transparent 2px);
-            background-size: 100px 100px;
+                linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        /* Modern Header */
-        .modern-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+        /* Modern Header - Added exactly like dashboard */
+        .header-modern {
+            background: var(--color-surface);
             border-bottom: 1px solid var(--color-border);
-            padding: 18px 0;
+            padding: 16px 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .header-content {
@@ -165,360 +108,81 @@
         .brand-wrapper {
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
         }
 
         .brand-icon {
-            width: 52px;
-            height: 52px;
+            width: 48px;
+            height: 48px;
             background: var(--gradient-primary);
             border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.4rem;
-            box-shadow: 0 6px 20px rgba(0, 84, 97, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .brand-icon::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transform: translateX(-100%);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            100% { transform: translateX(100%); }
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(0, 84, 97, 0.15);
         }
 
         .brand-text {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--color-primary);
             letter-spacing: -0.5px;
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Navigation */
-        .modern-nav {
+        /* Modern Navigation - Added exactly like dashboard */
+        .nav-modern {
             display: flex;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 8px;
+            gap: 4px;
+            background: var(--color-surface-light);
+            padding: 6px;
             border-radius: var(--radius-lg);
             border: 1px solid var(--color-border);
-            backdrop-filter: blur(10px);
         }
 
-        .nav-item-modern {
+        .nav-item {
             position: relative;
         }
 
-        .nav-link-modern {
-            padding: 14px 26px;
+        .nav-link {
+            padding: 12px 24px;
             color: var(--color-text-secondary);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             border-radius: var(--radius-md);
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-link-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--gradient-primary);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: -1;
-        }
-
-        .nav-link-modern:hover {
-            color: var(--color-primary);
-            background: rgba(0, 84, 97, 0.05);
-            transform: translateY(-2px);
-        }
-
-        .nav-link-modern.active {
-            color: white;
-            background: var(--gradient-primary);
-            box-shadow: 0 4px 15px rgba(0, 84, 97, 0.2);
-        }
-
-        .nav-link-modern.active::before {
-            opacity: 1;
-        }
-
-        /* Main Container */
-        .main-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            text-align: center;
-            padding: 60px 0 40px;
-            max-width: 800px;
-            margin: 0 auto 50px;
-            position: relative;
-        }
-
-        .hero-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--color-primary);
-            line-height: 1.2;
-            margin-bottom: 16px;
-            letter-spacing: -0.5px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: var(--color-text-secondary);
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
-            font-weight: 400;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        /* Modern Card */
-        .modern-card {
-            background: var(--gradient-card);
-            border-radius: var(--radius-xl);
-            padding: 32px;
-            border: 1px solid var(--color-border);
-            box-shadow: var(--shadow-md);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .modern-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--gradient-accent);
-            transform: scaleY(0);
-            transform-origin: top;
-            transition: transform 0.4s ease;
-        }
-
-        .modern-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--color-accent-light);
-        }
-
-        .modern-card:hover::before {
-            transform: scaleY(1);
-        }
-
-        /* Card Header */
-        .card-header {
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--color-border);
-            position: relative;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-primary);
-            margin-bottom: 8px;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .card-subtitle {
-            color: var(--color-text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* Table Styling */
-        .enrollment-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 16px;
-        }
-
-        .enrollment-table thead th {
-            background: var(--color-surface-light);
-            color: var(--color-text-secondary);
-            padding: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.85rem;
-            border-bottom: 2px solid var(--color-border);
-            text-align: left;
-        }
-
-        .enrollment-table tbody tr {
-            background: var(--color-surface-light);
-            border-bottom: 1px solid var(--color-border);
-            transition: var(--transition);
-        }
-
-        .enrollment-table tbody tr:hover {
-            background: white;
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .enrollment-table tbody td {
-            padding: 20px 16px;
-            color: var(--color-text-primary);
-            border-bottom: 1px solid var(--color-border-light);
-            vertical-align: middle;
-        }
-
-        .enrollment-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* Status Badge */
-        .status-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-active {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--color-success);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .status-pending {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--color-warning);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-        }
-
-        .status-inactive {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--color-danger);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--color-text-muted);
-        }
-
-        .empty-state-icon {
-            font-size: 3rem;
-            color: var(--color-primary);
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .empty-state-text {
-            font-size: 1rem;
-            color: var(--color-text-muted);
-        }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 35px 0;
-            color: var(--color-text-muted);
-            font-size: 0.95rem;
-            margin-top: 50px;
-            border-top: 1px solid var(--color-border);
-        }
-
-        /* Logout Button */
-        .logout-btn {
-            background: transparent;
-            border: 2px solid var(--color-border);
-            color: var(--color-text-secondary);
-            padding: 12px 28px;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            transition: var(--transition);
-            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 10px;
-            position: relative;
-            overflow: hidden;
         }
 
-        .logout-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
-            transition: left 0.6s ease;
+        .nav-link:hover {
+            color: var(--color-primary);
+            background: rgba(0, 84, 97, 0.05);
         }
 
-        .logout-btn:hover::before {
-            left: 100%;
-        }
-
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.05);
-            border-color: var(--color-danger);
-            color: var(--color-danger);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(239, 68, 68, 0.1);
+        .nav-link.active {
+            color: white;
+            background: var(--gradient-primary);
+            box-shadow: 0 2px 8px rgba(0, 84, 97, 0.2);
         }
 
         /* System Status */
         .system-status {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             color: var(--color-text-muted);
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.85rem;
+            font-weight: 400;
         }
 
         .status-indicator {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             background: var(--color-success);
             border-radius: 50%;
             position: relative;
@@ -536,14 +200,210 @@
 
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.5); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: 10px 24px;
+            border-radius: var(--radius-md);
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+            transform: translateY(-1px);
+        }
+
+        /* Main Content Container */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Your original sections with added styles - NOT CHANGED */
+        .hero-section-purple {
+            text-align: center;
+            padding: 60px 0 40px;
+            max-width: 800px;
+            margin: 0 auto 50px;
+            position: relative;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .hero-title-purple {
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-subtitle-purple {
+            font-size: 1.1rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        .stats-grid-purple {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 50px;
+        }
+
+        .purple-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .purple-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .purple-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-accent-light);
+        }
+
+        .purple-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .purple-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--color-border-light);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Table styling for your existing table - NOT CHANGED */
+        .purple-card table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 16px;
+        }
+
+        .purple-card table thead {
+            background: var(--color-surface-light);
+        }
+
+        .purple-card table th {
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .purple-card table tbody tr {
+            transition: var(--transition);
+        }
+
+        .purple-card table tbody tr:hover {
+            background: rgba(0, 183, 181, 0.05);
+        }
+
+        .purple-card table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--color-border-light);
+            font-size: 0.95rem;
+            color: var(--color-text-primary);
+        }
+
+        .purple-card table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status styling (if you want to add it later) */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-inactive {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--color-text-muted);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-text-muted);
+            font-size: 1.1rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            color: var(--color-border);
         }
 
         /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(40px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -551,148 +411,192 @@
             }
         }
 
-        .modern-card, .hero-section {
-            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            opacity: 0;
+        /* Footer like dashboard */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-top: 40px;
+            border-top: 1px solid var(--color-border);
         }
 
-        .modern-card:nth-child(1) { animation-delay: 0.1s; }
-        .modern-card:nth-child(2) { animation-delay: 0.2s; }
-        .modern-card:nth-child(3) { animation-delay: 0.3s; }
-        .modern-card:nth-child(4) { animation-delay: 0.4s; }
+        /* Bottom Navigation like dashboard */
+        .bottom-nav {
+            background: var(--color-surface-light);
+            border-top: 1px solid var(--color-border);
+            padding: 30px 40px;
+            margin-top: 60px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .quick-link {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .quick-link:hover {
+            color: var(--color-primary);
+        }
+
+        .quick-link.active {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .quick-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-accent);
+            border-radius: 1px;
+        }
 
         /* Responsive Design */
         @media (max-width: 1200px) {
-            .main-container {
-                padding: 40px 30px;
-            }
-            
             .header-content {
                 padding: 0 30px;
             }
             
-            .hero-title {
-                font-size: 2.4rem;
+            .main-content {
+                padding: 40px 30px;
             }
             
-            .stats-grid {
-                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            .hero-title-purple {
+                font-size: 2.4rem;
             }
         }
 
         @media (max-width: 992px) {
-            .modern-nav {
-                overflow-x: auto;
-                padding-bottom: 12px;
-            }
-            
-            .nav-link-modern {
-                padding: 12px 20px;
-            }
-            
-            .hero-title {
-                font-size: 2rem;
-            }
-            
-            .stats-grid {
+            .stats-grid-purple {
                 grid-template-columns: 1fr;
+            }
+            
+            .nav-modern {
+                overflow-x: auto;
+                padding-bottom: 8px;
+            }
+            
+            .hero-title-purple {
+                font-size: 2.2rem;
+            }
+            
+            .hero-section-purple {
+                padding: 40px 0 30px;
+            }
+            
+            .quick-links {
+                gap: 20px;
             }
         }
 
         @media (max-width: 768px) {
-            .main-container {
-                padding: 30px 20px;
-            }
-            
             .header-content {
                 padding: 0 20px;
                 flex-direction: column;
-                gap: 20px;
+                gap: 16px;
             }
             
-            .hero-title {
-                font-size: 1.8rem;
+            .main-content {
+                padding: 30px 20px;
             }
             
-            .modern-card {
+            .stats-grid-purple {
+                gap: 16px;
+            }
+            
+            .purple-card {
                 padding: 24px;
             }
             
-            .enrollment-table thead {
-                display: none;
-            }
-            
-            .enrollment-table tbody tr {
-                display: block;
-                margin-bottom: 16px;
-                border-radius: var(--radius-lg);
-                box-shadow: var(--shadow-sm);
-                padding: 16px;
-            }
-            
-            .enrollment-table tbody td {
-                display: block;
-                padding: 12px 0;
-                border-bottom: 1px solid var(--color-border-light);
-                text-align: left;
-            }
-            
-            .enrollment-table tbody td:last-child {
-                border-bottom: none;
-            }
-            
-            .enrollment-table tbody td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: var(--color-text-secondary);
-                text-transform: uppercase;
-                font-size: 0.8rem;
-                letter-spacing: 1px;
-                display: block;
-                margin-bottom: 4px;
-            }
-            
-            .brand-text {
+            .hero-title-purple {
                 font-size: 1.8rem;
+            }
+            
+            .hero-subtitle-purple {
+                font-size: 1rem;
+            }
+            
+            .bottom-nav {
+                padding: 20px;
             }
         }
 
         @media (max-width: 576px) {
-            .nav-link-modern span {
-                font-size: 0.8rem;
+            .purple-card {
+                padding: 20px;
             }
             
-            .nav-link-modern i {
-                font-size: 1rem;
-            }
-            
-            .hero-title {
+            .hero-title-purple {
                 font-size: 1.6rem;
             }
             
-            .hero-subtitle {
-                font-size: 1rem;
+            .purple-card table th,
+            .purple-card table td {
+                padding: 12px;
+                font-size: 0.9rem;
             }
             
-            .card-title {
+            .purple-card h2 {
                 font-size: 1.3rem;
+            }
+            
+            .nav-link {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+            
+            .logout-btn {
+                padding: 8px 16px;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* For mobile table responsiveness */
+        @media (max-width: 480px) {
+            .purple-card table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .purple-card table thead {
+                display: table-header-group;
+            }
+            
+            .purple-card table tbody {
+                display: table-row-group;
+            }
+            
+            .nav-modern {
+                flex-wrap: wrap;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Teal Background -->
-    <div class="teal-gradient-bg">
-        <div class="teal-blob teal-blob-1"></div>
-        <div class="teal-blob teal-blob-2"></div>
-        <div class="teal-blob teal-blob-3"></div>
-    </div>
-    
-    <!-- Geometric Pattern Overlay -->
-    <div class="geometric-pattern"></div>
+    <!-- Geometric Background -->
+    <div class="geometric-background"></div>
 
-    <!-- Modern Header -->
-    <header class="modern-header">
+    <!-- Modern Header - ADDED NAVBAR -->
+    <header class="header-modern">
         <div class="header-content">
             <div class="brand-wrapper">
                 <div class="brand-icon">
@@ -702,38 +606,38 @@
                     <div class="brand-text">CareDent</div>
                     <div class="system-status">
                         <span class="status-indicator"></span>
-                        <span>System Online • Enrollment Management</span>
+                        <span>System Online • Updated: <span th:text="${#dates.format(#dates.createNow(), 'HH:mm')}">14:30</span></span>
                     </div>
                 </div>
             </div>
 
-            <nav class="modern-nav">
-                <div class="nav-item-modern">
-                    <a class="nav-link-modern" th:href="@{/api/auth/admin/dashboard}">
+            <nav class="nav-modern">
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/dashboard}">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
                 </div>
-                <div class="nav-item-modern">
-                    <a class="nav-link-modern" th:href="@{/api/auth/admin/plans}">
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/plans}">
                         <i class="fas fa-boxes"></i>
                         <span>Plans</span>
                     </a>
                 </div>
-                <div class="nav-item-modern">
-                    <a class="nav-link-modern active" th:href="@{/api/auth/admin/manageenrollment}">
+                <div class="nav-item">
+                    <a class="nav-link active" th:href="@{/api/auth/admin/manageenrollment}">
                         <i class="fas fa-users"></i>
                         <span>Enrollment</span>
                     </a>
                 </div>
-                <div class="nav-item-modern">
-                    <a class="nav-link-modern" th:href="@{/api/auth/admin/claims}">
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/claims}">
                         <i class="fas fa-file-invoice-dollar"></i>
                         <span>Claims</span>
                     </a>
                 </div>
-                <div class="nav-item-modern">
-                    <a class="nav-link-modern" th:href="@{/api/auth/admin/analytics}">
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/analytics}">
                         <i class="fas fa-chart-line"></i>
                         <span>Analytics</span>
                     </a>
@@ -747,144 +651,114 @@
     </header>
 
     <!-- Main Content -->
-    <div class="main-container">
-        <!-- Hero Section -->
-        <section class="hero-section">
-            <h1 class="hero-title">Active Enrollments</h1>
-            <p class="hero-subtitle">
+    <div class="main-content">
+        <!-- Your exact HTML structure with added styles - NOT CHANGED -->
+        <section class="hero-section-purple">
+            <h1 class="hero-title-purple">Active Enrollments</h1>
+            <p class="hero-subtitle-purple">
                 View all patients currently enrolled in each dental plan.
             </p>
         </section>
 
-        <!-- Enrollment Grid -->
-        <div class="stats-grid">
-            <div th:each="plan : ${plans}" class="modern-card">
-                <div class="card-header">
-                    <h2 class="card-title" th:text="${plan.name}">Plan Name</h2>
-                    <div class="card-subtitle">
-                        Total Enrollments: <span th:text="${enrollmentsByPlan[plan.id]?.size() ?: 0}">0</span>
-                    </div>
-                </div>
-                
-                <div th:if="${enrollmentsByPlan[plan.id] != null and !enrollmentsByPlan[plan.id].empty}">
-                    <table class="enrollment-table">
-                        <thead>
-                            <tr>
-                                <th>Patient Name</th>
-                                <th>Benefit Year Start</th>
-                                <th>Benefit Year End</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="enrollment : ${enrollmentsByPlan[plan.id]}">
-                                <td data-label="Patient Name" th:text="${enrollment.patient.firstName} + ' ' + ${enrollment.patient.lastName}">John Doe</td>
-                                <td data-label="Benefit Year Start" th:text="${enrollment.benefitYearStart}">2024-01-01</td>
-                                <td data-label="Benefit Year End" th:text="${enrollment.benefitYearEnd}">2024-12-31</td>
-                                <td data-label="Status">
-                                    <span th:classappend="${enrollment.status == 'ACTIVE'} ? 'status-badge status-active' : 
-                                                         ${enrollment.status == 'PENDING'} ? 'status-badge status-pending' : 
-                                                         'status-badge status-inactive'"
-                                          th:text="${enrollment.status}">ACTIVE</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div th:if="${enrollmentsByPlan[plan.id] == null or enrollmentsByPlan[plan.id].empty}" class="empty-state">
-                    <div class="empty-state-icon">
-                        <i class="fas fa-user-slash"></i>
-                    </div>
-                    <p class="empty-state-text">No enrollments found for this plan.</p>
-                </div>
+        <div class="stats-grid-purple">
+            <div th:each="plan : ${plans}" class="purple-card">
+                <h2 th:text="${plan.name}"></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Benefit Year Start</th>
+                            <th>Benefit Year End</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="enrollment : ${enrollmentsByPlan[plan.id]}">
+                            <td th:text="${enrollment.patient.firstName} + ' ' + ${enrollment.patient.lastName}"></td>
+                            <td th:text="${enrollment.benefitYearStart}"></td>
+                            <td th:text="${enrollment.benefitYearEnd}"></td>
+                            <td th:text="${enrollment.status}"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <p class="mb-2">CareDent Admin Dashboard • v3.2</p>
+        <!-- Bottom Navigation - ADDED -->
+        <nav class="bottom-nav">
+            <div class="quick-links">
+                <a class="quick-link" th:href="@{/api/auth/admin/dashboard}">Dashboard</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/plans}">Plan Management</a>
+                <a class="quick-link active" th:href="@{/api/auth/admin/manageenrollment}">Enrollment</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/claims}">Claims Center</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/analytics}">Analytics</a>
+            </div>
+        </nav>
+
+        <!-- Footer - ADDED -->
+        <footer class="footer">
+            <p class="mb-2">CareDent Enrollment Management • v3.2</p>
             <p class="small text-muted">
-                Report Date: <span th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}">December 11, 2025</span> • 
-                System Status: <span style="color: var(--color-success); font-weight: 500;">Operational</span>
+                Report Date: <span th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}">December 13, 2025</span> • 
+                Total Plans: <span th:text="${plans.size()}">0</span>
             </p>
-        </div>
+        </footer>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Initialize card hover effects
         document.addEventListener('DOMContentLoaded', function() {
-            // Highlight active navigation
+            const cards = document.querySelectorAll('.purple-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '100';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    setTimeout(() => {
+                        this.style.zIndex = '1';
+                    }, 300);
+                });
+            });
+            
+            // Animate cards with delay
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Update timestamp
+            function updateTimestamp() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: false 
+                });
+                
+                const timestampElements = document.querySelectorAll('.system-status span:nth-child(2)');
+                timestampElements.forEach(el => {
+                    if (el.textContent.includes('Updated:')) {
+                        el.textContent = `Updated: ${timeString}`;
+                    }
+                });
+            }
+            
+            // Set active navigation
             const currentPath = window.location.pathname;
-            const navLinks = document.querySelectorAll('.nav-link-modern');
+            const navLinks = document.querySelectorAll('.nav-link, .quick-link');
             
             navLinks.forEach(link => {
-                if (link.getAttribute('href') && currentPath.includes(link.getAttribute('href'))) {
+                const href = link.getAttribute('href');
+                if (href && currentPath.includes(href.split('/').pop())) {
                     link.classList.add('active');
                 } else {
                     link.classList.remove('active');
                 }
             });
-
-            // Add responsive table labels for mobile
-            function setupResponsiveTable() {
-                if (window.innerWidth < 768) {
-                    const tables = document.querySelectorAll('.enrollment-table');
-                    tables.forEach(table => {
-                        const headers = table.querySelectorAll('thead th');
-                        const cells = table.querySelectorAll('tbody td');
-                        
-                        if (headers.length > 0) {
-                            cells.forEach((cell, index) => {
-                                const headerIndex = index % headers.length;
-                                const headerText = headers[headerIndex].textContent;
-                                cell.setAttribute('data-label', headerText);
-                            });
-                        }
-                    });
-                }
-            }
-
-            // Initialize responsive table
-            setupResponsiveTable();
-            window.addEventListener('resize', setupResponsiveTable);
-
-            // Add hover animations to table rows
-            const tableRows = document.querySelectorAll('.enrollment-table tbody tr');
-            tableRows.forEach(row => {
-                row.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-2px)';
-                    this.style.boxShadow = 'var(--shadow-sm)';
-                });
-                
-                row.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                    this.style.boxShadow = 'none';
-                });
-            });
-
-            // Parallax effect on scroll
-            window.addEventListener('scroll', function() {
-                const scrolled = window.pageYOffset;
-                const blobs = document.querySelectorAll('.teal-blob');
-                
-                blobs.forEach((blob, index) => {
-                    const speed = 0.05 + (index * 0.03);
-                    blob.style.transform = `translate(${scrolled * speed * 0.5}px, ${scrolled * speed * 0.5}px)`;
-                });
-            });
-
-            // Initialize animations
-            setTimeout(() => {
-                const cards = document.querySelectorAll('.modern-card');
-                cards.forEach((card, index) => {
-                    setTimeout(() => {
-                        card.style.animation = `fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards`;
-                        card.style.opacity = '0';
-                        card.style.animationDelay = `${0.1 + (index * 0.1)}s`;
-                    }, 100);
-                });
-            }, 300);
+            
+            updateTimestamp();
+            setInterval(updateTimestamp, 60000);
         });
     </script>
 </body>

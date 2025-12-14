@@ -1,98 +1,828 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Claim Queue</title>
-    <link rel="stylesheet" th:href="@{/css/styles1.css}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareDent Claims Queue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <style>
-        .status-pill { padding: 2px 8px; border-radius: 12px; background:#ffe08a; }
-        .btn { padding: 6px 10px; margin-right: 6px; cursor:pointer; }
-        .btn-approve { background:#4caf50; color:#fff; border:none; }
-        .btn-reject { background:#f44336; color:#fff; border:none; }
-        .toolbar { margin-bottom: 12px; }
-        .pagination { margin-top: 12px; }
+        /* Professional Teal Color Palette */
+        :root {
+            --color-primary: #005461;
+            --color-primary-dark: #003c46;
+            --color-primary-light: #006d7d;
+            --color-secondary: #018790;
+            --color-secondary-light: #02a3aa;
+            --color-accent: #00B7B5;
+            --color-accent-light: #00d4d2;
+            --color-surface: #ffffff;
+            --color-surface-light: #f8fafc;
+            --color-surface-dark: #f1f5f9;
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #334155;
+            --color-text-muted: #64748b;
+            --color-text-light: #94a3b8;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            --gradient-primary-light: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
+            --gradient-surface: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-light) 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 84, 97, 0.08), 0 2px 4px -1px rgba(0, 84, 97, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 84, 97, 0.08), 0 4px 6px -2px rgba(0, 84, 97, 0.03);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 84, 97, 0.08), 0 10px 10px -5px rgba(0, 84, 97, 0.02);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        /* Minimalist Background Elements */
+        .geometric-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Modern Header */
+        .header-modern {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: -0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        /* Navigation */
+        .nav-modern {
+            display: flex;
+            gap: 2px;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+            height: 100%;
+        }
+
+        .nav-link {
+            padding: 0 20px;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border-radius: 0;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 100%;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+            background: rgba(0, 84, 97, 0.03);
+            border-bottom-color: var(--color-border);
+        }
+
+        .nav-link.active {
+            color: var(--color-primary);
+            background: transparent;
+            border-bottom-color: var(--color-primary);
+            box-shadow: none;
+            font-weight: 600;
+        }
+
+        .nav-link.active i {
+            color: var(--color-primary);
+        }
+
+        .nav-link i {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        /* System Status */
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            font-weight: 400;
+        }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            background: var(--color-success);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 40px 0 30px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1.2;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        /* Modern Card */
+        .card-modern {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .card-modern:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Claims Table Container */
+        .table-container {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+        }
+
+        /* Table Styles */
+        .claims-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .claims-table thead {
+            background: var(--color-surface-light);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        .claims-table th {
+            padding: 18px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .claims-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--color-border-light);
+            color: var(--color-text-primary);
+            vertical-align: middle;
+        }
+
+        .claims-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .claims-table tbody tr:hover {
+            background: rgba(0, 183, 181, 0.03);
+        }
+
+        .claims-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Status Pill */
+        .status-pill {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--color-warning);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .status-approved {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--color-success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* Action Buttons */
+        .btn-approve {
+            background: var(--color-success);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: var(--transition);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-approve:hover {
+            background: #0da271;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-approve i {
+            font-size: 0.9rem;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--color-surface-light);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .pending-count {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .count-badge {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+        }
+
+        .pagination a {
+            padding: 10px 24px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .pagination a:hover {
+            background: var(--color-surface-light);
+            border-color: var(--color-accent);
+            color: var(--color-primary);
+        }
+
+        .pagination span {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            background: var(--color-surface-light);
+            border-top: 1px solid var(--color-border);
+            padding: 30px 40px;
+            margin-top: 60px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .quick-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .quick-link {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .quick-link:hover {
+            color: var(--color-primary);
+        }
+
+        .quick-link.active {
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .quick-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-accent);
+            border-radius: 1px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin-top: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .main-container {
+                padding: 40px 30px;
+            }
+            
+            .header-content {
+                padding: 0 30px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .claims-table {
+                font-size: 0.85rem;
+            }
+            
+            .claims-table th,
+            .claims-table td {
+                padding: 14px 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 30px 20px;
+            }
+            
+            .header-content {
+                padding: 0 20px;
+                height: auto;
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 0;
+            }
+            
+            .nav-modern {
+                width: 100%;
+                overflow-x: auto;
+                justify-content: center;
+                padding: 8px 0;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+            
+            .quick-links {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .toolbar {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .nav-link {
+                padding: 0 15px;
+                font-size: 0.8rem;
+            }
+            
+            .bottom-nav {
+                padding: 20px;
+            }
+            
+            .logout-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-modern, .hero-title, .hero-subtitle {
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
     </style>
 </head>
 <body>
-<div class="main-content">
-    <h1>Claims Queue</h1>
+    <!-- Geometric Background -->
+    <div class="geometric-background"></div>
 
-    <div class="toolbar">
-        <span><b>Pending:</b> <span th:text="${pendingCount}"></span></span>
-        <button class="btn btn-approve" id="approveAllBtn">Approve All</button>
+    <!-- Modern Header -->
+    <header class="header-modern">
+        <div class="header-content">
+            <div class="brand-wrapper">
+                <div class="brand-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div>
+                    <div class="brand-text">CareDent</div>
+                    <div class="system-status">
+                        <span class="status-indicator"></span>
+                        <span>System Online • Updated: <span th:text="${#dates.format(#dates.createNow(), 'HH:mm')}">14:30</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="nav-modern">
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/dashboard}">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/plans}">
+                        <i class="fas fa-boxes"></i>
+                        <span>Plans</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/manageenrollment}">
+                        <i class="fas fa-users"></i>
+                        <span>Enrollment</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link active" th:href="@{/api/auth/admin/claims}">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Claims</span>
+                    </a>
+                </div>
+                <a th:href="@{/api/auth/login_register}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">Claims Queue</h1>
+            <p class="hero-subtitle">
+                Review and manage pending dental insurance claims requiring approval. 
+                Monitor submission timelines and ensure timely processing for optimal member experience.
+            </p>
+        </section>
+
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <div class="pending-count">
+                <span><b>Pending Claims:</b></span>
+                <span class="count-badge" th:text="${pendingCount}">0</span>
+            </div>
+        </div>
+
+        <!-- Claims Table Container -->
+        <div class="table-container">
+            <table class="claims-table">
+                <thead>
+                    <tr>
+                        <th>Claim ID</th>
+                        <th>Patient</th>
+                        <th>Dentist</th>
+                        <th>Submitted</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${pendingClaims}" th:attr="data-id=${c.id}">
+                        <td th:text="${c.id}"></td>
+                        <td th:text="${c.patientName}"></td>
+                        <td th:text="${c.dentistName}"></td>
+                        <td th:text="${#dates.format(c.submissionDate,'dd-MMM-yyyy')}"></td>
+                        <td th:text="${c.claimedAmount}"></td>
+                        <td>
+                            <span class="status-pill status-pending" th:text="${c.status}"></span>
+                        </td>
+                        <td>
+                            <button class="btn-approve" th:attr="data-id=${c.id}" onclick="approveClaim(this)">
+                                <i class="fas fa-check"></i>
+                                Approve
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <a th:if="${page>0}" th:href="@{'/api/auth/admin/claims'(page=${page-1},size=${size})}">
+                <i class="fas fa-chevron-left"></i> Previous
+            </a>
+            <span>Page <span th:text="${page+1}"></span> of <span th:text="${totalPages}"></span></span>
+            <a th:if="${page+1<totalPages}" th:href="@{'/api/auth/admin/claims'(page=${page+1},size=${size})}">
+                Next <i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="quick-links">
+                <a class="quick-link" th:href="@{/api/auth/admin/dashboard}">Dashboard</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/plans}">Plan Management</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/manageenrollment}">Enrollment</a>
+                <a class="quick-link active" th:href="@{/api/auth/admin/claims}">Claims Center</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/analytics}">Analytics</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/networks}">Networks</a>
+                <a class="quick-link" th:href="@{/api/auth/admin/fee-schedules}">Fee Schedules</a>
+            </div>
+        </nav>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p class="mb-2">CareDent Claims Management • v3.2</p>
+            <p class="small text-muted">
+                Report Date: <span th:text="${#dates.format(#dates.createNow(), 'MMMM dd, yyyy')}">December 11, 2025</span> • 
+                System Status: <span style="color: var(--color-success); font-weight: 500;">Operational</span>
+            </p>
+        </footer>
     </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Claim ID</th>
-            <th>Patient</th>
-            <th>Dentist</th>
-            <th>Submitted</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="c : ${pendingClaims}" th:attr="data-id=${c.id}">
-            <td th:text="${c.id}"></td>
-            <td th:text="${c.patientName}"></td>
-            <td th:text="${c.dentistName}"></td>
-            <td th:text="${#dates.format(c.submissionDate,'dd-MMM-yyyy')}"></td>
-            <td th:text="${c.claimedAmount}"></td>
-            <td><span class="status-pill" th:text="${c.status}"></span></td>
-            <td>
-                <button class="btn btn-approve" th:attr="data-id=${c.id}" onclick="approveClaim(this)">Approve</button>
-                <button class="btn btn-reject" th:attr="data-id=${c.id}" onclick="rejectClaim(this)">Reject</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <script>
+    function approveClaim(btn) {
+        const id = btn.getAttribute('data-id');
+        axios.post(`/api/auth/admin/claims/${id}/approve`)
+            .then(() => {
+                const row = btn.closest('tr');
+                row.style.opacity = 0.6;
+                
+                // Update status pill
+                const statusPill = row.querySelector('.status-pill');
+                statusPill.textContent = 'APPROVED';
+                statusPill.classList.remove('status-pending');
+                statusPill.classList.add('status-approved');
+                
+                // Disable the button
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-check-circle"></i> Approved';
+                btn.style.opacity = '0.7';
+                btn.style.cursor = 'default';
+                
+                // Update pending count
+                const countBadge = document.querySelector('.count-badge');
+                if (countBadge) {
+                    const currentCount = parseInt(countBadge.textContent);
+                    if (currentCount > 0) {
+                        countBadge.textContent = currentCount - 1;
+                    }
+                }
+            })
+            .catch(err => {
+                alert(err.response?.data?.message || 'Approval failed. Please try again.');
+            });
+    }
 
-    <div class="pagination">
-        <a th:if="${page>0}" th:href="@{'/api/auth/admin/claims'(page=${page-1},size=${size})}">Prev</a>
-        <span>Page <span th:text="${page+1}"></span> / <span th:text="${totalPages}"></span></span>
-        <a th:if="${page+1<totalPages}" th:href="@{'/api/auth/admin/claims'(page=${page+1},size=${size})}">Next</a>
-    </div>
-</div>
+    // Update timestamp
+    function updateTimestamp() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: false 
+        });
+        
+        const timestampElements = document.querySelectorAll('.system-status span:nth-child(2)');
+        timestampElements.forEach(el => {
+            if (el.textContent.includes('Updated:')) {
+                el.textContent = `Updated: ${timeString}`;
+            }
+        });
+    }
 
-<script>
-function approveClaim(btn) {
-    const id = btn.getAttribute('data-id');
-    axios.post(`/api/auth/admin/claims/${id}/approve`)
-        .then(() => {
-            const row = btn.closest('tr');
-            row.style.opacity = 0.4;
-            row.querySelector('.status-pill').textContent = 'APPROVED';
-        })
-        .catch(err => alert(err.response?.data?.message || 'Approval failed'));
-}
-
-function rejectClaim(btn) {
-    const id = btn.getAttribute('data-id');
-    const reason = prompt('Enter rejection reason:');
-    if (!reason) return;
-    const params = new URLSearchParams();
-    params.append('reason', reason);
-    axios.post(`/api/auth/admin/claims/${id}/reject?` + params.toString())
-        .then(() => {
-            const row = btn.closest('tr');
-            row.style.opacity = 0.4;
-            row.querySelector('.status-pill').textContent = 'REJECTED';
-        })
-        .catch(err => alert(err.response?.data?.message || 'Rejection failed'));
-}
-
-document.getElementById('approveAllBtn').addEventListener('click', function() {
-    axios.post('/api/auth/admin/claims/approve-all')
-        .then(resp => {
-            alert(resp.data);
-            window.location.reload();
-        })
-        .catch(err => alert(err.response?.data?.message || 'Batch approval failed'));
-});
-</script>
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        updateTimestamp();
+        setInterval(updateTimestamp, 60000);
+        
+        // Set active navigation
+        const currentPath = window.location.pathname;
+        const navLinks = document.querySelectorAll('.nav-link, .quick-link');
+        
+        navLinks.forEach(link => {
+            const href = link.getAttribute('href');
+            if (href && currentPath.includes(href.split('/').pop())) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    });
+    </script>
 </body>
 </html>

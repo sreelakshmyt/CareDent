@@ -82,28 +82,15 @@
             background-size: 40px 40px;
         }
 
-        /* Subtle accent elements */
-        .accent-line {
-            position: absolute;
-            height: 2px;
-            background: var(--gradient-accent);
-            width: 100px;
-            bottom: -1px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 1px;
-        }
-
-        /* Modern Header */
+        /* Modern Header - CLEANER NAVBAR */
         .header-modern {
             background: var(--color-surface);
             border-bottom: 1px solid var(--color-border);
-            padding: 16px 0;
+            padding: 0;
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
         }
 
         .header-content {
@@ -113,6 +100,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            height: 70px;
         }
 
         .brand-wrapper {
@@ -122,62 +110,125 @@
         }
 
         .brand-icon {
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             background: var(--gradient-primary);
-            border-radius: var(--radius-md);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.3rem;
-            box-shadow: 0 4px 12px rgba(0, 84, 97, 0.15);
+            font-size: 1.2rem;
         }
 
         .brand-text {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--color-primary);
             letter-spacing: -0.5px;
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Modern Navigation */
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        /* CLEANER Navigation */
         .nav-modern {
             display: flex;
-            gap: 4px;
-            background: var(--color-surface-light);
-            padding: 6px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--color-border);
+            gap: 2px;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            height: 100%;
+            align-items: center;
         }
 
         .nav-item {
             position: relative;
+            height: 100%;
         }
 
         .nav-link {
-            padding: 12px 24px;
+            padding: 0 20px;
             color: var(--color-text-secondary);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.9rem;
-            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            border-radius: 0;
             transition: var(--transition);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            height: 100%;
+            border-bottom: 3px solid transparent;
         }
 
         .nav-link:hover {
             color: var(--color-primary);
-            background: rgba(0, 84, 97, 0.05);
+            background: rgba(0, 84, 97, 0.03);
+            border-bottom-color: var(--color-border);
         }
 
         .nav-link.active {
-            color: white;
-            background: var(--gradient-primary);
-            box-shadow: 0 2px 8px rgba(0, 84, 97, 0.2);
+            color: var(--color-primary);
+            background: transparent;
+            border-bottom-color: var(--color-primary);
+            box-shadow: none;
+            font-weight: 600;
+        }
+
+        .nav-link.active i {
+            color: var(--color-primary);
+        }
+
+        .nav-link i {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Logout Button - Cleaner */
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        /* System Status */
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            font-weight: 400;
+        }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            background: var(--color-success);
+            border-radius: 50%;
+            position: relative;
         }
 
         /* Main Container */
@@ -476,61 +527,6 @@
             margin-top: 40px;
         }
 
-        /* Logout Button */
-        .logout-btn {
-            background: transparent;
-            border: 1px solid var(--color-border);
-            color: var(--color-text-secondary);
-            padding: 10px 24px;
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            transition: var(--transition);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.05);
-            border-color: var(--color-danger);
-            color: var(--color-danger);
-            transform: translateY(-1px);
-        }
-
-        /* System Status */
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--color-text-muted);
-            font-size: 0.85rem;
-            font-weight: 400;
-        }
-
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            background: var(--color-success);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .status-indicator::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: inherit;
-            border-radius: inherit;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
         /* Responsive Design */
         @media (max-width: 1200px) {
             .main-container {
@@ -561,7 +557,7 @@
             
             .nav-modern {
                 overflow-x: auto;
-                padding-bottom: 8px;
+                padding-bottom: 0;
             }
             
             .hero-title {
@@ -580,8 +576,17 @@
             
             .header-content {
                 padding: 0 20px;
+                height: auto;
                 flex-direction: column;
                 gap: 16px;
+                padding: 16px 0;
+            }
+            
+            .nav-modern {
+                width: 100%;
+                overflow-x: auto;
+                justify-content: center;
+                padding: 8px 0;
             }
             
             .stats-grid {
@@ -615,12 +620,17 @@
             }
             
             .nav-link {
-                padding: 10px 16px;
-                font-size: 0.85rem;
+                padding: 0 15px;
+                font-size: 0.8rem;
             }
             
             .bottom-nav {
                 padding: 20px;
+            }
+            
+            .logout-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
             }
         }
 
@@ -693,12 +703,6 @@
                         <span>Claims</span>
                     </a>
                 </div>
-                <div class="nav-item">
-                    <a class="nav-link" th:href="@{/api/auth/admin/analytics}">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Analytics</span>
-                    </a>
-                </div>
                 <a th:href="@{/api/auth/login_register}" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
@@ -717,65 +721,6 @@
                 Monitor performance, manage claims, and optimize system configurations.
             </p>
         </section>
-
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <!-- Total Claims -->
-            <div class="card-modern">
-                <div class="stat-icon">
-                    <i class="fas fa-file-invoice"></i>
-                </div>
-                <div class="stat-title">Total Claims (YTD)</div>
-                <div class="stat-number" th:text="${totalClaims}">1,450</div>
-                <div class="stat-trend">
-                    <i class="fas fa-arrow-up"></i>
-                    +12% from last month
-                </div>
-                <p class="text-muted small mt-4">Current count of all submitted claims this fiscal year</p>
-            </div>
-
-            <!-- Total Payouts -->
-            <div class="card-modern">
-                <div class="stat-icon">
-                    <i class="fas fa-money-bill-wave"></i>
-                </div>
-                <div class="stat-title">Total Payouts</div>
-                <div class="stat-number" th:text="${#numbers.formatCurrency(totalPayouts)}">$580K</div>
-                <div class="stat-trend">
-                    <i class="fas fa-arrow-up"></i>
-                    +8% increase
-                </div>
-                <p class="text-muted small mt-4">Aggregate insurance payments disbursed this year</p>
-            </div>
-
-            <!-- Active Plans -->
-            <div class="card-modern">
-                <div class="stat-icon">
-                    <i class="fas fa-layer-group"></i>
-                </div>
-                <div class="stat-title">Active Plans</div>
-                <div class="stat-number" th:text="${totalPlans}">5</div>
-                <div class="stat-trend">
-                    <i class="fas fa-plus"></i>
-                    2 new this quarter
-                </div>
-                <p class="text-muted small mt-4">Number of active dental coverage products</p>
-            </div>
-
-            <!-- Total Enrollments -->
-            <div class="card-modern">
-                <div class="stat-icon">
-                    <i class="fas fa-users-line"></i>
-                </div>
-                <div class="stat-title">Total Enrollments</div>
-                <div class="stat-number" th:text="${totalEnrollments}">2,450</div>
-                <div class="stat-trend">
-                    <i class="fas fa-arrow-up"></i>
-                    +15% growth
-                </div>
-                <p class="text-muted small mt-4">Patients currently covered under active plans</p>
-            </div>
-        </div>
 
         <!-- Action Grid -->
         <div class="action-grid">

@@ -633,18 +633,52 @@
 
 <body>
 
-  <!-- Header -->
+            <nav class="main-nav">
+                <a th:href="@{/api/auth/doctor/dashboard}" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Overview
+                </a>
+                <a th:href="@{/api/auth/doctor/profile}" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
+                <a th:href="@{/api/auth/doctor/plan}" class="nav-link">
+                    <i class="fas fa-network-wired"></i>
+                    Network
+                </a>
+                <a th:href="@{/api/auth/doctor/manageProcedures}" class="nav-link">
+                    <i class="fas fa-procedures"></i>
+                    Procedures
+                </a>
+                <a th:href="@{/api/auth/doctor/claimForm}" class="nav-link">
+                    <i class="fas fa-file-medical"></i>
+                    Submit Claim
+                </a>
+                <a th:href="@{/api/auth/doctor/trackClaims}" class="nav-link active">
+                    <i class="fas fa-chart-line"></i>
+                    Track Claims
+                </a>
+            </nav>
 
-  <header class="main-header">
-
-    <div class="header-content">
-
-      <a href="/" class="brand">
-
-        <div class="brand-icon">
-
-          <i class="fas fa-tooth"></i>
-
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3>Dr. <span th:text="${user.username}">Doctor</span></h3>
+                        <p>Dental Practitioner</p>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                   
+                    <a th:href="@{/api/auth/login_register}" class="action-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div>
