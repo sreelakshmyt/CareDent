@@ -73,7 +73,7 @@
                 
                 <div class="d-grid gap-2 mt-4">
                     <button type="submit" class="btn btn-success btn-lg">
-                        <i class="fas fa-lock me-2"></i> Pay $<span th:text="${plan.deductible}">50.00</span> and Activate Plan
+                        <i class="fas fa-lock me-2"></i> Pay $<span th:text="${plan.premium}">50.00</span> and Activate Plan
                     </button>
                     <a th:href="@{/patient/dashboard}" class="btn btn-outline-secondary">Cancel Enrollment</a>
                 </div>
