@@ -1,8 +1,6 @@
 
 package com.example.caredent.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.caredent.bean.Claim;
 import com.example.caredent.bean.ClaimLine;
 import com.example.caredent.bean.DentalPlan;
 import com.example.caredent.bean.DentalProcedure;
 import com.example.caredent.bean.DentistNetwork;
-import com.example.caredent.bean.Dependent;
 import com.example.caredent.bean.Enrollment;
 import com.example.caredent.bean.Patient;
 import com.example.caredent.bean.PlanCoverageRule;
@@ -256,6 +252,163 @@ private DentalProcedureRepository dentalProcedureRepository;
 @Autowired
 private ClaimLineRepository claimLineRepository; // if not cascaded
 
+// @PostMapping("/claims/{id}/approve")
+// public String approveClaim(@PathVariable Long id) {
+//     Claim claim = claimRepository.findById(id)
+//             .orElseThrow(() -> new RuntimeException("Claim not found"));
+//     Patient patient = claim.getPatient();
+
+//     Enrollment enrollment = enrollmentRepository.findByPatientId(patient.getId())
+//             .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+
+//     double totalInsurancePaid = 0.0;
+//     double totalPatientResponsibility = 0.0;
+
+//     for (ClaimLine line : claim.getClaimLines()) {
+//         DentalProcedure procedure = dentalProcedureRepository.findByProcedureCode(line.getProcedureCode())
+//                 .orElseThrow(() -> new RuntimeException("Procedure not found"));
+
+//         PlanCoverageRule rule = planCoverageRuleRepository.findByDentalPlanIdAndProcedureCategory(
+//                 enrollment.getDentalPlan().getId(), procedure.getCategory())
+//                 .orElseThrow(() -> new RuntimeException("Coverage rule not found"));
+
+//         double coveragePercentage = rule.getCoveragePercentage();
+//         double insurancePaid = line.getAmount() * coveragePercentage / 100;
+//         double patientResponsibility = line.getAmount() - insurancePaid;
+
+//         // Deductible
+//         double remainingDeductible = enrollment.getDentalPlan().getDeductible() - enrollment.getDeductibleUsed();
+//         double deductibleApplied = 0.0;
+//         if (remainingDeductible > 0) {
+//             deductibleApplied = Math.min(patientResponsibility, remainingDeductible);
+//             enrollment.setDeductibleUsed(enrollment.getDeductibleUsed() + deductibleApplied);
+
+//             insurancePaid -= deductibleApplied;
+//             if (insurancePaid < 0) insurancePaid = 0;
+//         }
+
+//         // Annual max
+//         double remainingAnnualMax = enrollment.getDentalPlan().getAnnualMax() - enrollment.getAnnualMaxUsed();
+//         if (remainingAnnualMax <= 0) {
+//             patientResponsibility += insurancePaid;
+//             insurancePaid = 0.0;
+//         } else if (insurancePaid > remainingAnnualMax) {
+//             double excess = insurancePaid - remainingAnnualMax;
+//             insurancePaid = remainingAnnualMax;
+//             patientResponsibility += excess;
+//         }
+//         enrollment.setAnnualMaxUsed(enrollment.getAnnualMaxUsed() + insurancePaid);
+
+//         line.setInsurancePaid(insurancePaid);
+//         line.setPatientResponsibility(patientResponsibility);
+//         line.setDeductibleApplied(deductibleApplied);
+
+//         claimLineRepository.save(line); // if cascade not set
+
+//         totalInsurancePaid += insurancePaid;
+//         totalPatientResponsibility += patientResponsibility;
+//     }
+
+//     claim.setClaimStatus("APPROVED");
+//     claim.setApprovalDate(new java.util.Date());
+//     claim.setInsurancePaid(totalInsurancePaid);
+//     claim.setPatientResponsibility(totalPatientResponsibility);
+
+//     enrollmentRepository.save(enrollment);
+//     claimRepository.save(claim);
+
+//     return "redirect:/api/auth/admin/claims"; // adjust to your UI flow
+// }
+
+
+
+
+// @PostMapping("/claims/{id}/approve")
+// public String approveClaim(@PathVariable Long id) {
+//     Claim claim = claimRepository.findById(id)
+//             .orElseThrow(() -> new RuntimeException("Claim not found"));
+//     Patient patient = claim.getPatient();
+
+//     Enrollment enrollment = enrollmentRepository.findByPatientId(patient.getId())
+//             .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+
+//     double totalInsurancePaid = 0.0;
+//     double totalPatientResponsibility = 0.0;
+
+//     for (ClaimLine line : claim.getClaimLines()) {
+//         DentalProcedure procedure = dentalProcedureRepository.findByProcedureCode(line.getProcedureCode())
+//                 .orElseThrow(() -> new RuntimeException("Procedure not found"));
+
+//         PlanCoverageRule rule = planCoverageRuleRepository.findByDentalPlanIdAndProcedureCategory(
+//                 enrollment.getDentalPlan().getId(), procedure.getCategory())
+//                 .orElseThrow(() -> new RuntimeException("Coverage rule not found"));
+
+//         double coveragePercentage = rule.getCoveragePercentage();
+//         double billAmount = line.getAmount();
+//         double insurancePaid = 0.0;
+//         double patientResponsibility = billAmount;
+
+//         // 1. Handle Bill Below Deductible
+//         double remainingDeductible = enrollment.getDentalPlan().getDeductible() - enrollment.getDeductibleUsed();
+//         if (billAmount < remainingDeductible) {
+//             // If bill is below deductible, patient pays the full bill
+//             enrollment.setDeductibleUsed(enrollment.getDeductibleUsed() + billAmount);
+//             insurancePaid = 0.0;
+//             patientResponsibility = billAmount;
+//         } else {
+//             // 2. Handle Bill Exceeding Deductible
+//             if (remainingDeductible > 0) {
+//                 // Deductible applied
+//                 double deductibleApplied = Math.min(billAmount, remainingDeductible);
+//                 enrollment.setDeductibleUsed(enrollment.getDeductibleUsed() + deductibleApplied);
+//                 patientResponsibility -= deductibleApplied;
+//                 billAmount -= deductibleApplied; // After deductible applied, reduce bill
+//             }
+
+//             // 3. Insurance Coverage and Annual Max Logic
+//             double remainingAnnualMax = enrollment.getDentalPlan().getAnnualMax() - enrollment.getAnnualMaxUsed();
+//             if (remainingAnnualMax > 0) {
+//                 // Coverage within annual max
+//                 insurancePaid = billAmount * coveragePercentage / 100;
+//                 if (insurancePaid > remainingAnnualMax) {
+//                     // If insurance exceeds remaining annual max, adjust coverage
+//                     insurancePaid = remainingAnnualMax;
+//                     patientResponsibility += (billAmount - insurancePaid); // Adjust patient responsibility
+//                 }
+//             } else {
+//                 // If the annual max is reached, patient pays the full bill
+//                 insurancePaid = 0.0;
+//                 patientResponsibility = billAmount;
+//             }
+
+//             // 4. Apply Annual Max Usage
+//             enrollment.setAnnualMaxUsed(enrollment.getAnnualMaxUsed() + insurancePaid);
+//         }
+
+//         // Save updated claim line
+//         line.setInsurancePaid(insurancePaid);
+//         line.setPatientResponsibility(patientResponsibility);
+//         line.setDeductibleApplied(enrollment.getDeductibleUsed());
+
+//         claimLineRepository.save(line); // If cascade is not set
+
+//         totalInsurancePaid += insurancePaid;
+//         totalPatientResponsibility += patientResponsibility;
+//     }
+
+//     // 5. Final Claim Updates
+//     claim.setClaimStatus("APPROVED");
+//     claim.setApprovalDate(new java.util.Date());
+//     claim.setInsurancePaid(totalInsurancePaid);
+//     claim.setPatientResponsibility(totalPatientResponsibility);
+
+//     // Save enrollment and claim after updates
+//     enrollmentRepository.save(enrollment);
+//     claimRepository.save(claim);
+
+//     return "redirect:/api/auth/admin/claims"; // Adjust to your UI flow
+// }
+
 @PostMapping("/claims/{id}/approve")
 public String approveClaim(@PathVariable Long id) {
     Claim claim = claimRepository.findById(id)
@@ -267,6 +420,14 @@ public String approveClaim(@PathVariable Long id) {
 
     double totalInsurancePaid = 0.0;
     double totalPatientResponsibility = 0.0;
+    double totalDeductibleApplied = 0.0; // Track deductible for this claim
+
+    // Get initial values before processing
+    double initialDeductibleUsed = enrollment.getDeductibleUsed();
+    double initialAnnualMaxUsed = enrollment.getAnnualMaxUsed();
+    
+    double deductibleUsedInThisClaim = 0.0;
+    double annualMaxUsedInThisClaim = 0.0;
 
     for (ClaimLine line : claim.getClaimLines()) {
         DentalProcedure procedure = dentalProcedureRepository.findByProcedureCode(line.getProcedureCode())
@@ -277,165 +438,69 @@ public String approveClaim(@PathVariable Long id) {
                 .orElseThrow(() -> new RuntimeException("Coverage rule not found"));
 
         double coveragePercentage = rule.getCoveragePercentage();
-        double insurancePaid = line.getAmount() * coveragePercentage / 100;
-        double patientResponsibility = line.getAmount() - insurancePaid;
-
-        // Deductible
-        double remainingDeductible = enrollment.getDentalPlan().getDeductible() - enrollment.getDeductibleUsed();
+        double originalBillAmount = line.getAmount();
+        double remainingBill = originalBillAmount;
+        double insurancePaid = 0.0;
+        double patientResponsibility = 0.0;
         double deductibleApplied = 0.0;
+
+        // Step 1: Apply Deductible (only once per year, not per claim line)
+        double remainingDeductible = enrollment.getDentalPlan().getDeductible() - enrollment.getDeductibleUsed();
         if (remainingDeductible > 0) {
-            deductibleApplied = Math.min(patientResponsibility, remainingDeductible);
+            deductibleApplied = Math.min(remainingBill, remainingDeductible);
             enrollment.setDeductibleUsed(enrollment.getDeductibleUsed() + deductibleApplied);
-
-            insurancePaid -= deductibleApplied;
-            if (insurancePaid < 0) insurancePaid = 0;
+            deductibleUsedInThisClaim += deductibleApplied;
+            remainingBill -= deductibleApplied;
         }
 
-        // Annual max
+        // Step 2: Apply Insurance Coverage
         double remainingAnnualMax = enrollment.getDentalPlan().getAnnualMax() - enrollment.getAnnualMaxUsed();
-        if (remainingAnnualMax <= 0) {
-            patientResponsibility += insurancePaid;
+        if (remainingAnnualMax > 0 && remainingBill > 0) {
+            // Calculate what insurance would pay based on coverage percentage
+            double potentialInsurancePaid = remainingBill * coveragePercentage / 100;
+            
+            // Cap insurance payment to remaining annual max
+            insurancePaid = Math.min(potentialInsurancePaid, remainingAnnualMax);
+            
+            // Update annual max usage
+            enrollment.setAnnualMaxUsed(enrollment.getAnnualMaxUsed() + insurancePaid);
+            annualMaxUsedInThisClaim += insurancePaid;
+            
+            // Patient pays: deductible + (remaining bill after deductible - insurance paid)
+            patientResponsibility = deductibleApplied + (remainingBill - insurancePaid);
+        } else {
+            // No insurance coverage available
             insurancePaid = 0.0;
-        } else if (insurancePaid > remainingAnnualMax) {
-            double excess = insurancePaid - remainingAnnualMax;
-            insurancePaid = remainingAnnualMax;
-            patientResponsibility += excess;
+            patientResponsibility = deductibleApplied + remainingBill;
         }
-        enrollment.setAnnualMaxUsed(enrollment.getAnnualMaxUsed() + insurancePaid);
 
+        // Save updated claim line
         line.setInsurancePaid(insurancePaid);
         line.setPatientResponsibility(patientResponsibility);
-        line.setDeductibleApplied(deductibleApplied);
+        line.setDeductibleApplied(deductibleApplied); // Store the deductible applied to this line
 
-        claimLineRepository.save(line); // if cascade not set
+        claimLineRepository.save(line); // If cascade is not set
 
         totalInsurancePaid += insurancePaid;
         totalPatientResponsibility += patientResponsibility;
+        totalDeductibleApplied += deductibleApplied;
     }
 
+    // Step 3: Final Claim Updates
     claim.setClaimStatus("APPROVED");
     claim.setApprovalDate(new java.util.Date());
     claim.setInsurancePaid(totalInsurancePaid);
     claim.setPatientResponsibility(totalPatientResponsibility);
+    //claim.setDeductibleApplied(totalDeductibleApplied);
 
+    // Save the enrollment and claim after updates
     enrollmentRepository.save(enrollment);
     claimRepository.save(claim);
 
-    return "redirect:/api/auth/admin/claims"; // adjust to your UI flow
+    return "redirect:/api/auth/admin/claims"; // Adjust to your UI flow
 }
 
 
-
-
-
-
-
-
-// // // Add these autowired repositories in the controller
-// @Autowired
-// private EnrollmentRepository enrollmentRepository;
-
-// @Autowired
-// private PatientRepository patientRepository;
-
-// // @Autowired
-// // private EnrollmentService enrollmentService;
-
-
-
-
-
-// @Autowired
-// private DentalProcedureRepository dentalProcedureRepository;
-
-
-// @PostMapping("/claims/{id}/approve")
-// public String approveClaim(@PathVariable Long id) {
-//     Claim claim = claimRepository.findById(id)
-//             .orElseThrow(() -> new RuntimeException("Claim not found"));
-//     Patient patient = claim.getPatient();
-
-//     // Find enrollment for patient
-//     Enrollment enrollment = enrollmentRepository.findByPatientId(patient.getId())
-//             .orElseThrow(() -> new RuntimeException("Enrollment not found"));
-
-//     double totalInsurancePaid = 0.0;
-//     double totalPatientResponsibility = 0.0;
-//     double totalDeductibleApplied = 0.0;
-
-//     // Loop through claim lines
-//     for (ClaimLine line : claim.getClaimLines()) {
-//         // Find procedure
-//         DentalProcedure procedure = dentalProcedureRepository.findByProcedureCode(line.getProcedureCode())
-//                 .orElseThrow(() -> new RuntimeException("Procedure not found"));
-
-//         // Find coverage rule
-//         PlanCoverageRule rule = planCoverageRuleRepository.findByDentalPlanIdAndProcedureCategory(
-//                 enrollment.getDentalPlan().getId(), procedure.getCategory())
-//                 .orElseThrow(() -> new RuntimeException("Coverage rule not found"));
-
-//         double coveragePercentage = rule.getCoveragePercentage();
-//         double insurancePaid = line.getAmount() * coveragePercentage / 100;
-//         double patientResponsibility = line.getAmount() - insurancePaid;
-
-//         // --- Deductible logic ---
-//         double deductibleApplied = 0.0;
-//         double remainingDeductible = enrollment.getDentalPlan().getDeductible() - enrollment.getDeductibleUsed();
-
-//         if (remainingDeductible > 0) {
-//             deductibleApplied = Math.min(patientResponsibility, remainingDeductible);
-//             double newDeductibleUsed = enrollment.getDeductibleUsed() + deductibleApplied;
-//             enrollment.setDeductibleUsed(Math.min(newDeductibleUsed, enrollment.getDentalPlan().getDeductible()));
-//             // Patient responsibility already includes deductible portion, so do NOT add again
-//         }
-
-//         // --- Annual max logic ---
-//         double remainingAnnualMax = enrollment.getDentalPlan().getAnnualMax() - enrollment.getAnnualMaxUsed();
-
-//         if (remainingAnnualMax <= 0) {
-//             // Annual max already reached → patient pays full line amount
-//             patientResponsibility += insurancePaid;
-//             insurancePaid = 0.0;
-//         } else if (insurancePaid > remainingAnnualMax) {
-//             // Cap insurance paid at remaining annual max
-//             double excess = insurancePaid - remainingAnnualMax;
-//             insurancePaid = remainingAnnualMax;
-//             patientResponsibility += excess;
-//         }
-
-//         // Update enrollment annual max used (capped at plan annual max)
-//         double newAnnualMaxUsed = enrollment.getAnnualMaxUsed() + insurancePaid;
-//         enrollment.setAnnualMaxUsed(Math.min(newAnnualMaxUsed, enrollment.getDentalPlan().getAnnualMax()));
-
-//         // Update claim line
-//         line.setInsurancePaid(insurancePaid);
-//         line.setPatientResponsibility(patientResponsibility);
-//         line.setDeductibleApplied(deductibleApplied);
-
-//         totalInsurancePaid += insurancePaid;
-//         totalPatientResponsibility += patientResponsibility;
-//         totalDeductibleApplied += deductibleApplied;
-//     }
-
-//     // --- Final claim update ---
-//     claim.setClaimStatus("APPROVED");
-//     claim.setApprovalDate(new java.util.Date());
-
-//     // If annual max already reached, insurance pays nothing for the whole claim
-//     if (enrollment.getAnnualMaxUsed() >= enrollment.getDentalPlan().getAnnualMax()) {
-//         claim.setInsurancePaid(0.0);
-//         claim.setPatientResponsibility(claim.getClaimAmount());
-//     } else {
-//         claim.setInsurancePaid(totalInsurancePaid);
-//         claim.setPatientResponsibility(totalPatientResponsibility);
-//     }
-
-//     // Save everything
-//     enrollmentRepository.save(enrollment);
-//     claimRepository.save(claim);
-
-//     return "redirect:/api/auth/admin/claims"; // Redirect back to claims list
-// }
 
    
     @Autowired

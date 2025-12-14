@@ -1,917 +1,529 @@
 <!DOCTYPE html>
-
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
   <title>Track Claims - CareDent</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   
-
   <style>
-
     :root {
-
       --primary-color: #005461;
-
       --primary-dark: #003d47;
-
       --primary-light: #e6f2f3;
-
       --secondary-color: #018790;
-
       --accent-color: #00B7B5;
-
       --text-primary: #333333;
-
       --text-secondary: #666666;
-
       --text-light: #888888;
-
       --text-on-dark: #ffffff;
-
       --background-light: #f8f9fa;
-
       --background-white: #ffffff;
-
       --border-color: #e0e0e0;
-
       --border-light: #f0f0f0;
-
       --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.08);
-
       --shadow-md: 0 4px 6px rgba(0, 84, 97, 0.1);
-
       --radius-sm: 6px;
-
       --radius-md: 10px;
-
       --radius-lg: 14px;
-
       --radius-xl: 18px;
-
       --transition: all 0.25s ease;
-
     }
-
 
     * {
-
       margin: 0;
-
       padding: 0;
-
       box-sizing: border-box;
-
     }
-
 
     body {
-
       font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-
       background: var(--background-light);
-
       color: var(--text-primary);
-
       line-height: 1.6;
-
       min-height: 100vh;
-
     }
-
 
     /* Header */
-
     .main-header {
-
       background: var(--background-white);
-
       border-bottom: 1px solid var(--border-light);
-
       padding: 1.25rem 0;
-
       box-shadow: var(--shadow-sm);
-
     }
-
 
     .header-content {
-
       max-width: 1400px;
-
       margin: 0 auto;
-
       padding: 0 2rem;
-
       display: flex;
-
       justify-content: space-between;
-
       align-items: center;
-
     }
-
 
     .brand {
-
       display: flex;
-
       align-items: center;
-
       gap: 1rem;
-
       text-decoration: none;
-
     }
-
 
     .brand-icon {
-
       width: 2.5rem;
-
       height: 2.5rem;
-
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-
       border-radius: var(--radius-md);
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       color: white;
-
       font-size: 1.25rem;
-
     }
-
 
     .brand-text {
-
       font-family: 'Poppins', sans-serif;
-
       font-size: 1.5rem;
-
       font-weight: 700;
-
       color: var(--primary-color);
-
       letter-spacing: -0.5px;
-
     }
-
 
     .brand-tagline {
-
       font-size: 0.875rem;
-
       color: var(--text-secondary);
-
       font-weight: 400;
-
       margin-top: 0.125rem;
-
     }
-
 
     /* Navigation */
-
     .main-nav {
-
       display: flex;
-
       gap: 0.5rem;
-
       background: var(--background-white);
-
       border: 1px solid var(--border-color);
-
       padding: 0.5rem;
-
       border-radius: var(--radius-md);
-
     }
-
 
     .nav-link {
-
       display: flex;
-
       align-items: center;
-
       gap: 0.5rem;
-
       padding: 0.75rem 1.25rem;
-
       text-decoration: none;
-
       color: var(--text-secondary);
-
       font-weight: 500;
-
       font-size: 0.9rem;
-
       border-radius: var(--radius-sm);
-
       transition: var(--transition);
-
     }
-
 
     .nav-link:hover {
-
       background: var(--primary-light);
-
       color: var(--primary-color);
-
     }
-
 
     .nav-link.active {
-
       background: var(--primary-color);
-
       color: white;
-
     }
-
 
     /* User Menu */
-
     .user-menu {
-
       display: flex;
-
       align-items: center;
-
       gap: 1.5rem;
-
     }
-
 
     .user-info {
-
       display: flex;
-
       align-items: center;
-
       gap: 0.75rem;
-
     }
-
 
     .user-avatar {
-
       width: 2.5rem;
-
       height: 2.5rem;
-
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-
       border-radius: 50%;
-
       display: flex;
-
       align-items: center;
-
       justify-content: center;
-
       color: white;
-
       font-weight: 600;
-
     }
-
 
     .user-details h3 {
-
       font-family: 'Poppins', sans-serif;
-
       font-size: 1rem;
-
       font-weight: 600;
-
       color: var(--text-primary);
-
     }
-
 
     .user-details p {
-
       font-size: 0.875rem;
-
       color: var(--text-secondary);
-
     }
-
 
     .header-actions {
-
       display: flex;
-
       gap: 0.75rem;
-
       align-items: center;
-
     }
-
 
     .action-btn {
-
       display: flex;
-
       align-items: center;
-
       gap: 0.5rem;
-
       padding: 0.75rem 1.25rem;
-
       background: var(--background-white);
-
       border: 1px solid var(--border-color);
-
       border-radius: var(--radius-md);
-
       text-decoration: none;
-
       color: var(--text-primary);
-
       font-weight: 500;
-
       font-size: 0.9rem;
-
       transition: var(--transition);
-
     }
-
 
     .action-btn:hover {
-
       background: var(--primary-light);
-
       border-color: var(--accent-color);
-
       color: var(--primary-color);
-
     }
-
 
     .action-btn-primary {
-
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-
       color: white;
-
       border: none;
-
     }
-
 
     .action-btn-primary:hover {
-
       background: linear-gradient(135deg, var(--primary-dark), var(--secondary-color));
-
       color: white;
-
     }
-
 
     /* Main Content */
-
     .main-content {
-
       max-width: 1400px;
-
       margin: 2rem auto;
-
       padding: 0 2rem;
-
     }
-
 
     /* Card Styling */
-
     .card {
-
       background: var(--background-white);
-
       border-radius: var(--radius-xl);
-
       padding: 3rem;
-
       box-shadow: var(--shadow-md);
-
       border: 1px solid var(--border-color);
-
     }
-
 
     .card h2 {
-
       font-family: 'Poppins', sans-serif;
-
       font-size: 1.75rem;
-
       font-weight: 600;
-
       color: var(--primary-color);
-
       margin-bottom: 2rem;
-
     }
-
 
     /* Table Styling */
-
     table {
-
       width: 100%;
-
       border-collapse: collapse;
-
       margin-top: 1rem;
-
       border: 1px solid var(--border-color);
-
     }
-
 
     table thead {
-
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-
     }
-
 
     table th {
-
       color: white;
-
       font-weight: 600;
-
       font-family: 'Poppins', sans-serif;
-
       text-align: left;
-
       padding: 1rem 1.25rem;
-
       font-size: 0.9rem;
-
       border: 1px solid var(--border-color);
-
     }
-
 
     table tbody tr {
-
       border-bottom: 1px solid var(--border-light);
-
       transition: var(--transition);
-
     }
-
 
     table tbody tr:hover {
-
       background: var(--primary-light);
-
     }
-
 
     table td {
-
       padding: 1rem 1.25rem;
-
       color: var(--text-primary);
-
       font-size: 0.95rem;
-
       border: 1px solid var(--border-color);
-
     }
 
+    /* Status Badges */
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .status-approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .status-rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .status-submitted {
+      background-color: #cce5ff;
+      color: #004085;
+    }
 
     /* Responsive Design */
-
     @media (max-width: 1200px) {
-
       .header-content,
-
       .main-content {
-
         padding-left: 1.5rem;
-
         padding-right: 1.5rem;
-
       }
-
     }
-
 
     @media (max-width: 992px) {
-
       .header-content {
-
         flex-direction: column;
-
         gap: 1.5rem;
-
       }
-
       
-
       .main-nav {
-
         width: 100%;
-
         overflow-x: auto;
-
       }
-
       
-
       .user-menu {
-
         width: 100%;
-
         justify-content: space-between;
-
       }
-
     }
-
 
     @media (max-width: 768px) {
-
       .brand {
-
         flex-direction: column;
-
         text-align: center;
-
         gap: 0.5rem;
-
       }
-
       
-
       .card {
-
         padding: 2rem;
-
       }
-
       
-
       table {
-
         display: block;
-
         overflow-x: auto;
-
       }
-
+      
+      .user-menu {
+        flex-direction: column;
+        gap: 1rem;
+      }
     }
-
 
     @media (max-width: 576px) {
-
       .header-content,
-
       .main-content {
-
         padding-left: 1rem;
-
         padding-right: 1rem;
-
       }
-
       
-
       .user-info {
-
         flex-direction: column;
-
         text-align: center;
-
       }
-
       
-
       .header-actions {
-
         flex-wrap: wrap;
-
         justify-content: center;
-
       }
-
       
-
       .action-btn {
-
         padding: 0.625rem 1rem;
-
       }
-
+      
+      .main-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+      }
     }
-
   </style>
-
 </head>
-
 <body>
-
-            <nav class="main-nav">
-                <a th:href="@{/api/auth/doctor/dashboard}" class="nav-link">
-                    <i class="fas fa-tachometer-alt"></i>
-                    Overview
-                </a>
-                <a th:href="@{/api/auth/doctor/profile}" class="nav-link">
-                    <i class="fas fa-user"></i>
-                    Profile
-                </a>
-                <a th:href="@{/api/auth/doctor/plan}" class="nav-link">
-                    <i class="fas fa-network-wired"></i>
-                    Network
-                </a>
-                <a th:href="@{/api/auth/doctor/manageProcedures}" class="nav-link">
-                    <i class="fas fa-procedures"></i>
-                    Procedures
-                </a>
-                <a th:href="@{/api/auth/doctor/claimForm}" class="nav-link">
-                    <i class="fas fa-file-medical"></i>
-                    Submit Claim
-                </a>
-                <a th:href="@{/api/auth/doctor/trackClaims}" class="nav-link active">
-                    <i class="fas fa-chart-line"></i>
-                    Track Claims
-                </a>
-            </nav>
-
-            <div class="user-menu">
-                <div class="user-info">
-                    <div class="user-avatar">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <div class="user-details">
-                        <h3>Dr. <span th:text="${user.username}">Doctor</span></h3>
-                        <p>Dental Practitioner</p>
-                    </div>
-                </div>
-                
-                <div class="header-actions">
-                   
-                    <a th:href="@{/api/auth/login_register}" class="action-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </a>
-                </div>
-            </div>
+  <!-- Fixed Header Structure -->
+  <header class="main-header">
+    <div class="header-content">
+      <a href="#" class="brand">
+        <div class="brand-icon">
+          <i class="fas fa-tooth"></i>
         </div>
-
         <div>
-
           <div class="brand-text">CareDent</div>
-
           <div class="brand-tagline">Doctor Dashboard</div>
-
         </div>
-
       </a>
 
-
       <nav class="main-nav">
-
         <a th:href="@{/api/auth/doctor/dashboard}" class="nav-link">
-
           <i class="fas fa-tachometer-alt"></i>
-
           Overview
-
         </a>
-
         <a th:href="@{/api/auth/doctor/profile}" class="nav-link">
-
           <i class="fas fa-user"></i>
-
           Profile
-
         </a>
-
         <a th:href="@{/api/auth/doctor/plan}" class="nav-link">
-
           <i class="fas fa-network-wired"></i>
-
           Network
-
         </a>
-
         <a th:href="@{/api/auth/doctor/manageProcedures}" class="nav-link">
-
           <i class="fas fa-procedures"></i>
-
           Procedures
-
         </a>
-
         <a th:href="@{/api/auth/doctor/claimForm}" class="nav-link">
-
           <i class="fas fa-file-medical"></i>
-
           Submit Claim
-
         </a>
-
         <a th:href="@{/api/auth/doctor/trackClaims}" class="nav-link active">
-
           <i class="fas fa-chart-line"></i>
-
           Track Claims
-
         </a>
-
       </nav>
 
-
       <div class="user-menu">
-
         <div class="user-info">
-
           <div class="user-avatar">
-
             <i class="fas fa-user-md"></i>
-
           </div>
-
           <div class="user-details">
-
             <h3>Dr. <span th:text="${user.username}">Doctor</span></h3>
-
             <p>Dental Practitioner</p>
-
           </div>
-
         </div>
-
         
-
         <div class="header-actions">
-
-          
-
           <a th:href="@{/api/auth/login_register}" class="action-btn">
-
             <i class="fas fa-sign-out-alt"></i>
-
             Logout
-
           </a>
-
         </div>
-
       </div>
-
     </div>
-
   </header>
 
-
   <!-- Main Content -->
-
   <main class="main-content">
-
     <div class="card">
-
-      <h2>Track Claims for [[${user.username}]]</h2>
-
-
-      <table border="1">
-
-        <thead>
-
-          <tr>
-
-            <th>Claim ID</th>
-
-            <th>Patient</th>
-
-            <th>Claim Amount</th>
-
-            <th>Status</th>
-
-            <th>Submission Date</th>
-
-            <th>Approval Date</th>
-
-            <th>Insurance Paid</th>
-
-            <th>Patient Responsibility</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          <tr th:each="claim : ${claims}">
-
-            <td th:text="${claim.id}"></td>
-
-            <td th:text="${claim.patient.firstName + ' ' + claim.patient.lastName}"></td>
-
-            <td th:text="${claim.claimAmount}"></td>
-
-            <td th:text="${claim.claimStatus}"></td>
-
-            <td th:text="${#dates.format(claim.submissionDate, 'yyyy-MM-dd')}"></td>
-
-            <td th:text="${claim.approvalDate != null ? #dates.format(claim.approvalDate, 'yyyy-MM-dd') : 'N/A'}"></td>
-
-
-            <!-- Show insurance + patient responsibility only if approved -->
-
-            <td th:text="${claim.claimStatus == 'APPROVED' ? claim.insurancePaid : 'N/A'}"></td>
-
-            <td th:text="${claim.claimStatus == 'APPROVED' ? claim.patientResponsibility : 'N/A'}"></td>
-
-          </tr>
-
-        </tbody>
-
-      </table>
-
+      <h2>Track Claims for Dr. <span th:text="${user.username}">Doctor</span></h2>
+      
+      <div th:if="${claims != null and !claims.empty}" style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Claim ID</th>
+              <th>Patient</th>
+              <th>Claim Amount</th>
+              <th>Status</th>
+              <th>Submission Date</th>
+              <th>Approval Date</th>
+              <th>Insurance Paid</th>
+              <th>Patient Responsibility</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="claim : ${claims}">
+              <td th:text="${claim.id}"></td>
+              <td th:text="${claim.patient.firstName + ' ' + claim.patient.lastName}"></td>
+              <td>$<span th:text="${#numbers.formatDecimal(claim.claimAmount, 1, 2)}"></span></td>
+              <td>
+                <span th:class="'status-badge ' + ${'status-' + claim.claimStatus.toLowerCase()}" 
+                      th:text="${claim.claimStatus}">
+                </span>
+              </td>
+              <td th:text="${#dates.format(claim.submissionDate, 'yyyy-MM-dd')}"></td>
+              <td th:text="${claim.approvalDate != null ? #dates.format(claim.approvalDate, 'yyyy-MM-dd') : 'N/A'}"></td>
+              <td th:text="${claim.claimStatus == 'APPROVED' ? '$' + #numbers.formatDecimal(claim.insurancePaid, 1, 2) : 'N/A'}"></td>
+              <td th:text="${claim.claimStatus == 'APPROVED' ? '$' + #numbers.formatDecimal(claim.patientResponsibility, 1, 2) : 'N/A'}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div th:if="${claims == null or claims.empty}" class="text-center py-5">
+        <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">No claims found</h4>
+        <p class="text-muted">You haven't submitted any claims yet.</p>
+        <a th:href="@{/api/auth/doctor/claimForm}" class="action-btn action-btn-primary mt-3">
+          <i class="fas fa-plus"></i>
+          Submit Your First Claim
+        </a>
+      </div>
     </div>
-
   </main>
 
-
   <script>
-
     document.addEventListener('DOMContentLoaded', function() {
-
       // Set active navigation based on current URL
-
       const currentPath = window.location.pathname;
-
       const navLinks = document.querySelectorAll('.nav-link');
-
       
-
       navLinks.forEach(link => {
-
-        if (link.getAttribute('th:href') && 
-
-          currentPath.includes(link.getAttribute('th:href').split('/').pop())) {
-
-          link.classList.add('active');
-
-        } else {
-
-          link.classList.remove('active');
-
+        const href = link.getAttribute('th:href');
+        if (href) {
+          const lastSegment = href.split('/').pop();
+          if (currentPath.includes(lastSegment)) {
+            link.classList.add('active');
+          } else {
+            link.classList.remove('active');
+          }
         }
-
       });
-
 
       // Add hover effects to table rows
-
       const tableRows = document.querySelectorAll('table tbody tr');
-
       tableRows.forEach(row => {
-
         row.addEventListener('mouseenter', function() {
-
           this.style.transform = 'translateX(4px)';
-
         });
-
         
-
         row.addEventListener('mouseleave', function() {
-
           this.style.transform = 'translateX(0)';
-
         });
-
       });
-
+      
+      // Auto-refresh page every 30 seconds to check for claim status updates
+      setTimeout(function() {
+        window.location.reload();
+      }, 30000);
     });
-
   </script>
-
 </body>
-
 </html>

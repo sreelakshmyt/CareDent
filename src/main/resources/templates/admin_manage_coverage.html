@@ -1,35 +1,568 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Coverage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Professional Teal Color Palette */
+        :root {
+            --color-primary: #005461;
+            --color-primary-dark: #003c46;
+            --color-primary-light: #006d7d;
+            --color-secondary: #018790;
+            --color-secondary-light: #02a3aa;
+            --color-accent: #00B7B5;
+            --color-accent-light: #00d4d2;
+            --color-surface: #ffffff;
+            --color-surface-light: #f8fafc;
+            --color-surface-dark: #f1f5f9;
+            --color-border: #e2e8f0;
+            --color-border-light: #f1f5f9;
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #334155;
+            --color-text-muted: #64748b;
+            --color-text-light: #94a3b8;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-danger: #ef4444;
+            --color-info: #3b82f6;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            --gradient-primary-light: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary-light) 100%);
+            --gradient-accent: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
+            --gradient-surface: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-light) 100%);
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 84, 97, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 84, 97, 0.08), 0 2px 4px -1px rgba(0, 84, 97, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 84, 97, 0.08), 0 4px 6px -2px rgba(0, 84, 97, 0.03);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 84, 97, 0.08), 0 10px 10px -5px rgba(0, 84, 97, 0.02);
+            
+            /* Border Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            font-weight: 400;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Minimalist Background Elements */
+        .geometric-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: 
+                linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Modern Header - CLEANER NAVBAR */
+        .header-modern {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .brand-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .brand-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: -0.5px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .brand-tagline {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        /* CLEANER Navigation */
+        .nav-modern {
+            display: flex;
+            gap: 2px;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            height: 100%;
+            align-items: center;
+        }
+
+        .nav-item {
+            position: relative;
+            height: 100%;
+        }
+
+        .nav-link {
+            padding: 0 20px;
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.85rem;
+            border-radius: 0;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 100%;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary);
+            background: rgba(0, 84, 97, 0.03);
+            border-bottom-color: var(--color-border);
+        }
+
+        .nav-link.active {
+            color: var(--color-primary);
+            background: transparent;
+            border-bottom-color: var(--color-primary);
+            box-shadow: none;
+            font-weight: 600;
+        }
+
+        .nav-link.active i {
+            color: var(--color-primary);
+        }
+
+        .nav-link i {
+            font-size: 1rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Logout Button - Cleaner */
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            padding: 8px 20px;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: var(--color-danger);
+            color: var(--color-danger);
+        }
+
+        /* System Status */
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+            font-weight: 400;
+        }
+
+        .status-indicator {
+            width: 6px;
+            height: 6px;
+            background: var(--color-success);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Content Styling */
+        .content-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-accent);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .content-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-accent-light);
+        }
+
+        .content-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        h1 {
+            color: var(--color-primary);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+        }
+
+        h2 {
+            color: var(--color-text-primary);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            margin: 40px 0 20px;
+            font-size: 1.5rem;
+        }
+
+        form {
+            background: var(--color-surface-light);
+            padding: 30px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--color-surface);
+            color: var(--color-text-primary);
+            margin-bottom: 20px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(0, 183, 181, 0.1);
+        }
+
+        button[type="submit"] {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--gradient-primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        thead {
+            background: var(--color-surface-dark);
+            border-bottom: 2px solid var(--color-border);
+        }
+
+        th {
+            padding: 16px 20px;
+            text-align: left;
+            color: var(--color-text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--color-border-light);
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: rgba(0, 183, 181, 0.05);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 16px 20px;
+            color: var(--color-text-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 20px;
+                height: auto;
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px 0;
+            }
+            
+            .nav-modern {
+                width: 100%;
+                overflow-x: auto;
+                justify-content: center;
+                padding: 8px 0;
+            }
+            
+            .main-container {
+                padding: 20px;
+            }
+            
+            .content-card {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-link {
+                padding: 0 15px;
+                font-size: 0.8rem;
+            }
+            
+            .logout-btn {
+                padding: 6px 16px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Manage Coverage for Plan: <span th:text="${dentalPlan.name}"></span></h1>
-    <form th:action="@{/api/auth/admin/plans/manage-coverage/{planId}(planId=${dentalPlan.id})}" method="post">
-        <label for="procedureCategory">Procedure Category:</label>
-        <input type="text" id="procedureCategory" name="procedureCategory" required><br>
+    <!-- Geometric Background -->
+    <div class="geometric-background"></div>
 
-        <label for="coveragePercentage">Coverage Percentage:</label>
-        <input type="number" id="coveragePercentage" name="coveragePercentage" step="0.01" min="0" max="100" required><br>
+    <!-- Modern Header -->
+    <header class="header-modern">
+        <div class="header-content">
+            <div class="brand-wrapper">
+                <div class="brand-icon">
+                    <i class="fas fa-tooth"></i>
+                </div>
+                <div>
+                    <div class="brand-text">CareDent</div>
+                    <div class="system-status">
+                        <span class="status-indicator"></span>
+                        <span>System Online • Updated: <span th:text="${#dates.format(#dates.createNow(), 'HH:mm')}">14:30</span></span>
+                    </div>
+                </div>
+            </div>
 
-        <button type="submit">Save Coverage</button>
-    </form>
+            <nav class="nav-modern">
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/dashboard}">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link active" th:href="@{/api/auth/admin/plans}">
+                        <i class="fas fa-boxes"></i>
+                        <span>Plans</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/manageenrollment}">
+                        <i class="fas fa-users"></i>
+                        <span>Enrollment</span>
+                    </a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" th:href="@{/api/auth/admin/claims}">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <span>Claims</span>
+                    </a>
+                </div>
+                <a th:href="@{/api/auth/login_register}" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </div>
+    </header>
 
-    <h2>Existing Coverage Rules</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Procedure Category</th>
-                <th>Coverage Percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="rule : ${coverageRules}">
-                <td th:text="${rule.procedureCategory}"></td>
-                <td th:text="${rule.coveragePercentage}"></td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="content-card">
+            <h1>Manage Coverage for Plan: <span th:text="${dentalPlan.name}"></span></h1>
+            
+            <form th:action="@{/api/auth/admin/plans/manage-coverage/{planId}(planId=${dentalPlan.id})}" method="post">
+                <div style="max-width: 500px;">
+                    <label for="procedureCategory">Procedure Category:</label>
+                    <input type="text" id="procedureCategory" name="procedureCategory" required>
+                    
+                    <label for="coveragePercentage">Coverage Percentage:</label>
+                    <input type="number" id="coveragePercentage" name="coveragePercentage" step="0.01" min="0" max="100" required>
+                    
+                    <button type="submit">
+                        <i class="fas fa-save"></i>
+                        Save Coverage
+                    </button>
+                </div>
+            </form>
+
+            <h2>Existing Coverage Rules</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Procedure Category</th>
+                        <th>Coverage Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="rule : ${coverageRules}">
+                        <td th:text="${rule.procedureCategory}"></td>
+                        <td th:text="${rule.coveragePercentage}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Set active navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (currentPath.includes('plans') || currentPath.includes('manage-coverage')) {
+                    if (link.getAttribute('href') && link.getAttribute('href').includes('plans')) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                }
+            });
+            
+            // Update timestamp
+            function updateTimestamp() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit',
+                    hour12: false 
+                });
+                
+                const timestampElements = document.querySelectorAll('.system-status span:nth-child(2)');
+                timestampElements.forEach(el => {
+                    if (el.textContent.includes('Updated:')) {
+                        el.textContent = `Updated: ${timeString}`;
+                    }
+                });
+            }
+            
+            updateTimestamp();
+            setInterval(updateTimestamp, 60000);
+        });
+    </script>
 </body>
 </html>
