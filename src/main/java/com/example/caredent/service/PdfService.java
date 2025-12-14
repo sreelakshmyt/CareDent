@@ -8,6 +8,7 @@ import org.thymeleaf.context.Context;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 @Service
 public class PdfService {
@@ -23,15 +24,24 @@ public class PdfService {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             ITextRenderer renderer = new ITextRenderer();
             
-            // Note: Flying Saucer expects well-formed XML (XHTML), 
-            // so ensure your HTML template is clean.
+            // NOTE: If you are using external images/fonts, you MUST set the document base.
+            // Example for resources in src/main/resources/static:
+            // String basePath = "file:///" + System.getProperty("user.dir") + "/src/main/resources/static/";
+            // renderer.setDocumentBase(basePath); 
+
             renderer.setDocumentFromString(htmlContent);
             renderer.layout();
             renderer.createPDF(os);
             
             return os.toByteArray();
+        
+        } catch (IOException e) {
+             // Handle IO issues 
+            throw new DocumentException("IO Error during PDF generation: " + e.getMessage());
         } catch (Exception e) {
-            throw new DocumentException("Error generating PDF: " + e.getMessage());
+             // Catch all other exceptions (like SAXParseException from bad HTML)
+             // Use the constructor that accepts only a String message
+             throw new DocumentException("Error during HTML rendering/layout. Cause: " + e.getMessage());
         }
     }
 }

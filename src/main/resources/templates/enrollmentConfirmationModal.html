@@ -1,0 +1,51 @@
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            
+            <div class="modal-header bg-caredent-primary text-white">
+                <h5 class="modal-title" id="termsModalLabel"><i class="fas fa-file-contract me-2"></i> Dental Plan Terms & Conditions</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body">
+                <p>Please review the following standard terms and conditions before proceeding with your enrollment.</p>
+                
+                <div class="p-3 mb-3 border rounded" style="max-height: 300px; overflow-y: auto;">
+                    <h6>**Standard Enrollment Agreement**</h6>
+                    <p class="small">
+                        By checking the box below, you ("The Member") agree to the terms set forth by CareDent Insurance Portal. 
+                        This agreement covers eligibility, coverage details, payment responsibilities, and data privacy.
+                        <br><br>
+                        <strong>1. Eligibility:</strong> Coverage is effective upon the start date specified in your plan documents, provided the first premium payment is successfully processed. You certify that all information provided regarding yourself and any dependents is true and accurate.
+                        <br><br>
+                        <strong>2. Premiums and Payment:</strong> Premiums are due on the first day of each coverage month. Failure to pay premiums within the grace period may result in immediate cancellation of coverage.
+                        <br><br>
+                        <strong>3. Annual Maximums and Deductibles:</strong> Coverage is subject to the annual maximum and deductible amounts specified in your selected dental plan. All services are subject to review for medical necessity.
+                        <br><br>
+                        <strong>4. Data Privacy:</strong> You authorize CareDent to collect, use, and share your protected health information (PHI) with covered entities (providers, hospitals) as required for processing claims and administering the plan, in compliance with HIPAA guidelines.
+                        <br><br>
+                        <strong>5. Termination:</strong> You may terminate coverage at any time by providing written notice. CareDent reserves the right to terminate coverage for fraud, material misrepresentation, or non-payment of premiums.
+                        <br><br>
+                        <strong>6. Appeals:</strong> If a claim is denied, you have the right to appeal the decision following the procedures outlined in your Member Handbook.
+                    </p>
+                </div>
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" id="termsAcceptCheck">
+                    <label class="form-check-label fw-bold" for="termsAcceptCheck">
+                        I have read and agree to the Terms and Conditions listed above.
+                    </label>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <a th:href="@{/patient/dashboard}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i> Decline
+                </a>
+
+                <button type="button" id="acceptBtn" class="btn btn-secondary" disabled>
+                    <i class="fas fa-check me-1"></i> Accept & Continue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
