@@ -371,34 +371,34 @@ public class PatientController {
     // =========================================================
 
     /** Show the Find a Dentist form and display results if a plan is selected. */
-    // @GetMapping("/network")
-    // public String showFindDentist(
-    //     @RequestParam(name = "planId", required = false) Long planId,
-    //     Model model, HttpSession session)
-    // {
-    //     User user = (User) session.getAttribute(LOGGED_IN_USER);
-    //     if (user == null) {
-    //         return "redirect:/api/auth/login";
-    //     }
+    @GetMapping("/network")
+    public String showFindDentist(
+        @RequestParam(name = "planId", required = false) Long planId,
+        Model model, HttpSession session)
+    {
+        User user = (User) session.getAttribute(LOGGED_IN_USER);
+        if (user == null) {
+            return "redirect:/api/auth/login";
+        }
 
-    //     // Fetch all available dental plans to populate the dropdown
-    //     List<DentalPlan> plans = planRepository.findAll();
-    //     model.addAttribute("plans", plans);
+        // Fetch all available dental plans to populate the dropdown
+        List<DentalPlan> plans = planRepository.findAll();
+        model.addAttribute("plans", plans);
 
-    //     List<Doctor> doctors = List.of();
-    //     DentalPlan selectedPlan = null;
+        List<Doctor> doctors = List.of();
+        DentalPlan selectedPlan = null;
 
-    //     if (planId != null) {
-    //         // Find doctors based on the selected plan ID, delegated to networkService
-    //         doctors = networkService.findInNetworkDoctors(planId);
-    //         selectedPlan = planRepository.findById(planId).orElse(null);
-    //     }
+        if (planId != null) {
+            // Find doctors based on the selected plan ID, delegated to networkService
+            doctors = networkService.findInNetworkDoctors(planId);
+            selectedPlan = planRepository.findById(planId).orElse(null);
+        }
 
-    //     model.addAttribute("selectedPlan", selectedPlan);
-    //     model.addAttribute("doctors", doctors);
+        model.addAttribute("selectedPlan", selectedPlan);
+        model.addAttribute("doctors", doctors);
 
-    //     return "findDentist";
-    // }
+        return "findDentist";
+    }
 
     // // =========================================================
     // //               VIEW CLAIMS ROUTE 
