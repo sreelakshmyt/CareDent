@@ -1,4 +1,9 @@
-<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- 
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -113,13 +118,22 @@
     </div>
     
 </body>
-</html> -->
+</html>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+ -->
+
+
+
+
+
+
+
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>CareDent Insurance Card - Enhanced</title>
+    <title>CareDent Insurance Card - Enhanced Redesign</title>
     
     <style type="text/css">
         /* A stronger, more legible font stack */
@@ -128,48 +142,60 @@
             font-size: 10pt; 
             margin: 0; 
             padding: 20px; 
+            /* background-color: #f1eeee; Light background for the overall page */
         }
         .card-container {
-        width: 700px; 
-        height: 350px;
-        border: 4px solid #1d0b3591; 
-        padding: 25px;
-        border-radius: 10px;
-        position: relative;
-        background: linear-gradient(135deg, #005461 0%, #00798a 120%);
-        color: #080707;
-        overflow: hidden; 
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); 
-    }
+            width: 600px; 
+            height: 350px;
+            /* Changed border color to dark for contrast */
+            border: 4px solid #4a0000; 
+            padding: 25px;
+            border-radius: 10px;
+            position: relative;
+            /* Updated to a red/dark-red gradient to match Capture.PNG */
+            /* background-color: linear-gradient(135deg, #a80000 0%, #4a0000 120%); */
+            background-color:#4a0000;
+            /* color: #16d336; Main text color set to white */
+            overflow: hidden; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); 
+        }
         
         /* Utility Styles for the Card Layout */
         .logo { 
+            /* Placeholder styling for a logo */
             width: 150px; 
+            height: 30px;
             float: left; 
             margin-right: 25px; 
+            background-color: #ffffff; /* Example: White box for logo placeholder */
+            line-height: 30px;
+            text-align: center;
+            font-size: 10pt;
+            color: #4a0000;
         }
         .header-title { 
             text-align: right; 
-            font-size: 1.3rem; /* Larger title */
-            font-weight: 900; /* Bolder title */
-            color: #083634; 
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #FFFFFF; /* White title for high visibility */
             padding-bottom: 15px; 
-            letter-spacing: 1px; /* Spacing for better visual flow */
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Subtle separator */
         }
-        .section { margin-bottom: 20px; } /* Increased vertical spacing */
+        .section { margin-bottom: 25px; } 
         .label { 
-            font-weight: 500; 
-            color: #395b5e; /* Lighter color for better contrast on dark background */
-            font-size: 9pt; 
+            font-weight: 400; 
+            color: #FFC107; /* Lighter color for label */
+            font-size: 10pt; 
             display: block; 
-            margin-bottom: 3px;
+            margin-bottom: 5px;
         }
         .value { 
-            font-size: 15pt; /* Larger key values for prominence */
+            font-size: 18pt; /* Even larger for key values */
             font-weight: bold; 
-            color: #c72121; 
-            /* Optional: Add a subtle text shadow for clarity in print/PDF */
-            text-shadow: 0 0 3px rgba(56, 36, 36, 0.2); 
+            color: #ffffff; /* Bright yellow/gold for high contrast and prominence */
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
+            text-transform: uppercase;
         }
         
         /* Footer for Instructions */
@@ -178,13 +204,15 @@
             bottom: 25px; 
             left: 25px; 
             right: 25px; 
-            font-size: 8.5pt; 
-            color: #4c104e; 
+            font-size: 9pt; 
+            color: #FFFFFF; /* White text */
             text-align: center;
             
-            /* Accent Yellow and thicker border for emphasis */
-            border: 2px solid #0a0a07; 
-            padding-top: 8px;
+            /* Accent border */
+            border: 2px solid #FFC107; 
+            background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent dark background */
+            padding: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -192,7 +220,7 @@
 
     <div class="card-container">
         
-       <img src="classpath:static/images/caredent-logo.png" alt="CareDent Logo" class="logo" />
+        <div class="logo">CAREDENT</div>
         
         <div class="header-title">
             DENTAL INSURANCE ID CARD
@@ -204,22 +232,22 @@
             <div style="width: 50%; float: left;">
                 <div class="section">
                     <span class="label">PLAN NAME</span>
-                    <span class="value" th:text="${enrollment.dentalPlan.name}">CareDent Plus Gold</span>
+                    <span class="value" th:text="${enrollment.dentalPlan.name}">HMO</span> 
                 </div>
                 <div class="section">
                     <span class="label">MEMBER NAME</span>
-                    <span class="value" th:text="${patientName}">Jane Doe</span>
+                    <span class="value" th:text="${patientName}">MEGHA RAJESH</span>
                 </div>
             </div>
             
             <div style="width: 50%; float: left;">
                 <div class="section">
                     <span class="label">ID NUMBER</span>
-                    <span class="value" th:text="'P' + ${enrollment.patient.id} + 'E' + ${enrollment.id}">P123456E7890</span> 
+                    <span class="value" th:text="'P' + ${enrollment.patient.id} + 'E' + ${enrollment.id}">P16E22</span> 
                 </div>
                 <div class="section">
                     <span class="label">EFFECTIVE DATE</span>
-                    <span class="value" th:text="${#temporals.format(enrollment.benefitYearStart, 'MM/dd/yyyy')}">01/01/2024</span>
+                    <span class="value" th:text="${#temporals.format(enrollment.benefitYearStart, 'MM/dd/yyyy')}">12/15/2025</span>
                 </div>
             </div>
         </div>
