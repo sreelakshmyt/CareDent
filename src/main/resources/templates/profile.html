@@ -370,7 +370,7 @@
             margin: 0;
         }
 
-        /* No doctor found message */
+        /* No doctor found message
         p[th\\:if*="doctor == null"] {
             background: var(--color-surface-light);
             border-radius: var(--radius-lg);
@@ -379,7 +379,7 @@
             color: var(--color-text-secondary);
             font-size: 1.1rem;
             border: 1px solid var(--color-border);
-        }
+        } */
 
         /* Footer - Matching Doctor Dashboard */
         .main-footer {
@@ -666,7 +666,7 @@
 
             <nav class="nav-modern">
                 <div class="nav-item">
-                    <a th:href="@{/doctor/profile}" class="nav-link active">
+                    <a th:href="@{/api/auth/doctor/profile}" class="nav-link active">
                         <i class="fas fa-user"></i>
                         <span>Profile</span>
                     </a>
@@ -703,7 +703,8 @@
                         <i class="fas fa-user-md"></i>
                     </div>
                     <div class="user-details">
-                        <h3>Dr. <span th:text="${doctor?.name}">Doctor</span></h3>
+                        <h3> <span th:text="${doctor?.name}">Doctor</span></h3>
+                          
                         <p>Dental Practitioner</p>
                     </div>
                 </div>
